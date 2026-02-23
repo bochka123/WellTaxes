@@ -54,3 +54,6 @@ TestResult.xml
 nunit-*.xml
 /.vs
 /WellTaxes.Backend/WellTaxes.Service.Gateaway/appsettings.Development.json
+/WellTaxes.Backend/.vs
+/WellTaxes.Backend/WellTaxes.Service.Gateaway/Properties
+/WellTaxes.Backend/WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj.user
