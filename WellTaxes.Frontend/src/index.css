@@ -1,5 +1,6 @@
-@import './reset.css';
-@import './fonts.css';
+@import './styles/reset.css';
+@import './styles/fonts.css';
+@import 'tailwindcss';
 
 html {
   scroll-behavior: smooth;
