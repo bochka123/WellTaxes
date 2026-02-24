@@ -6,7 +6,7 @@ RUN dotnet restore "WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj
 
 COPY . .
 WORKDIR "/src/WellTaxes.Service.Gateaway"
-RUN dotnet publish "WellTaxes.Service.Gateaway.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WellTaxes.Service.Gateaway.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

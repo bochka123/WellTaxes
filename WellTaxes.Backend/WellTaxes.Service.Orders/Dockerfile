@@ -5,8 +5,10 @@ COPY ["WellTaxes.Service.Orders/WellTaxes.Service.Orders.csproj", "WellTaxes.Ser
 RUN dotnet restore "WellTaxes.Service.Orders/WellTaxes.Service.Orders.csproj"
 
 COPY . .
+
 WORKDIR "/src/WellTaxes.Service.Orders"
-RUN dotnet publish "WellTaxes.Service.Orders.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+RUN dotnet publish "WellTaxes.Service.Orders.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
