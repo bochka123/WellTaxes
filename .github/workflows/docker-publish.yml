@@ -21,12 +21,12 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and Push Gateway
+      - name: Build and Push Gateaway
         run: |
-          docker build -t ${{ env.ACR_NAME }}.azurecr.io/gateway:${{ github.sha }} \
-                       -t ${{ env.ACR_NAME }}.azurecr.io/gateway:latest \
-                       -f WellTaxes.Backend/WellTaxes.Service.Gateway/Dockerfile WellTaxes.Backend/
-          docker push ${{ env.ACR_NAME }}.azurecr.io/gateway --all-tags
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/gateaway:${{ github.sha }} \
+                       -t ${{ env.ACR_NAME }}.azurecr.io/gateaway:latest \
+                       -f WellTaxes.Backend/WellTaxes.Service.Gateaway/Dockerfile WellTaxes.Backend/
+          docker push ${{ env.ACR_NAME }}.azurecr.io/gateaway --all-tags
 
       - name: Build and Push Orders
         run: |
