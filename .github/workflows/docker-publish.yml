@@ -1,0 +1,44 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  ACR_NAME: welltaxesregistry
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Build and Push Gateway
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/gateway:${{ github.sha }} \
+                       -t ${{ env.ACR_NAME }}.azurecr.io/gateway:latest \
+                       -f WellTaxes.Backend/WellTaxes.Service.Gateway/Dockerfile WellTaxes.Backend/
+          docker push ${{ env.ACR_NAME }}.azurecr.io/gateway --all-tags
+
+      - name: Build and Push Orders
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/orders:${{ github.sha }} \
+                       -t ${{ env.ACR_NAME }}.azurecr.io/orders:latest \
+                       -f WellTaxes.Backend/WellTaxes.Service.Orders/Dockerfile WellTaxes.Backend/
+          docker push ${{ env.ACR_NAME }}.azurecr.io/orders --all-tags
+
+      - name: Build and Push Frontend
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }} \
+                       -t ${{ env.ACR_NAME }}.azurecr.io/frontend:latest \
+                       -f WellTaxes.Frontend/Dockerfile WellTaxes.Frontend/
+          docker push ${{ env.ACR_NAME }}.azurecr.io/frontend --all-tags
