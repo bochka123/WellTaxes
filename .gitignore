@@ -57,3 +57,7 @@ nunit-*.xml
 /WellTaxes.Backend/.vs
 /WellTaxes.Backend/WellTaxes.Service.Gateaway/Properties
 /WellTaxes.Backend/WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj.user
+/WellTaxes.Backend/WellTaxes.Service.Orders/Properties
+/WellTaxes.Backend/WellTaxes.Service.Orders/appsettings.Development.json
+*.user
+/WellTaxes.Backend/WellTaxes.Service.Users/Properties
