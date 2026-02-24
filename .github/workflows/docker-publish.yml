@@ -21,9 +21,6 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Login to ACR
-        run: az acr login --name ${{ env.ACR_NAME }}
-
       - name: Build and Push Gateway
         run: |
           docker build -t ${{ env.ACR_NAME }}.azurecr.io/gateway:${{ github.sha }} \
