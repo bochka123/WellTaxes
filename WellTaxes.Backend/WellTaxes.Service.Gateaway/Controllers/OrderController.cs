@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WellTaxes.Service.Gateaway.Services;
 using WellTaxes.Service.Orders.Data.Entities;
@@ -8,6 +9,7 @@ namespace WellTaxes.Service.Gateaway.Controllers
     /// Gateway controller for managing orders
     /// </summary>
     [ApiController]
+    [Authorize]
     [Route("[controller]/[action]")]
     public class OrderController : ControllerBase
     {

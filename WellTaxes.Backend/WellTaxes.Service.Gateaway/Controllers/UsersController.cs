@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WellTaxes.Service.Gateaway.Services;
 
@@ -7,6 +8,7 @@ namespace WellTaxes.Service.Gateaway.Controllers
     /// Controller for managing users
     /// </summary>
     [ApiController]
+    [Authorize]
     [Route("[controller]/[action]")]
     public class UsersController : ControllerBase
     {
