@@ -1,20 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using WellTaxes.Service.Gateaway.Data;
-using WellTaxes.Service.Gateaway.Services;
+using WellTaxes.Service.Orders.Data;
+using WellTaxes.Service.Orders.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IOrderServiceClient, OrderServiceClient>();
-
-builder.Services.AddHttpClient("OrdersService", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["Services:OrdersService:Url"]!);
-    client.Timeout = TimeSpan.FromSeconds(30);
-});
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

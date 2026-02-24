@@ -1,33 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
-using WellTaxes.Service.Gateaway.Services;
 using WellTaxes.Service.Orders.Data.Entities;
+using WellTaxes.Service.Orders.Services;
 
-namespace WellTaxes.Service.Gateaway.Controllers
+namespace WellTaxes.Service.Orders.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
-        private readonly IOrderServiceClient _orderServiceClient;
-        private readonly IUserService _userService;
+        private readonly IOrderService _orderService;
 
-        public OrderController(IOrderServiceClient orderServiceClient, IUserService userService)
+        public OrdersController(IOrderService orderService)
         {
-            _orderServiceClient = orderServiceClient;
-            _userService = userService;
+            _orderService = orderService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var orders = await _orderServiceClient.GetAllOrdersAsync();
+            var orders = await _orderService.GetAllOrdersAsync();
             return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var order = await _orderServiceClient.GetOrderByIdAsync(id);
+            var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -38,44 +36,32 @@ namespace WellTaxes.Service.Gateaway.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            var userExists = await _userService.UserExistsAsync(userId);
-            if (!userExists)
-            {
-                return NotFound("User not found");
-            }
-
-            var orders = await _orderServiceClient.GetOrdersByUserIdAsync(userId);
+            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
             return Ok(orders);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
         {
-            var userExists = await _userService.UserExistsAsync(request.UserId);
-            if (!userExists)
-            {
-                return BadRequest("User not found");
-            }
-
-            var createOrderDto = new CreateOrderDto(
+            var order = await _orderService.CreateOrderAsync(
                 request.UserId,
                 request.Amount,
                 request.AmountWithTax,
                 request.Latitude,
                 request.Longitude);
 
-            var order = await _orderServiceClient.CreateOrderAsync(createOrderDto);
-            return CreatedAtAction(nameof(GetById), new { id = order!.Id }, order);
+            return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateOrderStatusRequest request)
         {
-            var order = await _orderServiceClient.UpdateOrderStatusAsync(id, request.Status);
+            var order = await _orderService.UpdateOrderStatusAsync(id, request.Status);
             if (order == null)
             {
                 return NotFound();
             }
+
             return Ok(order);
         }
     }
