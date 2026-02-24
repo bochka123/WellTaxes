@@ -1,10 +1,14 @@
 import type { FC } from 'react';
+import { msalInstance } from './auth/msalConfig';
+import { MsalProvider } from '@azure/msal-react';
+import { LoginButton } from './components/LoginButton';
+
 
 const App: FC = () => {
     return (
-        <>
-            <h1 className="text-3xl font-bold">Hello world!</h1>
-        </>
+        <MsalProvider instance={msalInstance}>
+            <LoginButton></LoginButton>
+        </MsalProvider>
     );
 };
 
