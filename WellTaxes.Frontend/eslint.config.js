@@ -3,8 +3,8 @@ import js from '@eslint/js';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import sortExports from 'eslint-plugin-sort-exports';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import globals from "globals";
 
 export default tseslint.config([
     js.configs.recommended,
@@ -17,6 +17,8 @@ export default tseslint.config([
                 window: 'readonly',
                 navigator: 'readonly',
                 process: 'readonly',
+                ...globals.browser,
+                ...globals.node,
             },
             parserOptions: {
                 ecmaVersion: 'latest',
@@ -30,7 +32,6 @@ export default tseslint.config([
             'react-hooks': reactHooks,
             'react-refresh': reactRefresh,
             'simple-import-sort': simpleImportSort,
-            'sort-exports': sortExports,
         },
         rules: {
             'no-unused-vars': 'off',
