@@ -2,11 +2,16 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj", "WellTaxes.Service.Gateaway/"]
+COPY ["WellTaxes.Service.Orders/WellTaxes.Service.Orders.csproj", "WellTaxes.Service.Orders/"]
+
 RUN dotnet restore "WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj"
 
 COPY . .
+
+RUN rm WellTaxes.Service.Orders/appsettings.json
+
 WORKDIR "/src/WellTaxes.Service.Gateaway"
-RUN dotnet publish "WellTaxes.Service.Gateaway.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WellTaxes.Service.Gateaway.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
