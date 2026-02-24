@@ -4,7 +4,8 @@ WORKDIR /src
 COPY ["WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj", "WellTaxes.Service.Gateaway/"]
 RUN dotnet restore "WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj"
 
-COPY . .
+COPY WellTaxes.Service.Gateaway/ WellTaxes.Service.Gateaway/
+
 WORKDIR "/src/WellTaxes.Service.Gateaway"
 RUN dotnet publish "WellTaxes.Service.Gateaway.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
