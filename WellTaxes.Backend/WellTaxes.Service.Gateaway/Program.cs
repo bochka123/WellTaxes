@@ -1,35 +1,21 @@
-using Microsoft.EntityFrameworkCore;
-using WellTaxes.Service.Gateaway.Data;
-using WellTaxes.Service.Gateaway.Services;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IOrderServiceClient, OrderServiceClient>();
-
-builder.Services.AddHttpClient("OrdersService", client =>
+namespace WellTaxes.Service.Gateaway
 {
-    client.BaseAddress = new Uri(builder.Configuration["Services:OrdersService:Url"]!);
-    client.Timeout = TimeSpan.FromSeconds(30);
-});
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var settings = config.Build();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

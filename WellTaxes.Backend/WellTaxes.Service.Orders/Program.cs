@@ -1,28 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using WellTaxes.Service.Orders.Data;
-using WellTaxes.Service.Orders.Services;
+using WellTaxes.Service.Orders;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IOrderService, OrderService>();
-
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+public partial class Program
 {
-    app.MapOpenApi();
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                var settings = config.Build();
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

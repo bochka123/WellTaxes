@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="WellTaxes.Service.Gateaway/WellTaxes.Service.Gateaway.csproj" />
+  <Project Path="WellTaxes.Service.Gateaway/WellTaxes.Service.Gateway.csproj" />
   <Project Path="WellTaxes.Service.Orders/WellTaxes.Service.Orders.csproj" Id="25c88d60-06b1-4c87-a599-f45baa79bd80" />
 </Solution>
