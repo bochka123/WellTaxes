@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "WellTaxes.Service.Worker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DbConnectionString": "Host=localhost;Port=5432;Username=tax;Password=tax;Database=taxdb"
+      }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
