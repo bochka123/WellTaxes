@@ -1,7 +1,5 @@
 using CsvHelper;
 using CsvHelper.Configuration;
-using Dapper;
-using Microsoft.Extensions.Hosting;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
@@ -24,38 +22,36 @@ namespace WellTaxes.Service.Worker
         public string RiskLevel { get; set; }
     }
 
-    
-
     public partial class Worker(NpgsqlConnection db, ILogger<Worker> logger) : BackgroundService
     {
-        private const string sourcePath = @"D:\Programming\Test\tl_2020_us_zcta510.shp";
-        private const string outputPath = @"D:\Programming\Test\NewYorkArea.shp";
-        private const string taxesFilePath = @"D:\Programming\Test\TAXRATES_ZIP5_NY202602.csv";
+        private const string sourcePath = @"C:\.NET\Test\tl_2020_us_zcta510.shp";
+        private const string outputPath = @"C:\.NET\Test\NewYorkArea.shp";
+        private const string taxesFilePath = @"C:\.NET\Test\TAXRATES_ZIP5_NY202602.csv";
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
                 var taxes = ReadTaxCsv(taxesFilePath);
-                CreateNewYorkFile(taxes);
-                //await db.OpenAsync();
-
-                //var version = await db.QuerySingleAsync<string>("SELECT version();");
-                //Console.WriteLine(version);
+                var features = CreateNewYorkFile(taxes);
+                PolygonPngRenderer.RenderToPng(
+                    path: @"C:\.NET\Test\NewYorkArea.png",
+                    geometries: features.Select(f => f.Geometry),
+                    width: 2000,
+                    height: 1200
+                );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
         }
 
-        private void CreateNewYorkFile(List<TaxRecord> taxes)
+        private List<Feature> CreateNewYorkFile(List<TaxRecord> taxes)
         {
             var factory = new GeometryFactory();
 
-            // Читаємо shapefile
             using var reader = new ShapefileDataReader(sourcePath, factory);
 
-            // Створюємо новий header тільки з потрібними полями
             var header = new DbaseFileHeader();
             header.AddColumn("ZipCode", 'C', 5, 0);
             header.AddColumn("StateRate", 'N', 6, 3);
@@ -64,7 +60,6 @@ namespace WellTaxes.Service.Worker
             header.AddColumn("SpecialRate", 'N', 6, 3);
             header.AddColumn("TotalRate", 'N', 6, 3);
 
-            // Створюємо writer і вказуємо header
             var writer = new ShapefileDataWriter(outputPath, factory)
             {
                 Header = header
@@ -74,9 +69,13 @@ namespace WellTaxes.Service.Worker
 
             while (reader.Read())
             {
-                string zipcode = reader.GetString(reader.GetOrdinal("ZCTA5CE10"));
-                var foundTax = taxes.FirstOrDefault(x => x.ZipCode == zipcode);
-                if (foundTax == null) continue;
+                var taxByZip = taxes
+                    .GroupBy(t => t.ZipCode)
+                    .ToDictionary(g => g.Key, g => g.First());
+
+                var zipcode = reader.GetString(reader.GetOrdinal("ZCTA5CE10"));
+                var foundTax = taxByZip.GetValueOrDefault(zipcode);
+                if (foundTax is null) continue;
 
                 var geom = reader.Geometry;
                 var attrs = new AttributesTable
@@ -93,6 +92,8 @@ namespace WellTaxes.Service.Worker
             }
 
             writer.Write(features);
+
+            return features;
         }
 
         public List<TaxRecord> ReadTaxCsv(string filePath)
