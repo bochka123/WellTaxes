@@ -24,7 +24,7 @@ namespace WellTaxes.Service.Worker
 
     public partial class Worker(NpgsqlConnection db, ILogger<Worker> logger) : BackgroundService
     {
-        private const string sourcePath = @"C:\.NET\Test\tl_2020_us_zcta510.shp";
+        private const string sourcePath = @"C:\.NET\Test\tl_2025_us_zcta520.shp";
         private const string outputPath = @"C:\.NET\Test\NewYorkArea.shp";
         private const string taxesFilePath = @"C:\.NET\Test\TAXRATES_ZIP5_NY202602.csv";
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -66,6 +66,7 @@ namespace WellTaxes.Service.Worker
             };
 
             var features = new List<Feature>();
+            var notFoundTaxes = new List<TaxRecord>();
 
             while (reader.Read())
             {
@@ -73,9 +74,14 @@ namespace WellTaxes.Service.Worker
                     .GroupBy(t => t.ZipCode)
                     .ToDictionary(g => g.Key, g => g.First());
 
-                var zipcode = reader.GetString(reader.GetOrdinal("ZCTA5CE10"));
+                var zipcode = reader.GetString(reader.GetOrdinal("ZCTA5CE20"));
                 var foundTax = taxByZip.GetValueOrDefault(zipcode);
-                if (foundTax is null) continue;
+
+                if (foundTax is null)
+                {
+                    notFoundTaxes.Add(new TaxRecord { State = "!NY", ZipCode = zipcode });
+                    continue;
+                }
 
                 var geom = reader.Geometry;
                 var attrs = new AttributesTable
