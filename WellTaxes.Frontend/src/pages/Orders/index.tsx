@@ -7,6 +7,7 @@ import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
 import { MOCK_ORDERS } from './mock';
 import OrdersToolbar from './toolbar/OrdersToolbar';
+import { useOrders } from '@/entities/order';
 
 const Orders: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -16,8 +17,11 @@ const Orders: FC = () => {
         sortDir: 'desc',
     });
 
-    const [page, setPage]         = useState(1);
+    const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+
+    const { data } = useOrders({ page, pageSize, ...filterSort });
+    console.log(data);
 
     const handleCreateOrder = () => {
         setModalVisible(true);
