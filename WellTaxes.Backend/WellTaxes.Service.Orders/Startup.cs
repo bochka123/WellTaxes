@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
+using Npgsql;
 using System.Reflection;
-using WellTaxes.Service.Orders.Data;
 using WellTaxes.Service.Orders.Extensions;
 using WellTaxes.Service.Orders.Services;
 
@@ -20,8 +19,12 @@ namespace WellTaxes.Service.Orders
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                var connStr = config["DefaultConnectionString"];
+                return new NpgsqlConnection(connStr);
+            });
 
             services.AddAuth(Configuration);
             services.AddScoped<IOrderService, OrderService>();
