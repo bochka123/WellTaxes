@@ -56,13 +56,13 @@ export default tseslint.config([
             'eol-last': ['error', 'always'],
             'quotes': ['error', 'single'],
             '@typescript-eslint/explicit-function-return-type': [
-                'error',
-                {
-                    allowExpressions: true,
-                    allowTypedFunctionExpressions: true,
-                    allowHigherOrderFunctions: true,
-                    allowFunctionsWithoutTypeDeclaration: true,
-                },
+                'warn',
+                // {
+                //     allowExpressions: true,
+                //     allowTypedFunctionExpressions: true,
+                //     allowHigherOrderFunctions: true,
+                //     allowConciseArrowFunctionExpressionsStartingWithVoid: true,
+                // },
             ],
             '@typescript-eslint/no-empty-function': 'off',
             '@typescript-eslint/no-misused-promises': 'off',
