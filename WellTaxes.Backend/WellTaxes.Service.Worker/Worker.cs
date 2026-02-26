@@ -1,44 +1,66 @@
-using CsvHelper;
-using CsvHelper.Configuration;
-using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
-using Npgsql;
-using System.Globalization;
+﻿using Npgsql;
+using WellTaxes.Service.Core.Entities;
+using WellTaxes.Service.Worker.Extensions;
+using WellTaxes.Service.Worker.Models;
+using WellTaxes.Service.Worker.Services;
 
 namespace WellTaxes.Service.Worker
 {
 
-    public class TaxRecord
-    {
-        public string State { get; set; }
-        public string ZipCode { get; set; }
-        public string TaxRegionName { get; set; }
-        public decimal EstimatedCombinedRate { get; set; }
-        public decimal StateRate { get; set; }
-        public decimal EstimatedCountyRate { get; set; }
-        public decimal EstimatedCityRate { get; set; }
-        public decimal EstimatedSpecialRate { get; set; }
-        public string RiskLevel { get; set; }
-    }
-
     public partial class Worker(NpgsqlConnection db, ILogger<Worker> logger) : BackgroundService
     {
-        private const string sourcePath = @"C:\.NET\Test\tl_2025_us_zcta520.shp";
-        private const string outputPath = @"C:\.NET\Test\NewYorkArea.shp";
-        private const string taxesFilePath = @"C:\.NET\Test\TAXRATES_ZIP5_NY202602.csv";
+        private const string sourcePath = @"D:\Programming\Test\data2025\tl_2025_us_zcta520.shp";
+        private const string outputPath = @"D:\Programming\Test\York2026\NewYorkArea.shp";
+        private const string taxesFilePath = @"D:\Programming\Test\TAXRATES_ZIP5_NY202602.csv";
+        private async Task TestSQL()
+        {
+            try
+            {
+                Console.WriteLine("Opening connection...");
+                await db.OpenAsync();
+                Console.WriteLine("✅ Connected successfully!");
+
+                var sql = @"
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = 'public'
+                      AND table_type = 'BASE TABLE';
+                ";
+
+                using var cmd = new NpgsqlCommand(sql, db);
+                using var reader = await cmd.ExecuteReaderAsync();
+
+                Console.WriteLine("Tables in public schema:");
+                while (await reader.ReadAsync())
+                {
+                    Console.WriteLine($"- {reader.GetString(0)}");
+                }
+
+                await db.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error: {ex.Message}");
+                Console.WriteLine($"Type: {ex.GetType().Name}");
+                Console.WriteLine($"Inner: {ex.InnerException?.Message}");
+            }
+        }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
-                var taxes = ReadTaxCsv(taxesFilePath);
-                var features = CreateNewYorkFile(taxes);
-                PolygonPngRenderer.RenderToPng(
-                    path: @"C:\.NET\Test\NewYorkArea.png",
-                    geometries: features.Select(f => f.Geometry),
-                    width: 2000,
-                    height: 1200
-                );
+                //await RunSqlFile(@"D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\init.sql");
+                //await TestSQL();
+                
+                //await InsertJurisdictionsToDb(db, jurisdictions);
+
+                //var features = ShapeFileService.CreateJurisdictionsFromShapefile(taxes, sourcePath, outputPath);
+                //PolygonPngRenderer.RenderToPng(
+                //    path: @"D:\Programming\Test\York2026\NewYorkArea.png",
+                //    geometries: features.Select(f => f.Geometry),
+                //    width: 2000,
+                //    height: 1200
+                //);
             }
             catch (Exception ex)
             {
@@ -46,77 +68,38 @@ namespace WellTaxes.Service.Worker
             }
         }
 
-        private List<Feature> CreateNewYorkFile(List<TaxRecord> taxes)
+
+        private async Task RunSqlFile(string filePath)
         {
-            var factory = new GeometryFactory();
+            var sql = await File.ReadAllTextAsync(filePath);
 
-            using var reader = new ShapefileDataReader(sourcePath, factory);
+            await db.OpenAsync();
 
-            var header = new DbaseFileHeader();
-            header.AddColumn("ZipCode", 'C', 5, 0);
-            header.AddColumn("StateRate", 'N', 6, 3);
-            header.AddColumn("CountyRate", 'N', 6, 3);
-            header.AddColumn("CityRate", 'N', 6, 3);
-            header.AddColumn("SpecialRate", 'N', 6, 3);
-            header.AddColumn("TotalRate", 'N', 6, 3);
+            using var cmd = new NpgsqlCommand(sql, db);
+            await cmd.ExecuteNonQueryAsync();
 
-            var writer = new ShapefileDataWriter(outputPath, factory)
+            await db.CloseAsync();
+            Console.WriteLine($"✅ SQL file {filePath} executed successfully!");
+        }
+
+        public async Task FillOrders()
+        {
+            var taxes = ExcelReader.ReadTaxCsv(taxesFilePath);
+            var notFoundTaxes = new List<TaxRateCsv>();
+            await db.OpenAsync();
+            var jurisdictions = await db.GetIdAndZipAsync();
+            foreach (var tax in taxes)
             {
-                Header = header
-            };
-
-            var features = new List<Feature>();
-            var notFoundTaxes = new List<TaxRecord>();
-
-            while (reader.Read())
-            {
-                var taxByZip = taxes
-                    .GroupBy(t => t.ZipCode)
-                    .ToDictionary(g => g.Key, g => g.First());
-
-                var zipcode = reader.GetString(reader.GetOrdinal("ZCTA5CE20"));
-                var foundTax = taxByZip.GetValueOrDefault(zipcode);
-
-                if (foundTax is null)
+                var jurisdiction = jurisdictions.FirstOrDefault(x => x.ZipCode == tax.ZipCode);
+                if (jurisdiction == null)
                 {
-                    notFoundTaxes.Add(new TaxRecord { State = "!NY", ZipCode = zipcode });
+                    notFoundTaxes.Add(tax);
                     continue;
                 }
 
-                var geom = reader.Geometry;
-                var attrs = new AttributesTable
-                {
-                    { "ZipCode", foundTax.ZipCode },
-                    { "StateRate", foundTax.StateRate },
-                    { "CountyRate", foundTax.EstimatedCountyRate },
-                    { "CityRate", foundTax.EstimatedCityRate },
-                    { "SpecialRate", foundTax.EstimatedSpecialRate },
-                    { "TotalRate", foundTax.StateRate + foundTax.EstimatedCountyRate + foundTax.EstimatedCityRate + foundTax.EstimatedSpecialRate }
-                };
-
-                features.Add(new Feature(geom, attrs));
+                await db.InsertToDbAsync(tax, jurisdiction.Id);
             }
-
-            writer.Write(features);
-
-            return features;
-        }
-
-        public List<TaxRecord> ReadTaxCsv(string filePath)
-        {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = true,
-                Delimiter = ",",
-                MissingFieldFound = null,
-                BadDataFound = null
-            };
-
-            using var reader = new StreamReader(filePath);
-            using var csv = new CsvReader(reader, config);
-
-            var records = csv.GetRecords<TaxRecord>().ToList();
-            return records;
+            await db.CloseAsync();
         }
     }
 }

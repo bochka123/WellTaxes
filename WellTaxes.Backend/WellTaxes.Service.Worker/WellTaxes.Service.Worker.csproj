@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
+    <ProjectReference Include="..\WellTaxes.Service.Core\WellTaxes.Service.Core.csproj" />
   </ItemGroup>
 </Project>

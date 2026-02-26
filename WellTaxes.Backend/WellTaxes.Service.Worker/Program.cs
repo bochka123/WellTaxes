@@ -1,4 +1,5 @@
 using Npgsql;
+using System.Text;
 
 namespace WellTaxes.Service.Worker
 {
@@ -6,8 +7,10 @@ namespace WellTaxes.Service.Worker
     {
         public static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Console.OutputEncoding = Encoding.UTF8;
             var builder = Host.CreateApplicationBuilder(args);
-
+            builder.Configuration.AddUserSecrets<Program>();
             builder.Services.AddHostedService<Worker>();
 
             builder.Services.AddTransient(sp =>

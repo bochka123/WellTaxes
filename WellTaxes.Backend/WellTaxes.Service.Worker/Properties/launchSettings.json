@@ -3,8 +3,7 @@
     "WellTaxes.Service.Worker": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DbConnectionString": "Host=localhost;Port=5432;Username=tax;Password=tax;Database=taxdb"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Container (Dockerfile)": {
