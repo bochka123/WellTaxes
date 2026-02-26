@@ -9,14 +9,8 @@ namespace WellTaxes.Service.Orders.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
-    public class OrdersController : ControllerBase
+    public class OrdersController(IOrderService orderService) : ControllerBase
     {
-        private readonly IOrderService _orderService;
-
-        public OrdersController(IOrderService orderService)
-        {
-            _orderService = orderService;
-        }
 
         /// <summary>
         /// Gets all orders
@@ -26,8 +20,8 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
-            var orders = await _orderService.GetAllOrdersAsync();
-            return Ok(orders);
+            //var orders = await _orderService.GetAllOrdersAsync();
+            return Ok("{\"orders: []\"}");
         }
 
         /// <summary>
@@ -40,7 +34,7 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var order = await _orderService.GetOrderByIdAsync(id);
+            var order = await orderService.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -57,7 +51,7 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+            var orders = await orderService.GetOrdersByUserIdAsync(userId);
             return Ok(orders);
         }
 
@@ -70,7 +64,7 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
         {
-            var order = await _orderService.CreateOrderAsync(
+            var order = await orderService.CreateOrderAsync(
                 request.UserId,
                 request.Amount,
                 request.AmountWithTax,
@@ -91,7 +85,7 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateOrderStatusRequest request)
         {
-            var order = await _orderService.UpdateOrderStatusAsync(id, request.Status);
+            var order = await orderService.UpdateOrderStatusAsync(id, request.Status);
             if (order == null)
             {
                 return NotFound();

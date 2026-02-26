@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WellTaxes.Service.Orders.Data;
+using WellTaxes.Service.Orders.Extensions;
 using WellTaxes.Service.Orders.Services;
 
 namespace WellTaxes.Service.Orders
@@ -22,6 +23,7 @@ namespace WellTaxes.Service.Orders
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuth(Configuration);
             services.AddScoped<IOrderService, OrderService>();
 
             services.AddHttpContextAccessor();
@@ -31,49 +33,48 @@ namespace WellTaxes.Service.Orders
 
             services.AddControllers();
 
-            if (Environment.IsDevelopment() || Environment.IsStaging())
-                services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo
-                    {
-                        Title = "WellTaxes Orders API",
-                        Version = "v1",
-                        Description = "API for managing orders with tax calculations"
-                    });
-
-                    c.CustomSchemaIds(type => type.FullName);
-                    c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}_orders");
-                    //c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                    //{
-                    //    Type = SecuritySchemeType.OAuth2,
-                    //    In = ParameterLocation.Header,
-                    //    Scheme = "Bearer",
-                    //    Flows = new OpenApiOAuthFlows
-                    //    {
-                    //        Implicit = new OpenApiOAuthFlow
-                    //        {
-                    //            AuthorizationUrl = new Uri($"{Configuration["AzureAD:Instance"]}{Configuration["AzureAD:TenantId"]}/oauth2/v2.0/authorize"),
-                    //            Scopes = new Dictionary<string, string> { { Configuration["AzureAD:Scopes"]!, "Default" } }
-                    //        }
-                    //    }
-                    //});
-
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "oauth2"
-                                }
-                            },
-                            new string[] {}
-                        }
-                    });
-                    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                    Title = "WellTaxes Orders API",
+                    Version = "v1",
+                    Description = "Orders API for managing users and orders with tax calculations"
                 });
+
+                c.CustomSchemaIds(type => type.FullName);
+                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}_gateway");
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    In = ParameterLocation.Header,
+                    Scheme = "Bearer",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAD:Instance"]}{Configuration["AzureAD:TenantId"]}/oauth2/v2.0/authorize"),
+                            Scopes = new Dictionary<string, string> { { $"{Configuration["AzureAd:ClientId"]}/.default", "Access API" } }
+                        }
+                    }
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "oauth2"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
