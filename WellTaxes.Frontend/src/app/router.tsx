@@ -3,6 +3,7 @@ import { type ElementType, type FC, lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 
 import Spinner from '@/shared/ui/Spinner';
+import Header from '@/widgets/Header';
 
 const Home = lazy(() => import('@/pages/Home'));
 const Auth = lazy(() => import('@/pages/Auth'));
@@ -11,14 +12,19 @@ const Orders = lazy(() => import('@/pages/Orders'));
 
 const AppLayout: FC = () => (
     <div className="flex flex-col min-h-screen">
-        {/*<Header />*/}
-        <main className="flex-1 pb-16">
-            <Suspense fallback={<Spinner />}>
-                <Outlet />
-            </Suspense>
-        </main>
-        {/*<BottomNav />*/}
+        <Suspense fallback={<Spinner />}>
+            <Outlet />
+        </Suspense>
     </div>
+);
+
+const MainLayout: FC = () => (
+    <>
+        <Header />
+        <main className="flex-1">
+            <Outlet />
+        </main>
+    </>
 );
 
 const ProtectedRoute: ElementType = () => {
@@ -38,8 +44,13 @@ export const router = createBrowserRouter([
             {
                 element: <ProtectedRoute />,
                 children: [
-                    { path: '/', element: <Home /> },
-                    { path: '/orders', element: <Orders /> }
+                    {
+                        element: <MainLayout />,
+                        children: [
+                            { path: '/', element: <Home /> },
+                            { path: '/orders', element: <Orders /> }
+                        ],
+                    },
                 ],
             },
             {
