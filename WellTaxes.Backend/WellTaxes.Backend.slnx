@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="WellTaxes.Service.Core/WellTaxes.Service.Core.csproj" Id="7da24694-7891-49fb-8ace-9fcabc9fd966" />
   <Project Path="WellTaxes.Service.Gateaway/WellTaxes.Service.Gateway.csproj" />
   <Project Path="WellTaxes.Service.Orders/WellTaxes.Service.Orders.csproj" Id="25c88d60-06b1-4c87-a599-f45baa79bd80" />
+  <Project Path="WellTaxes.Service.Worker/WellTaxes.Service.Worker.csproj" Id="83797d1a-6213-4e28-82fa-91e2ff44adce" />
 </Solution>
