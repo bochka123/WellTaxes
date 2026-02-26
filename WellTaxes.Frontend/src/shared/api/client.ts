@@ -1,13 +1,17 @@
 import { msalInstance } from '@/shared/config/msal.ts';
+import { getApiToken } from '@/shared/lib/msal/getApiToken.ts';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
+    const token = await getApiToken();
+
     const response = await fetch(`${BASE_URL}${url}`, {
         ...options,
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
             ...options.headers,
         },
     });
