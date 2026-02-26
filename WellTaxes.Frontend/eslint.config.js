@@ -53,7 +53,6 @@ export default tseslint.config([
             'semi': ['error', 'always'],
             'object-curly-spacing': ['error', 'always', {arraysInObjects: false}],
             'simple-import-sort/imports': 'error',
-            'sort-exports/sort-exports': ['error', {sortDir: 'asc'}],
             'eol-last': ['error', 'always'],
             'quotes': ['error', 'single'],
             '@typescript-eslint/explicit-function-return-type': [
