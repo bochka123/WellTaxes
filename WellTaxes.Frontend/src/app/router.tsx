@@ -7,6 +7,7 @@ import Spinner from '@/shared/ui/Spinner';
 const Home = lazy(() => import('@/pages/Home'));
 const Auth = lazy(() => import('@/pages/Auth'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
+const Orders = lazy(() => import('@/pages/Orders'));
 
 const AppLayout: FC = () => (
     <div className="flex flex-col min-h-screen">
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
                 element: <ProtectedRoute />,
                 children: [
                     { path: '/', element: <Home /> },
+                    { path: '/orders', element: <Orders /> }
                 ],
             },
             {
