@@ -61,6 +61,7 @@ export default tseslint.config([
                     allowExpressions: true,
                     allowTypedFunctionExpressions: true,
                     allowHigherOrderFunctions: true,
+                    allowFunctionsWithoutTypeDeclaration: true,
                 },
             ],
             '@typescript-eslint/no-empty-function': 'off',
