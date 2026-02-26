@@ -2,6 +2,7 @@ import { type FC, useMemo, useState } from 'react';
 
 import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
+import Pagination from '@/pages/Orders/Pagination.tsx';
 import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
 import { MOCK_ORDERS } from './mock';
@@ -14,6 +15,9 @@ const Orders: FC = () => {
         sortBy:  'createdAt',
         sortDir: 'desc',
     });
+
+    const [page, setPage]         = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     const handleCreateOrder = () => {
         setModalVisible(true);
@@ -36,6 +40,11 @@ const Orders: FC = () => {
             return filterSort.sortDir === 'asc' ? cmp : -cmp;
         });
     }, [filterSort]);
+
+    const paginated = useMemo(
+        () => sorted.slice((page - 1) * pageSize, page * pageSize),
+        [sorted, page, pageSize]
+    );
     
     return (
         <div className="flex justify-center min-h-screen w-full">
@@ -47,7 +56,14 @@ const Orders: FC = () => {
                     onImportCsv={handleImportCsv}
                 />
                 <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-6 py-2">
-                    <OrdersTable orders={sorted} />
+                    <OrdersTable orders={paginated} />
+                    <Pagination
+                        total={sorted.length}
+                        page={page}
+                        pageSize={pageSize}
+                        onPageChange={setPage}
+                        onPageSizeChange={(size) => { setPageSize(size); setPage(1); }}
+                    />
                 </div>
             </div>
 
