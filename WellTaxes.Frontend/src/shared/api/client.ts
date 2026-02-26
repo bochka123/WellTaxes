@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/features/auth';
+import { msalInstance } from '@/shared/config/msal.ts';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -13,7 +13,7 @@ async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
     });
 
     if (response.status === 401) {
-        useAuthStore.getState().clearAuth();
+        void msalInstance.logoutPopup();
     }
 
     if (!response.ok) {

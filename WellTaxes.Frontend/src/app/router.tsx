@@ -1,11 +1,11 @@
+import { useIsAuthenticated } from '@azure/msal-react';
 import { type ElementType, type FC, lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 
-import { useAuthStore } from '@/features/auth';
 import Spinner from '@/shared/ui/Spinner';
 
-const Home    = lazy(() => import('@/pages/Home'));
-const Auth    = lazy(() => import('@/pages/Auth'));
+const Home = lazy(() => import('@/pages/Home'));
+const Auth = lazy(() => import('@/pages/Auth'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 const AppLayout: FC = () => (
@@ -21,12 +21,12 @@ const AppLayout: FC = () => (
 );
 
 const ProtectedRoute: ElementType = () => {
-    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+    const isAuthenticated = useIsAuthenticated();
     return isAuthenticated ? <Outlet /> : <Navigate to="/auth" replace />;
 };
 
 const GuestRoute: ElementType = () => {
-    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+    const isAuthenticated = useIsAuthenticated();
     return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 };
 

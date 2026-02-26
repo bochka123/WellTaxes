@@ -9,8 +9,7 @@ export const LoginButton: FC = () => {
 
     useEffect(() => {
         const fetchToken = async () => {
-            const token = await getApiToken();
-            console.log('Access token:', token);
+            await getApiToken();
         };
 
         void fetchToken();

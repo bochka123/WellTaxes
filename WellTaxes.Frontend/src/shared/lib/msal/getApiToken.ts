@@ -8,7 +8,7 @@ export async function getApiToken(): Promise<string | null> {
 
     if (accounts.length === 0) {
         try {
-            await msalInstance.loginRedirect({ scopes: msalScopes });
+            // await msalInstance.loginRedirect({ scopes: msalScopes });
             return null;
         } catch (err) {
             console.error('Login failed:', err);
