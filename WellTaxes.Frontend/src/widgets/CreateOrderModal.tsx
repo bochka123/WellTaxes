@@ -48,11 +48,11 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
     <Modal visible={visible} setVisible={setVisible} heading="Create order">
       <div className="flex flex-col sm:flex-row gap-4 p-4 sm:p-5">
         
-        <div className="w-full sm:w-[320px] sm:shrink-0 rounded overflow-hidden">
-          <Map picked={picked} onPick={handleMapPick} height={220} />
+        <div className="w-full sm:w-2/3 rounded overflow-hidden">
+          <Map picked={picked} onPick={handleMapPick} height={280} />
         </div>
 
-        <div className="flex flex-col gap-3 flex-1">
+        <div className="flex flex-col gap-3 w-full sm:w-1/3">
           <div className="flex flex-col gap-1">
             <label className="text-xs text-gray-500">Latitude</label>
             <input
