@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WellTaxes.Service.Orders.Data.Entities;
 using WellTaxes.Service.Orders.Services;
 
 namespace WellTaxes.Service.Orders.Controllers
@@ -9,6 +9,7 @@ namespace WellTaxes.Service.Orders.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
+    [Authorize]
     public class OrdersController(IOrderService orderService) : ControllerBase
     {
 
@@ -73,35 +74,10 @@ namespace WellTaxes.Service.Orders.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
         }
-
-        /// <summary>
-        /// Updates the status of an order
-        /// </summary>
-        /// <param name="id">Order ID</param>
-        /// <param name="request">Status update request</param>
-        /// <returns>Updated order</returns>
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateOrderStatusRequest request)
-        {
-            var order = await orderService.UpdateOrderStatusAsync(id, request.Status);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(order);
-        }
     }
 
     /// <summary>
     /// Request model for creating an order
     /// </summary>
     public record CreateOrderRequest(Guid UserId, decimal Amount, decimal AmountWithTax, decimal Latitude, decimal Longitude);
-
-    /// <summary>
-    /// Request model for updating order status
-    /// </summary>
-    public record UpdateOrderStatusRequest(OrderStatus Status);
 }

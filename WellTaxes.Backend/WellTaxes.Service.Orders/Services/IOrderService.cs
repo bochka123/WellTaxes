@@ -1,4 +1,4 @@
-using WellTaxes.Service.Orders.Data.Entities;
+using WellTaxes.Service.Core.Entities;
 
 namespace WellTaxes.Service.Orders.Services
 {
@@ -8,7 +8,6 @@ namespace WellTaxes.Service.Orders.Services
         Task<Order?> GetOrderByIdAsync(Guid id);
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId);
         Task<Order> CreateOrderAsync(Guid userId, decimal amount, decimal amountWithTax, decimal latitude, decimal longitude);
-        Task<Order?> UpdateOrderStatusAsync(Guid id, OrderStatus status);
         Task<bool> OrderExistsAsync(Guid id);
     }
 }
