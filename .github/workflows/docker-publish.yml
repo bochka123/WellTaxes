@@ -44,3 +44,11 @@ jobs:
           containerAppName: welltaxes-frontend
           resourceGroup: ${{ env.RG_NAME }}
           imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
+
+      - name: Deploy Orders
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          acrName: ${{ env.ACR_NAME }}
+          containerAppName: welltaxes-orders
+          resourceGroup: ${{ env.RG_NAME }}
+          imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
