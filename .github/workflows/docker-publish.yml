@@ -20,6 +20,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Login to ACR
+        run: az acr login --name ${{ env.ACR_NAME }}
+
       - name: Build and Push Orders
         run: |
           docker build -t ${{ env.ACR_NAME }}.azurecr.io/orders:${{ github.sha }} \
