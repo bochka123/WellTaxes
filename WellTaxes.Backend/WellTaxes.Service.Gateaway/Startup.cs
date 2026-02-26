@@ -3,22 +3,18 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WellTaxes.Service.Gateaway.Data;
 using WellTaxes.Service.Gateaway.Services;
+using WellTaxes.Service.Gateway.Extensions;
 
 namespace WellTaxes.Service.Gateaway
 {
-    public class Startup
+    public class Startup(IConfiguration configuration, IWebHostEnvironment environment)
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
-        {
-            Configuration = configuration;
-            Environment = environment;
-        }
-
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
+        public IConfiguration Configuration { get; } = configuration;
+        public IWebHostEnvironment Environment { get; } = environment;
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuth(Configuration);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -50,20 +46,20 @@ namespace WellTaxes.Service.Gateaway
 
                     c.CustomSchemaIds(type => type.FullName);
                     c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}_gateway");
-                    //c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                    //{
-                    //    Type = SecuritySchemeType.OAuth2,
-                    //    In = ParameterLocation.Header,
-                    //    Scheme = "Bearer",
-                    //    Flows = new OpenApiOAuthFlows
-                    //    {
-                    //        Implicit = new OpenApiOAuthFlow
-                    //        {
-                    //            AuthorizationUrl = new Uri($"{Configuration["AzureAD:Instance"]}{Configuration["AzureAD:TenantId"]}/oauth2/v2.0/authorize"),
-                    //            Scopes = new Dictionary<string, string> { { Configuration["AzureAD:Scope"]!, "Default" } }
-                    //        }
-                    //    }
-                    //});
+                    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OAuth2,
+                        In = ParameterLocation.Header,
+                        Scheme = "Bearer",
+                        Flows = new OpenApiOAuthFlows
+                        {
+                            Implicit = new OpenApiOAuthFlow
+                            {
+                                AuthorizationUrl = new Uri($"{Configuration["AzureAD:Instance"]}{Configuration["AzureAD:TenantId"]}/oauth2/v2.0/authorize"),
+                                Scopes = new Dictionary<string, string> { { $"{Configuration["AzureAd:ClientId"]}/.default", "Access API" } }
+                            }
+                        }
+                    });
 
                     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
@@ -107,8 +103,8 @@ namespace WellTaxes.Service.Gateaway
 
             app.UseRouting();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
