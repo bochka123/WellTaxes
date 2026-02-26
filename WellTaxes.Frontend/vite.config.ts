@@ -1,9 +1,30 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export default defineConfig({
+    server: {
+        port: 5173,
+        strictPort: true,
+        host: true,
+    },
+    preview: {
+        port: 4173,
+        host: true,
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
+    base: '/',
     plugins: [
         react(),
         tailwindcss(),

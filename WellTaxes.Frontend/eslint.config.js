@@ -3,8 +3,8 @@ import js from '@eslint/js';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import sortExports from 'eslint-plugin-sort-exports';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import globals from "globals";
 
 export default tseslint.config([
     js.configs.recommended,
@@ -17,6 +17,8 @@ export default tseslint.config([
                 window: 'readonly',
                 navigator: 'readonly',
                 process: 'readonly',
+                ...globals.browser,
+                ...globals.node,
             },
             parserOptions: {
                 ecmaVersion: 'latest',
@@ -30,7 +32,6 @@ export default tseslint.config([
             'react-hooks': reactHooks,
             'react-refresh': reactRefresh,
             'simple-import-sort': simpleImportSort,
-            'sort-exports': sortExports,
         },
         rules: {
             'no-unused-vars': 'off',
@@ -52,11 +53,10 @@ export default tseslint.config([
             'semi': ['error', 'always'],
             'object-curly-spacing': ['error', 'always', {arraysInObjects: false}],
             'simple-import-sort/imports': 'error',
-            'sort-exports/sort-exports': ['error', {sortDir: 'asc'}],
             'eol-last': ['error', 'always'],
             'quotes': ['error', 'single'],
             '@typescript-eslint/explicit-function-return-type': [
-                'error',
+                'warn',
                 {
                     allowExpressions: true,
                     allowTypedFunctionExpressions: true,
