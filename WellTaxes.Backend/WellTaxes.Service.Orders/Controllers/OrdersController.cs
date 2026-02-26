@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WellTaxes.Service.Orders.Data.Entities;
 using WellTaxes.Service.Orders.Services;
@@ -9,6 +10,7 @@ namespace WellTaxes.Service.Orders.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
+    [Authorize]
     public class OrdersController(IOrderService orderService) : ControllerBase
     {
 
