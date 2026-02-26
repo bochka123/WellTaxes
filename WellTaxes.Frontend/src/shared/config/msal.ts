@@ -1,0 +1,17 @@
+import { PublicClientApplication } from '@azure/msal-browser';
+
+export const msalConfig = {
+    auth: {
+        clientId: 'c8ea19e7-1732-457b-9f81-524a7ed404ed',
+        authority: 'https://login.microsoftonline.com/c66d3a69-d073-4c26-8aa2-29ffb701d00f',
+        redirectUri: window.location.origin,
+        navigateToLoginRequestUrl: false
+    },
+    cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: false
+    }
+};
+
+export const msalScopes = ['api://c8ea19e7-1732-457b-9f81-524a7ed404ed/access'];
+export const msalInstance = new PublicClientApplication(msalConfig);

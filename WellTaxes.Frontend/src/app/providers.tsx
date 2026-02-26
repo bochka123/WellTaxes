@@ -1,6 +1,8 @@
+import { MsalProvider } from '@azure/msal-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import { GoogleOAuthProvider } from '@react-oauth/google';
 import type { FC, ReactNode } from 'react';
+
+import { msalInstance } from '@/shared/config/msal.ts';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -14,8 +16,8 @@ type ProvidersProps = {
 
 export const Providers: FC<ProvidersProps> = ({ children }) => (
     <QueryClientProvider client={queryClient}>
-        {/*<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>*/}
+        <MsalProvider instance={msalInstance}>
             {children}
-        {/*</GoogleOAuthProvider>*/}
+        </MsalProvider>
     </QueryClientProvider>
 );

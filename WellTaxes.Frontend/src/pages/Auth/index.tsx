@@ -1,5 +1,7 @@
 import { type FC } from 'react';
 
+import { LoginButton } from '@/features/auth';
+
 const AuthPage: FC = () => {
     return (
         <main className="min-h-screen bg-zinc-50 flex items-center justify-center p-4">
@@ -21,8 +23,7 @@ const AuthPage: FC = () => {
                 </div>
 
                 <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-6">
-                    {/*<AzureAuthButton />*/}
-                    <button>Test</button>
+                    <LoginButton />
                 </div>
 
                 <p className="text-center text-xs text-zinc-400 mt-6">
