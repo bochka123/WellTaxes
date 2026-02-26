@@ -57,12 +57,11 @@ export default tseslint.config([
             'quotes': ['error', 'single'],
             '@typescript-eslint/explicit-function-return-type': [
                 'warn',
-                // {
-                //     allowExpressions: true,
-                //     allowTypedFunctionExpressions: true,
-                //     allowHigherOrderFunctions: true,
-                //     allowConciseArrowFunctionExpressionsStartingWithVoid: true,
-                // },
+                {
+                    allowExpressions: true,
+                    allowTypedFunctionExpressions: true,
+                    allowHigherOrderFunctions: true,
+                },
             ],
             '@typescript-eslint/no-empty-function': 'off',
             '@typescript-eslint/no-misused-promises': 'off',
