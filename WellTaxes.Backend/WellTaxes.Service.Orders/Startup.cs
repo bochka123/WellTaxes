@@ -1,7 +1,9 @@
 ﻿using Microsoft.OpenApi.Models;
 using Npgsql;
 using System.Reflection;
+using WellTaxes.Service.Core.Interfaces;
 using WellTaxes.Service.Core.Queries;
+using WellTaxes.Service.Core.Services;
 using WellTaxes.Service.Orders.Extensions;
 using WellTaxes.Service.Orders.Services;
 
@@ -40,6 +42,9 @@ namespace WellTaxes.Service.Orders
 
             services.AddAuth(Configuration);
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IJurisdictionsService, JurisdictionsService>();
+
+            services.AddMemoryCache();
 
             services.AddHttpContextAccessor();
             services.AddHttpClient();
