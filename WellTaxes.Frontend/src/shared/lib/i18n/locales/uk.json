@@ -1,0 +1,73 @@
+{
+  "home": {
+    "pickPosition": "Виберіть місце на карті або введіть вручну",
+    "latitude": "Широта",
+    "latitudePlaceholder": "напр. 42.147285",
+    "longitude": "Довгота",
+    "longitudePlaceholder": "напр. -76.750888",
+    "price": "Ціна ($)",
+    "pricePlaceholder": "напр. 100000",
+    "calculateTax": "Розрахувати податок"
+  },
+  "createOrder": {
+    "heading": "Створити замовлення",
+    "latitude": "Широта",
+    "latitudePlaceholder": "напр. 42.147285",
+    "longitude": "Довгота",
+    "longitudePlaceholder": "напр. -76.750888",
+    "price": "Ціна ($)",
+    "pricePlaceholder": "напр. 100000",
+    "createButton": "Створити замовлення",
+    "importCSV": "Імпортувати CSV"
+  },
+  "taxModal": {
+    "heading": "Розрахунок податку на нерухомість",
+    "result": "Орієнтовний податок на нерухомість за адресою ({{lat}}, {{lng}}) при ціні ${{price}} становить"
+  },
+  "auth": {
+    "login": "Увійти",
+    "logout": "Вийти",
+    "loginButton": "Увійти через Microsoft",
+    "welcome": "Ласкаво просимо",
+    "subtitle": "Увійдіть через корпоративний акаунт",
+    "useAccount": "Використовуйте свій Microsoft / Azure AD акаунт"
+  },
+  "nav": {
+    "home": "Головна",
+    "orders": "Замовлення"
+  },
+  "orders": {
+    "notFound": "Замовлень не знайдено",
+    "colNumber": "Номер",
+    "colAmount": "Сума",
+    "colAmountWithTax": "Сума з податком",
+    "colCoordinates": "Координати",
+    "colCreated": "Створено",
+    "colUpdated": "Оновлено"
+  },
+  "filterSort": {
+    "sorting": "Сортування",
+    "sortBy": "Сортувати за",
+    "direction": "Напрямок",
+    "asc": "За зростанням",
+    "desc": "За спаданням",
+    "createdAt": "Дата створення",
+    "updatedAt": "Дата зміни",
+    "amount": "Сума",
+    "amountWithTax": "Сума з податком",
+    "orderNumber": "Номер замовлення"
+  },
+  "pagination": {
+    "of": "з",
+    "perPage": "/ стор."
+  },
+  "common": {
+    "close": "Закрити"
+  },
+  "userMenu": {
+    "activeAccount": "Активний акаунт",
+    "otherAccounts": "Інші акаунти",
+    "addAccount": "Додати акаунт",
+    "loggingOut": "Виходимо..."
+  }
+}

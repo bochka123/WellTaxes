@@ -1,20 +1,22 @@
 import { useMsal } from '@azure/msal-react';
 import { type FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { msalScopes } from '@/shared/config/msal.ts';
 import { getApiToken } from '@/shared/lib/msal/getApiToken.ts';
 
 export const LoginButton: FC = () => {
     const { instance } = useMsal();
+    const { t } = useTranslation();
 
     useEffect(() => {
-        const fetchToken = async () => {
+        const fetchToken = async (): Promise<void> => {
             await getApiToken();
         };
 
         void fetchToken();
     }, []);
-    const login = () => {
+    const login = (): void => {
         void instance.loginPopup({
             scopes: msalScopes,
             prompt: 'select_account'
@@ -33,7 +35,7 @@ export const LoginButton: FC = () => {
             transition-all duration-150
             hover:cursor-pointer"
         >
-            Login with Google / Microsoft
+            {t('auth.loginButton')}
         </button>
     );
 };

@@ -1,6 +1,7 @@
 import type { AccountInfo } from '@azure/msal-browser';
 import { useMsal } from '@azure/msal-react';
 import { type FC, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useLogout } from '@/features/auth';
 import { msalScopes } from '@/shared/config/msal.ts';
@@ -16,6 +17,7 @@ const UserMenu: FC = () => {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const photoUrl = useUserPhoto();
+    const { t } = useTranslation();
 
     const activeAccount = instance.getActiveAccount() ?? accounts[0];
     const otherAccounts = accounts.filter((a) => a.homeAccountId !== activeAccount?.homeAccountId);
@@ -24,7 +26,7 @@ const UserMenu: FC = () => {
     const email = activeAccount?.username ?? '';
 
     useEffect(() => {
-        const handler = (e: MouseEvent) => {
+        const handler = (e: MouseEvent): void => {
             if (ref.current && !ref.current.contains(e.target as Node)) {
                 setOpen(false);
             }
@@ -33,13 +35,13 @@ const UserMenu: FC = () => {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    const switchAccount = (account: AccountInfo) => {
+    const switchAccount = (account: AccountInfo): void => {
         instance.setActiveAccount(account);
         setOpen(false);
         instance.acquireTokenSilent({ scopes: msalScopes, account }).catch(() => {});
     };
 
-    const addAccount = () => {
+    const addAccount = (): void => {
         setOpen(false);
         void instance.loginPopup({
             scopes: msalScopes,
@@ -62,7 +64,7 @@ const UserMenu: FC = () => {
                 <div className="absolute right-0 top-10 w-64 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden">
                     <div className="flex flex-col gap-2 px-4 py-3 border-b border-zinc-100">
                         <p className="text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
-                            Активний акаунт
+                            {t('userMenu.activeAccount')}
                         </p>
                         <div className="flex items-center gap-2.5">
                             <div
@@ -81,7 +83,7 @@ const UserMenu: FC = () => {
                     {otherAccounts.length > 0 && (
                         <div className="border-b border-zinc-100">
                             <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-zinc-400 uppercase tracking-wide">
-                                Інші акаунти
+                                {t('userMenu.otherAccounts')}
                             </p>
                             {otherAccounts.map((account) => (
                                 <button
@@ -112,7 +114,7 @@ const UserMenu: FC = () => {
                                 <line x1="19" y1="8" x2="19" y2="14" />
                                 <line x1="22" y1="11" x2="16" y2="11" />
                             </svg>
-                            Додати акаунт
+                            {t('userMenu.addAccount')}
                         </button>
 
                         <button
@@ -128,7 +130,7 @@ const UserMenu: FC = () => {
                                 <polyline points="16 17 21 12 16 7" />
                                 <line x1="21" y1="12" x2="9" y2="12" />
                             </svg>
-                            {isPending ? 'Виходимо...' : 'Вийти'}
+                            {isPending ? t('userMenu.loggingOut') : t('auth.logout')}
                         </button>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
-import { useIsAuthenticated } from '@azure/msal-react';
+import { InteractionStatus } from '@azure/msal-browser';
+import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { type ElementType, type FC, lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 
@@ -29,11 +30,23 @@ const MainLayout: FC = () => (
 
 const ProtectedRoute: ElementType = () => {
     const isAuthenticated = useIsAuthenticated();
+    const { inProgress } = useMsal();
+
+    if (inProgress !== InteractionStatus.None) {
+        return <Spinner fullscreen />;
+    }
+    
     return isAuthenticated ? <Outlet /> : <Navigate to="/auth" replace />;
 };
 
 const GuestRoute: ElementType = () => {
     const isAuthenticated = useIsAuthenticated();
+    const { inProgress } = useMsal();
+
+    if (inProgress !== InteractionStatus.None) {
+        return <Spinner fullscreen />;
+    }
+    
     return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 };
 
