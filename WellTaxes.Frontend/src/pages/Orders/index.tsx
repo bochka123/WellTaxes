@@ -20,7 +20,7 @@ const Orders: FC = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
-    const { data } = useOrders({ page, pageSize, ...filterSort });
+    const { data } = useOrders({ page, pageSize });
     console.log(data);
 
     const handleCreateOrder = (): void => {
