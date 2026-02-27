@@ -46,19 +46,6 @@ namespace WellTaxes.Service.Orders.Controllers
         }
 
         /// <summary>
-        /// Gets all orders for a specific user
-        /// </summary>
-        /// <param name="userId">User ID</param>
-        /// <returns>List of user's orders</returns>
-        [HttpGet("[action]/{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByUserId(Guid userId)
-        {
-            var orders = await orderService.GetOrdersByUserIdAsync(userId);
-            return Ok(orders);
-        }
-
-        /// <summary>
         /// Creates a new order
         /// </summary>
         /// <param name="request">Order creation request</param>
