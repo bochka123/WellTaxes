@@ -3,7 +3,7 @@ using MediatR;
 using MessagePack;
 using Npgsql;
 
-namespace WellTaxes.Service.Core.Quries
+namespace WellTaxes.Service.Core.Queries
 {
     [MessagePackObject]
     public class JurisdictionDto

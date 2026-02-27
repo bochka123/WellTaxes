@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Npgsql;
-using WellTaxes.Service.Core.Entities;
-using WellTaxes.Service.Core.Quries;
+using WellTaxes.Service.Core.Queries;
 using WellTaxes.Service.Worker.Extensions;
 using WellTaxes.Service.Worker.Models;
 using WellTaxes.Service.Worker.Services;
@@ -51,7 +50,6 @@ namespace WellTaxes.Service.Worker
         {
             try
             {
-                var result = await mediator.Send(new GetJurisdictionsQuery());
 
                 //await RunSqlFile(@"D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\init.sql");
                 //await TestSQL();
