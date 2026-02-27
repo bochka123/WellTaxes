@@ -54,7 +54,11 @@ jobs:
           resourceGroup: ${{ env.RG_NAME }}
           imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/orders:${{ github.sha }}
           environmentVariables: |
-            DefaultConnectionString=${{ secrets.DB_CONNECTION_STRING }}
-            AzureAd__TenantId=${{ secrets.AZURE_AD_TENANTID }}
-            AzureAd__ClientId=${{ secrets.AZURE_AD_CLIENTID }}
-            AzureAd__Audience=${{ secrets.AZURE_AD_AUDIENCE }}
+            ConnectionStrings__DefaultConnection="${{ secrets.DB_CONNECTION_STRING }}"
+            AzureAd__TenantId="${{ secrets.AZURE_AD_TENANTID }}"
+            AzureAd__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
+            AzureAd__Audience="${{ secrets.AZURE_AD_AUDIENCE }}"
+            AzureAd__Scopes="${{ secrets.AZURE_AD_AUDIENCE }}"
+            AzureAd__Instance="https://login.microsoftonline.com/"
+            Swagger__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
+            Swagger__ClientId="${{ secrets.AZURE_AD_CLIENTSECRET }}"
