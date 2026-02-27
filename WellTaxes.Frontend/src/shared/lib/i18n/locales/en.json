@@ -69,5 +69,28 @@
     "otherAccounts": "Other accounts",
     "addAccount": "Add an account",
     "loggingOut": "Logging out..."
+  },
+  "welcome": {
+    "title": "Welcome to WellTaxes",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  },
+  "team": {
+    "aboutUs": "About us",
+    "oleksandr": {
+      "name": "Oleksandr Tkach",
+      "position": "Team Lead / DevOps Engineer"
+    },
+    "oleksii": {
+      "name": "oleksii Kovtun",
+      "position": "Backend Developer"
+    },
+    "yaroslav": {
+      "name": "Yaroslav Buhayov",
+      "position": "Frontend Developer / Designer"
+    },
+    "nadiia": {
+      "name": "Nadiia Prokhorchuk",
+      "position": "Backend Developer / Frontend Developer"
+    }
   }
 }

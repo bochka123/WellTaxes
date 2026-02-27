@@ -69,5 +69,28 @@
     "otherAccounts": "Інші акаунти",
     "addAccount": "Додати акаунт",
     "loggingOut": "Виходимо..."
+  },
+  "welcome": {
+    "title": "Вітаємо на платформі WellTaxes",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  },
+  "team": {
+    "aboutUs": "Про нас",
+    "oleksandr": {
+      "name": "Ткач Олександр",
+      "position": "Team Lead / DevOps Engineer"
+    },
+    "oleksii": {
+      "name": "Ковтун Олексій",
+      "position": "Backend Developer"
+    },
+    "yaroslav": {
+      "name": "Бугайов Ярослав",
+      "position": "Frontend Developer / Designer"
+    },
+    "nadiia": {
+      "name": "Прохорчук Надія",
+      "position": "Backend Developer / Frontend Developer"
+    }
   }
 }

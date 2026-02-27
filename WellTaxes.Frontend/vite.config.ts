@@ -30,7 +30,7 @@ export default defineConfig({
         tailwindcss(),
         VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'pwa-maskable-512x512.png'],
+            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'pwa-maskable-512x512.png', 'yaroslav.jpg', 'nadiia.jpg', 'oleksandr.jpg', 'oleksii.jpg'],
             manifest: {
                 name: 'WellTaxes',
                 short_name: 'WellTaxes',
