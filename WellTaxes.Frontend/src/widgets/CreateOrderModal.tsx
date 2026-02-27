@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { type LatLng } from '@/entities/jurisdiction';
 import { useNyGeoJson } from '@/entities/jurisdiction/model/useNyGeoJson.ts';
-import Map from '@/entities/jurisdiction/ui/Map.tsx';
+import Map from '@/shared/ui/Map';
 import Modal from '@/shared/ui/Modal';
 
 interface Props {

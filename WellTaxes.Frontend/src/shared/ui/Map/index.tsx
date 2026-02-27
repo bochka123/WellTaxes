@@ -7,7 +7,8 @@ import { type FC, useMemo } from 'react';
 import { GeoJSON, MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
 import type { LatLng } from '@/entities/jurisdiction';
-import ZipZones from '@/entities/jurisdiction/ui/ZipZones.tsx';
+
+import ZipZones from './ZipZones.tsx';
 
 interface Props {
     picked: LatLng | null;
