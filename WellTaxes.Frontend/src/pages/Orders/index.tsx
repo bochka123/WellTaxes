@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react';
 
-import { useOrders } from '@/entities/order';
+import { useImportCSV, useOrders } from '@/entities/order';
 import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
@@ -26,12 +26,14 @@ const Orders: FC = () => {
         sortDescending: filterSort.sortDescending,
     });
 
+    const { mutate: importCSV } = useImportCSV();
+
     const handleCreateOrder = (): void => {
         setModalVisible(true);
     };
 
     const handleImportCsv = (file: File): void => {
-        alert(`TODO: import file "${file.name}"`);
+        importCSV(file);
     };
     
     return (
