@@ -70,14 +70,10 @@ namespace WellTaxes.Service.Orders
                     Scheme = "Bearer",
                     Flows = new OpenApiOAuthFlows
                     {
-                        AuthorizationCode = new OpenApiOAuthFlow
+                        Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri($"https://login.microsoftonline.com/{Configuration["AzureAd:TenantId"]}/oauth2/v2.0/authorize"),
-                            TokenUrl = new Uri($"https://login.microsoftonline.com/{Configuration["AzureAd:TenantId"]}/oauth2/v2.0/token"),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { $"{Configuration["AzureAd:Audience"]}/access", "Access API" }
-                            }
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}{Configuration["AzureAd:TenantId"]}/oauth2/v2.0/authorize"),
+                            Scopes = new Dictionary<string, string> { { $"{Configuration["AzureAd:Scopes"]}", "Default" } }
                         }
                     }
                 });
@@ -114,6 +110,9 @@ namespace WellTaxes.Service.Orders
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Orders API v1");
                     c.RoutePrefix = "swagger";
                     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+
+                    if (Environment.IsDevelopment())
+                        c.OAuthClientId(Configuration["Swagger:ClientId"]);
                 });
             }
 
