@@ -27,6 +27,7 @@ CREATE TABLE orders (
     amount_with_tax NUMERIC(18,2) NOT NULL CHECK (amount_with_tax >= 0),
     latitude NUMERIC(9,6) NOT NULL,
     longitude NUMERIC(9,6) NOT NULL,
+    tax_rates_id UUID NOT NULL REFERENCES tax_rates(id),
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
