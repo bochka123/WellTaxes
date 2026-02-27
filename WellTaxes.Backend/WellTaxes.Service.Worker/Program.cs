@@ -1,5 +1,6 @@
 using Npgsql;
 using System.Text;
+using WellTaxes.Service.Core.Quries;
 
 namespace WellTaxes.Service.Worker
 {
@@ -12,6 +13,10 @@ namespace WellTaxes.Service.Worker
             var builder = Host.CreateApplicationBuilder(args);
             builder.Configuration.AddUserSecrets<Program>();
             builder.Services.AddHostedService<Worker>();
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(typeof(GetJurisdictionsQuery).Assembly);
+            });
 
             builder.Services.AddTransient(sp =>
             {

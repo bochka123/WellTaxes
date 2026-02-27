@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql;
 using WellTaxes.Service.Core.Quries;
 
 namespace WellTaxes.Service.Orders.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    [Authorize]
-    public class JurisdictionController(NpgsqlConnection db): ControllerBase
+    //[Authorize]
+    public class JurisdictionController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
-            var jurisdictions = await db.GetJurisdictionsAsync();
-            return Ok(jurisdictions);
+            var result = await mediator.Send(new GetJurisdictionsQuery());
+            return Ok(result);
         }
     }
 }
