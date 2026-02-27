@@ -12,15 +12,19 @@ import OrdersToolbar from './toolbar/OrdersToolbar';
 const Orders: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [filterSort, setFilterSort] = useState<FilterSortState>({
-        sortBy:  'createdAt',
-        sortDir: 'desc',
-    });
-
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [filterSort, setFilterSort] = useState<FilterSortState>({
+        sortBy:         'createdAt',
+        sortDescending: true,
+    });
 
-    const { data: orders, isLoading } = useOrders({ page, pageSize });
+    const { data: orders, isLoading } = useOrders({
+        page,
+        pageSize,
+        sortBy: filterSort.sortBy,
+        sortDescending: filterSort.sortDescending,
+    });
 
     const handleCreateOrder = (): void => {
         setModalVisible(true);

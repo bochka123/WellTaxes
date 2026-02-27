@@ -1,12 +1,11 @@
 import { type FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export type SortField = 'createdAt' | 'updatedAt' | 'amount' | 'amountWithTax' | 'orderNumber';
-export type SortDir   = 'asc' | 'desc';
+import type { SortField } from '@/entities/order';
 
 export interface FilterSortState {
-    sortBy:  SortField;
-    sortDir: SortDir;
+    sortBy?:         SortField;
+    sortDescending:  boolean;
 }
 
 interface Props {
@@ -21,7 +20,6 @@ const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
 
     const SORT_FIELDS: { value: SortField; label: string }[] = [
         { value: 'createdAt',     label: t('filterSort.createdAt') },
-        { value: 'updatedAt',     label: t('filterSort.updatedAt') },
         { value: 'amount',        label: t('filterSort.amount') },
         { value: 'amountWithTax', label: t('filterSort.amountWithTax') },
         { value: 'orderNumber',   label: t('filterSort.orderNumber') },
@@ -75,22 +73,19 @@ const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
                     <div className="flex flex-col gap-2">
                         <p className="text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">{t('filterSort.direction')}</p>
                         <div className="flex gap-1.5">
-                            {(['asc', 'desc'] as SortDir[]).map((d) => (
+                            {([false, true] as boolean[]).map((desc) => (
                                 <button
-                                    key={d}
-                                    onClick={() => onChange({ ...value, sortDir: d })}
-                                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium border transition-all duration-100 cursor-pointer ${
-                                        value.sortDir === d
-                                            ? 'text-white border-transparent'
-                                            : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300'
+                                    key={String(desc)}
+                                    onClick={() => onChange({ ...value, sortDescending: desc })}
+                                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
+                                        value.sortDescending === desc ? 'text-white border-transparent' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300'
                                     }`}
-                                    style={value.sortDir === d ? { backgroundColor: '#63aeff', borderColor: '#63aeff' } : {}}
+                                    style={value.sortDescending === desc ? { backgroundColor: '#63aeff', borderColor: '#63aeff' } : {}}
                                 >
-                                    {d === 'asc' ? (
-                                        <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>{t('filterSort.asc')}</>
-                                    ) : (
-                                        <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>{t('filterSort.desc')}</>
-                                    )}
+                                    {!desc
+                                        ? <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>{t('filterSort.asc')}</>
+                                        : <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>{t('filterSort.desc')}</>
+                                    }
                                 </button>
                             ))}
                         </div>
