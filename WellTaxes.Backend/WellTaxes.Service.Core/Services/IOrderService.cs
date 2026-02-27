@@ -4,10 +4,9 @@ namespace WellTaxes.Service.Core.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetAllOrdersAsync();
+        Task<Order> CreateOrderAsync(decimal amount, decimal latitude, decimal longitude);
         Task<Order?> GetOrderByIdAsync(Guid id);
-        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId);
-        Task<Order> CreateOrderAsync(Guid userId, decimal amount, decimal amountWithTax, decimal latitude, decimal longitude);
-        Task<bool> OrderExistsAsync(Guid id);
+        Task<bool> UpdateOrderAsync(Guid id, decimal amount, decimal latitude, decimal longitude);
+        Task<bool> DeleteOrderAsync(Guid id);
     }
 }
