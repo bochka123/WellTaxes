@@ -1,9 +1,10 @@
 import { type FC, useState } from 'react';
 
 import { useOrders } from '@/entities/order';
-import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
+import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
+import type { Filter } from '@/shared/api/api.types.ts';
 import Spinner from '@/shared/ui/Spinner';
 import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
@@ -18,12 +19,14 @@ const Orders: FC = () => {
         sortBy:         'createdAt',
         sortDescending: true,
     });
+    const [filters, setFilters] = useState<Filter[]>([]);
 
     const { data: orders, isLoading } = useOrders({
         page,
         pageSize,
         sortBy: filterSort.sortBy,
         sortDescending: filterSort.sortDescending,
+        filters: filters.length ? filters : undefined,
     });
 
     const handleCreateOrder = (): void => {
@@ -38,8 +41,10 @@ const Orders: FC = () => {
         <div className="flex justify-center min-h-screen w-full">
             <div className="flex flex-col gap-4 px-6 py-6 max-w-6xl w-6xl">
                 <OrdersToolbar
+                    filters={filters}
                     filterSort={filterSort}
                     onFilterSortChange={setFilterSort}
+                    onFiltersChange={setFilters}
                     onCreateOrder={handleCreateOrder}
                     onImportCsv={handleImportCsv}
                 />
