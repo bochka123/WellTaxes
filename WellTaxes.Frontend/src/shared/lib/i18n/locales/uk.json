@@ -57,6 +57,18 @@
     "amountWithTax": "Сума з податком",
     "orderNumber": "Номер замовлення"
   },
+  "filter": {
+    "apply": "Застосувати",
+    "reset": "Скинути",
+    "title": "Фільтр",
+    "addCondition": "Додати умову",
+    "valuePlaceholder": "значення",
+    "amount": "Сума",
+    "amountWithTax": "Сума з податком",
+    "totalRate": "Ставка",
+    "taxRegionName": "Регіон",
+    "orderNumber": "Номер замовлення"
+  },
   "pagination": {
     "of": "з",
     "perPage": "/ стор."

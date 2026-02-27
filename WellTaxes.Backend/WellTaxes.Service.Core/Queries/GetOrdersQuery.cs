@@ -7,15 +7,34 @@ using System.Text;
 
 namespace WellTaxes.Service.Core.Queries
 {
-    public record OrderListDto(
-        Guid Id,
-        string OrderNumber,
-        decimal Amount,
-        decimal AmountWithTax,
-        decimal TotalRate,
-        string TaxRegionName,
-        DateTime CreatedAt
-    );
+    public class TaxBreakdownDto
+    {
+        public decimal StateRate { get; set; }
+        public decimal CountyRate { get; set; }
+        public decimal CityRate { get; set; }
+        public decimal SpecialRate { get; set; }
+    }
+
+    public class JurisdictionInfoDto
+    {
+        public string ZipCode { get; set; } = string.Empty;
+        public string TaxRegionName { get; set; } = string.Empty;
+    }
+
+    public class OrderListDto
+    {
+        public Guid Id { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
+        public decimal Subtotal { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal CompositeTaxRate { get; set; }
+        public DateTime Timestamp { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+        public TaxBreakdownDto Breakdown { get; set; } = new();
+        public JurisdictionInfoDto Jurisdiction { get; set; } = new();
+    }
 
     public class FilterCriterion
     {
@@ -28,7 +47,7 @@ namespace WellTaxes.Service.Core.Queries
     {
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-        public string? SortBy { get; set; } = "CreatedAt";
+        public string? SortBy { get; set; } = "Timestamp";
         public bool SortDescending { get; set; } = true;
         public List<FilterCriterion> Filters { get; set; } = new();
     }
@@ -60,10 +79,14 @@ namespace WellTaxes.Service.Core.Queries
             var columnMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "OrderNumber", "o.order_number" },
-                { "Amount", "o.amount" },
-                { "CreatedAt", "o.created_at" },
-                { "TotalRate", "tr.total_rate" },
-                { "Region", "tr.tax_region_name" }
+                { "Subtotal", "o.amount" },
+                { "TotalAmount", "o.amount_with_tax" },
+                { "Timestamp", "o.\"timestamp\"" },
+                { "CompositeTaxRate", "tr.total_rate" },
+                { "Region", "tr.tax_region_name" },
+                { "ZipCode", "tr.zipcode" },
+                { "Latitude", "o.latitude" },
+                { "Longitude", "o.longitude" }
             };
 
             if (request.Filters != null)
@@ -92,10 +115,10 @@ namespace WellTaxes.Service.Core.Queries
                         {
                             paramValue = filter.Field.ToLower() switch
                             {
-                                "amount" or "totalrate" => decimal.TryParse(filter.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0m,
-
-                                "createdat" => DateTime.TryParse(filter.Value, CultureInfo.InvariantCulture, out var dt) ? dt : DateTime.UtcNow,
-
+                                "subtotal" or "totalamount" or "compositetaxrate" =>
+                                    decimal.TryParse(filter.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0m,
+                                "timestamp" =>
+                                    DateTime.TryParse(filter.Value, CultureInfo.InvariantCulture, out var dt) ? dt : DateTime.UtcNow,
                                 _ => filter.Value
                             };
                         }
@@ -120,14 +143,33 @@ namespace WellTaxes.Service.Core.Queries
                 SELECT 
                     o.id as Id, 
                     o.order_number as OrderNumber, 
-                    o.amount as Amount, 
-                    o.amount_with_tax as AmountWithTax, 
-                    tr.total_rate as TotalRate, 
-                    tr.tax_region_name as TaxRegionName,
-                    o.created_at as CreatedAt "
+                    o.amount as Subtotal, 
+                    (o.amount_with_tax - o.amount) as TaxAmount, 
+                    o.amount_with_tax as TotalAmount, 
+                    tr.total_rate as CompositeTaxRate, 
+                    o.""timestamp"" as Timestamp,
+                    o.latitude as Latitude,
+                    o.longitude as Longitude,
+                    
+                    tr.state_rate as StateRate, 
+                    tr.estimated_county_rate as CountyRate, 
+                    tr.estimated_city_rate as CityRate, 
+                    tr.estimated_special_rate as SpecialRate,
+                    
+                    tr.zipcode as ZipCode, 
+                    tr.tax_region_name as TaxRegionName "
                 + sqlBuilder.ToString();
 
-            var items = await db.QueryAsync<OrderListDto>(selectSql, parameters);
+            var items = await db.QueryAsync<OrderListDto, TaxBreakdownDto, JurisdictionInfoDto, OrderListDto>(
+                selectSql,
+                (order, breakdown, jurisdiction) =>
+                {
+                    order.Breakdown = breakdown;
+                    order.Jurisdiction = jurisdiction;
+                    return order;
+                },
+                parameters,
+                splitOn: "StateRate,ZipCode");
 
             return new PagedResult<OrderListDto>(items.AsList(), totalCount, request.Page, request.PageSize);
         }

@@ -57,6 +57,18 @@
     "amountWithTax": "Amount (Incl. Tax)",
     "orderNumber": "Order Number"
   },
+  "filter": {
+    "apply": "Apply",
+    "reset": "Reset",
+    "title": "Filter",
+    "addCondition": "Add condition",
+    "valuePlaceholder": "value",
+    "amount": "Amount",
+    "amountWithTax": "Amount with tax",
+    "totalRate": "Total rate",
+    "taxRegionName": "Region",
+    "orderNumber": "Order number"
+  },
   "pagination": {
     "of": "of",
     "perPage": "/ page"

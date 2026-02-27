@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WellTaxes.Service.Core.Entities;
+using WellTaxes.Service.Core.Interfaces;
 using WellTaxes.Service.Core.Queries;
-using WellTaxes.Service.Core.Services;
 
 namespace WellTaxes.Service.Orders.Controllers
 {
@@ -53,7 +53,7 @@ namespace WellTaxes.Service.Orders.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
         {
-            var order = await orderService.CreateOrderAsync(request.Amount, request.Latitude, request.Longitude);
+            var order = await orderService.CreateOrderAsync(request.Amount, request.Latitude, request.Longitude, request.Timestamp);
             return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
         }
 
@@ -98,6 +98,6 @@ namespace WellTaxes.Service.Orders.Controllers
     /// <summary>
     /// Request model for creating an order
     /// </summary>
-    public record CreateOrderRequest(decimal Amount, decimal Latitude, decimal Longitude);
+    public record CreateOrderRequest(decimal Amount, decimal Latitude, decimal Longitude, DateTime Timestamp);
     public record UpdateOrderRequest(decimal Amount, decimal Latitude, decimal Longitude);
 }

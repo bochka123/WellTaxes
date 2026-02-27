@@ -9,5 +9,6 @@
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public Guid TaxRatesId { get; set; } //foreign key on tax rate
+        public DateTime Timestamp { get; set; }
     }
 }
