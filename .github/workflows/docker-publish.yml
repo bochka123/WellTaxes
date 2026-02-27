@@ -53,7 +53,7 @@ jobs:
           containerAppName: welltaxes-orders
           resourceGroup: ${{ env.RG_NAME }}
           imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/orders:${{ github.sha }}
-          environmentVariables: |
+          environmentVariables: >
             ConnectionStrings__DefaultConnection="${{ secrets.DB_CONNECTION_STRING }}"
             AzureAd__TenantId="${{ secrets.AZURE_AD_TENANTID }}"
             AzureAd__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
@@ -61,4 +61,4 @@ jobs:
             AzureAd__Scopes="${{ secrets.AZURE_AD_AUDIENCE }}"
             AzureAd__Instance="https://login.microsoftonline.com/"
             Swagger__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
-            Swagger__ClientId="${{ secrets.AZURE_AD_CLIENTSECRET }}"
+            Swagger__ClientSecret="${{ secrets.AZURE_AD_CLIENTSECRET }}"
