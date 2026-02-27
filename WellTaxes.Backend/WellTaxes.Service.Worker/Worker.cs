@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Dapper;
+using MediatR;
 using Npgsql;
 using WellTaxes.Service.Core.Entities;
 using WellTaxes.Service.Core.Quries;
@@ -51,7 +52,61 @@ namespace WellTaxes.Service.Worker
         {
             try
             {
-                var result = await mediator.Send(new GetJurisdictionsQuery());
+                await db.OpenAsync(stoppingToken);
+
+                // 1. Отримуємо наявні ставки, щоб випадково обирати їх і рахувати ціну з податком
+                var taxRates = (await db.QueryAsync<(Guid Id, decimal TotalRate)>(
+                    "SELECT id, total_rate FROM tax_rates")).ToList();
+
+                if (!taxRates.Any())
+                {
+                    Console.WriteLine("Помилка: Таблиця tax_rates порожня. Спочатку заповни її!");
+                    return;
+                }
+
+                // 2. Твій Object ID (скопіюй повний GUID зі свого скриншота дебагера)
+                var myUserId = Guid.Parse("0e8bfad1-04b1-4935-9b5c-73f81998692e"); // <-- ЗАМІНИ НА СВІЙ
+                var random = new Random();
+                var orders = new List<dynamic>();
+
+                Console.WriteLine("Генеруємо 5000 замовлень...");
+
+                // 3. Генеруємо дані
+                for (int i = 0; i < 5000; i++)
+                {
+                    // Обираємо випадкову ставку з бази
+                    var randomTaxRate = taxRates[random.Next(taxRates.Count)];
+
+                    // Генеруємо випадкову ціну від 10 до 110 доларів
+                    var subtotal = (decimal)(random.NextDouble() * 100 + 10);
+
+                    // Рахуємо суму з податком відповідно до обраної ставки
+                    var amountWithTax = subtotal * (1 + randomTaxRate.TotalRate);
+
+                    orders.Add(new
+                    {
+                        OrderNumber = $"ORD-{DateTime.UtcNow:yyMMdd}-{i:D5}-{Guid.NewGuid().ToString()[..4].ToUpper()}",
+                        UserId = myUserId,
+                        Amount = Math.Round(subtotal, 2),
+                        AmountWithTax = Math.Round(amountWithTax, 2),
+
+                        // Зразкові координати для штату Нью-Йорк
+                        Latitude = (decimal)(40.5 + random.NextDouble() * 4.5),
+                        Longitude = (decimal)(-79.0 + random.NextDouble() * 7.0),
+
+                        TaxRatesId = randomTaxRate.Id
+                    });
+                }
+
+                // 4. Масова вставка через Dapper
+                var sql = @"
+            INSERT INTO orders (order_number, user_id, amount, amount_with_tax, latitude, longitude, tax_rates_id, created_at, updated_at)
+            VALUES (@OrderNumber, @UserId, @Amount, @AmountWithTax, @Latitude, @Longitude, @TaxRatesId, NOW(), NOW())";
+
+                // Dapper автоматично розіб'є список об'єктів на ефективні параметризовані запити
+                await db.ExecuteAsync(sql, orders);
+
+                Console.WriteLine("Успішно додано 5000 замовлень у базу!");
 
                 //await RunSqlFile(@"D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\init.sql");
                 //await TestSQL();
