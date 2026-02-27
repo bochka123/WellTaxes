@@ -49,13 +49,14 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
 
     return (
         <Modal visible={visible} setVisible={setVisible} heading={t('createOrder.heading')}>
-            <div className="flex flex-col sm:flex-row gap-4 p-4 sm:p-5">
+            <div className="flex flex-1 flex-col sm:flex-row items-stretch gap-4 p-4 sm:p-5">
 
                 <div className="w-full sm:w-2/3 rounded overflow-hidden">
-                    <Map picked={picked} onPick={handleMapPick} height={280} />
+                    <Map picked={picked} onPick={handleMapPick} />
                 </div>
 
                 <div className="flex flex-col gap-3 w-full sm:w-1/3">
+                
                     <div className="flex flex-col gap-1">
                         <label className="text-xs text-gray-500">{t('createOrder.latitude')}</label>
                         <input
@@ -92,14 +93,15 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
                             className={inputClass}
                         />
                     </div>
-
-                    <button
-                        type="button"
-                        onClick={handleCreate}
-                        className="mt-auto w-full py-2 rounded border-2 border-green-500 text-green-600 text-sm font-semibold hover:bg-green-500 hover:text-white transition-colors cursor-pointer bg-transparent"
-                    >
-                        {t('createOrder.createButton')}
-                    </button>
+                    <div className="flex flex-1 items-end">
+                        <button
+                            type="button"
+                            onClick={handleCreate}
+                            className="w-full py-2 rounded border-2 border-green-500 text-green-600 text-sm font-semibold hover:bg-green-500 hover:text-white transition-colors cursor-pointer bg-transparent"
+                        >
+                            {t('createOrder.createButton')}
+                        </button>
+                    </div>
                 </div>
             </div>
         </Modal>

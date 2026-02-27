@@ -1,25 +1,25 @@
+import type { Filter, PaginatedResponse } from '@/shared/api/api.types.ts';
+
 export interface Order {
-    id: string;
-    orderNumber: string;
-    userId: string;
-    amount: number;
+    id:            string;
+    orderNumber:   string;
+    amount:        number;
     amountWithTax: number;
-    latitude: number;
-    longitude: number;
-    createdAt: string;
-    updatedAt: string;
+    totalRate:     number;
+    taxRegionName: string;
+    createdAt:     string;
 }
+
+export type SortField = keyof Pick<Order,
+    'amount' | 'amountWithTax' | 'totalRate' | 'orderNumber' | 'createdAt'
+>;
 
 export interface GetOrdersParams {
-    page:     number;
-    pageSize: number;
-    sortBy:   keyof Pick<Order, 'createdAt' | 'updatedAt' | 'amount' | 'amountWithTax' | 'orderNumber'>;
-    sortDir:  'asc' | 'desc';
+    page:            number;
+    pageSize:        number;
+    sortBy?:         SortField;
+    sortDescending?: boolean;
+    filters?:        Filter[];
 }
 
-export interface PaginatedResponse<T> {
-    data:     T[];
-    total:    number;
-    page:     number;
-    pageSize: number;
-}
+export interface PaginatedOrders extends PaginatedResponse<Order> { }
