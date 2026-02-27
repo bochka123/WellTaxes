@@ -1,6 +1,6 @@
 using WellTaxes.Service.Core.Entities;
 
-namespace WellTaxes.Service.Orders.Services
+namespace WellTaxes.Service.Core.Services
 {
     public class OrderService : IOrderService
     {

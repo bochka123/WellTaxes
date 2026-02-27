@@ -1,27 +1,30 @@
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useState } from 'react';
 
 import { useOrders } from '@/entities/order';
 import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
+import Spinner from '@/shared/ui/Spinner';
 import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
-import { MOCK_ORDERS } from './mock';
 import OrdersToolbar from './toolbar/OrdersToolbar';
 
 const Orders: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [filterSort, setFilterSort] = useState<FilterSortState>({
-        sortBy:  'createdAt',
-        sortDir: 'desc',
-    });
-
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [filterSort, setFilterSort] = useState<FilterSortState>({
+        sortBy:         'createdAt',
+        sortDescending: true,
+    });
 
-    const { data } = useOrders({ page, pageSize, ...filterSort });
-    console.log(data);
+    const { data: orders, isLoading } = useOrders({
+        page,
+        pageSize,
+        sortBy: filterSort.sortBy,
+        sortDescending: filterSort.sortDescending,
+    });
 
     const handleCreateOrder = (): void => {
         setModalVisible(true);
@@ -30,25 +33,6 @@ const Orders: FC = () => {
     const handleImportCsv = (file: File): void => {
         alert(`TODO: import file "${file.name}"`);
     };
-
-    const sorted = useMemo(() => {
-        return [...MOCK_ORDERS].sort((a, b) => {
-            let cmp = 0;
-            switch (filterSort.sortBy) {
-                case 'createdAt':     cmp = a.CreatedAt.localeCompare(b.CreatedAt); break;
-                case 'updatedAt':     cmp = a.UpdatedAt.localeCompare(b.UpdatedAt); break;
-                case 'amount':        cmp = a.Amount - b.Amount; break;
-                case 'amountWithTax': cmp = a.AmountWithTax - b.AmountWithTax; break;
-                case 'orderNumber':   cmp = a.OrderNumber.localeCompare(b.OrderNumber); break;
-            }
-            return filterSort.sortDir === 'asc' ? cmp : -cmp;
-        });
-    }, [filterSort]);
-
-    const paginated = useMemo(
-        () => sorted.slice((page - 1) * pageSize, page * pageSize),
-        [sorted, page, pageSize]
-    );
     
     return (
         <div className="flex justify-center min-h-screen w-full">
@@ -60,9 +44,12 @@ const Orders: FC = () => {
                     onImportCsv={handleImportCsv}
                 />
                 <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-6 py-2">
-                    <OrdersTable orders={paginated} />
+                    <OrdersTable orders={orders?.items ?? []} />
+                    {
+                        isLoading && <Spinner />
+                    }
                     <Pagination
-                        total={sorted.length}
+                        total={orders?.totalCount ?? 0}
                         page={page}
                         pageSize={pageSize}
                         onPageChange={setPage}

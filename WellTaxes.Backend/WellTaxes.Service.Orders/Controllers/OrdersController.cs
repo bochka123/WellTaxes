@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WellTaxes.Service.Orders.Services;
+using WellTaxes.Service.Core.Queries;
+using WellTaxes.Service.Core.Services;
 
 namespace WellTaxes.Service.Orders.Controllers
 {
@@ -8,9 +10,9 @@ namespace WellTaxes.Service.Orders.Controllers
     /// Controller for managing orders
     /// </summary>
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     [Authorize]
-    public class OrdersController(IOrderService orderService) : ControllerBase
+    public class OrdersController(IMediator mediator, IOrderService orderService) : ControllerBase
     {
 
         /// <summary>
@@ -19,10 +21,10 @@ namespace WellTaxes.Service.Orders.Controllers
         /// <returns>List of all orders</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] GetOrdersQuery query)
         {
-            //var orders = await _orderService.GetAllOrdersAsync();
-            return Ok("{\"orders: []\"}");
+            var result = await mediator.Send(query);
+            return Ok(result);
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace WellTaxes.Service.Orders.Controllers
         /// </summary>
         /// <param name="id">Order ID</param>
         /// <returns>Order details</returns>
-        [HttpGet("{id}")]
+        [HttpGet("[action]/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
@@ -41,19 +43,6 @@ namespace WellTaxes.Service.Orders.Controllers
                 return NotFound();
             }
             return Ok(order);
-        }
-
-        /// <summary>
-        /// Gets all orders for a specific user
-        /// </summary>
-        /// <param name="userId">User ID</param>
-        /// <returns>List of user's orders</returns>
-        [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByUserId(Guid userId)
-        {
-            var orders = await orderService.GetOrdersByUserIdAsync(userId);
-            return Ok(orders);
         }
 
         /// <summary>
@@ -73,6 +62,13 @@ namespace WellTaxes.Service.Orders.Controllers
                 request.Longitude);
 
             return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+        }
+
+        [HttpPost("[action]")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> Import([FromBody] object request)
+        {
+            return Ok();
         }
     }
 
