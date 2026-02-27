@@ -52,8 +52,8 @@ jobs:
           acrName: ${{ env.ACR_NAME }}
           containerAppName: welltaxes-orders
           resourceGroup: ${{ env.RG_NAME }}
-          imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
-          envVars: |
+          imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/orders:${{ github.sha }}
+          environmentVariables: |
             DefaultConnectionString=${{ secrets.DB_CONNECTION_STRING }}
             AzureAd__TenantId=${{ secrets.AZURE_AD_TENANTID }}
             AzureAd__ClientId=${{ secrets.AZURE_AD_CLIENTID }}
