@@ -22,4 +22,4 @@ export interface GetOrdersParams {
     filters?:        Filter[];
 }
 
-export interface PaginatedOrder<T> extends PaginatedResponse<T> { }
+export interface PaginatedOrders extends PaginatedResponse<Order> { }
