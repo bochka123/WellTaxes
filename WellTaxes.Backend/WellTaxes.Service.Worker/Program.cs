@@ -1,6 +1,6 @@
 using Npgsql;
 using System.Text;
-using WellTaxes.Service.Core.Quries;
+using WellTaxes.Service.Core.Queries;
 
 namespace WellTaxes.Service.Worker
 {

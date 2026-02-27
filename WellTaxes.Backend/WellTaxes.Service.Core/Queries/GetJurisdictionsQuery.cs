@@ -2,7 +2,7 @@
 using MediatR;
 using Npgsql;
 
-namespace WellTaxes.Service.Core.Quries
+namespace WellTaxes.Service.Core.Queries
 {
     public class JurisdictionDto
     {

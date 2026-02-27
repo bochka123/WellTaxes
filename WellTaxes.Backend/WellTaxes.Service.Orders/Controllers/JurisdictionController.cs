@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WellTaxes.Service.Core.Quries;
+using WellTaxes.Service.Core.Queries;
 
 namespace WellTaxes.Service.Orders.Controllers
 {
