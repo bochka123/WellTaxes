@@ -1,0 +1,96 @@
+{
+  "home": {
+    "pickPosition": "Pick position on map or type",
+    "latitude": "Latitude",
+    "latitudePlaceholder": "e.g. 42.147285",
+    "longitude": "Longitude",
+    "longitudePlaceholder": "e.g. -76.750888",
+    "price": "Price ($)",
+    "pricePlaceholder": "e.g. 100000",
+    "calculateTax": "Calculate Tax"
+  },
+  "createOrder": {
+    "heading": "Create order",
+    "latitude": "Latitude",
+    "latitudePlaceholder": "e.g. 42.147285",
+    "longitude": "Longitude",
+    "longitudePlaceholder": "e.g. -76.750888",
+    "price": "Price ($)",
+    "pricePlaceholder": "e.g. 100000",
+    "createButton": "Create order",
+    "importCSV": "Import CSV"
+  },
+  "taxModal": {
+    "heading": "Estimated Property Tax",
+    "result": "Estimated tax for property at ({{lat}}, {{lng}}) with price ${{price}} is"
+  },
+  "auth": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "loginButton": "Login with Microsoft",
+    "welcome": "Welcome",
+    "subtitle": "Sign in with your corporate account",
+    "useAccount": "Use your Microsoft / Azure AD account"
+  },
+  "nav": {
+    "home": "Home",
+    "orders": "Orders"
+  },
+  "orders": {
+    "notFound": "No orders found",
+    "colNumber": "Number",
+    "colAmount": "Amount",
+    "colAmountWithTax": "Amount (Incl. Tax)",
+    "colCoordinates": "Coordinates",
+    "colCreated": "Created",
+    "colUpdated": "Updated"
+  },
+  "filterSort": {
+    "sorting": "Sorting",
+    "sortBy": "Sort by",
+    "direction": "Direction",
+    "asc": "Asc",
+    "desc": "Desc",
+    "createdAt": "Creation Date",
+    "updatedAt": "Modified Date",
+    "amount": "Amount",
+    "amountWithTax": "Amount (Incl. Tax)",
+    "orderNumber": "Order Number"
+  },
+  "pagination": {
+    "of": "of",
+    "perPage": "/ page"
+  },
+  "common": {
+    "close": "Close"
+  },
+  "userMenu": {
+    "activeAccount": "Active account",
+    "otherAccounts": "Other accounts",
+    "addAccount": "Add an account",
+    "loggingOut": "Logging out..."
+  },
+  "welcome": {
+    "title": "Welcome to WellTaxes",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  },
+  "team": {
+    "aboutUs": "About us",
+    "oleksandr": {
+      "name": "Oleksandr Tkach",
+      "position": "Team Lead / DevOps Engineer"
+    },
+    "oleksii": {
+      "name": "Oleksii Kovtun",
+      "position": "Backend Developer"
+    },
+    "yaroslav": {
+      "name": "Yaroslav Buhayov",
+      "position": "Frontend Developer / Designer"
+    },
+    "nadiia": {
+      "name": "Nadiia Prokhorchuk",
+      "position": "Backend Developer / Frontend Developer"
+    }
+  }
+}

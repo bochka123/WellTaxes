@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
+using Npgsql;
 using System.Reflection;
-using WellTaxes.Service.Orders.Data;
+using WellTaxes.Service.Core.Quries;
+using WellTaxes.Service.Orders.Extensions;
 using WellTaxes.Service.Orders.Services;
 
 namespace WellTaxes.Service.Orders
@@ -19,61 +20,84 @@ namespace WellTaxes.Service.Orders
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                var connStr = config["DefaultConnectionString"];
+                return new NpgsqlConnection(connStr);
+            });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.SetIsOriginAllowed(origin => true)
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
+
+            services.AddAuth(Configuration);
             services.AddScoped<IOrderService, OrderService>();
 
             services.AddHttpContextAccessor();
             services.AddHttpClient();
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(typeof(GetJurisdictionsQuery).Assembly);
+            });
 
             services.AddMemoryCache();
 
             services.AddControllers();
 
-            if (Environment.IsDevelopment() || Environment.IsStaging())
-                services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo
-                    {
-                        Title = "WellTaxes Orders API",
-                        Version = "v1",
-                        Description = "API for managing orders with tax calculations"
-                    });
-
-                    c.CustomSchemaIds(type => type.FullName);
-                    c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}_orders");
-                    //c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                    //{
-                    //    Type = SecuritySchemeType.OAuth2,
-                    //    In = ParameterLocation.Header,
-                    //    Scheme = "Bearer",
-                    //    Flows = new OpenApiOAuthFlows
-                    //    {
-                    //        Implicit = new OpenApiOAuthFlow
-                    //        {
-                    //            AuthorizationUrl = new Uri($"{Configuration["AzureAD:Instance"]}{Configuration["AzureAD:TenantId"]}/oauth2/v2.0/authorize"),
-                    //            Scopes = new Dictionary<string, string> { { Configuration["AzureAD:Scopes"]!, "Default" } }
-                    //        }
-                    //    }
-                    //});
-
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "oauth2"
-                                }
-                            },
-                            new string[] {}
-                        }
-                    });
-                    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                    Title = "WellTaxes Orders API",
+                    Version = "v1",
+                    Description = "Orders API for managing users and orders with tax calculations"
                 });
+
+                c.CustomSchemaIds(type => type.FullName);
+                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.ActionDescriptor.RouteValues["action"]}_gateway");
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    In = ParameterLocation.Header,
+                    Scheme = "Bearer",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"https://login.microsoftonline.com/{Configuration["AzureAd:TenantId"]}/oauth2/v2.0/authorize"),
+                            TokenUrl = new Uri($"https://login.microsoftonline.com/{Configuration["AzureAd:TenantId"]}/oauth2/v2.0/token"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { $"{Configuration["AzureAd:Audience"]}/access", "Access API" }
+                            }
+                        }
+                    }
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "oauth2"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
@@ -96,7 +120,7 @@ namespace WellTaxes.Service.Orders
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 

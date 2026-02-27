@@ -11,7 +11,8 @@ public partial class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((context, config) =>
             {
-                var settings = config.Build();
+                config.AddEnvironmentVariables();
+                config.AddUserSecrets<Program>();
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
