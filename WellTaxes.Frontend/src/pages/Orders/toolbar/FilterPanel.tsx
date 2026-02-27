@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { type Filter } from '@/shared/api/api.types';
 import { OperatorEnum } from '@/shared/api/api.types';
+import Select from '@/shared/ui/Select';
 
 interface Props {
     value:    Filter[];
@@ -94,25 +95,25 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
                         {draft.map((filter, i) => (
                             <div key={i} className="flex items-center gap-1.5">
 
-                                <select
+                                <Select
                                     value={filter.field}
                                     onChange={(e) => updateRow(i, { field: e.target.value })}
-                                    className={`${inputClass} flex-1 min-w-0 px-2 py-1.5 cursor-pointer`}
+                                    className={'flex-1 min-w-0'}
                                 >
                                     {FILTER_FIELDS.map((f) => (
                                         <option key={f.value} value={f.value}>{f.label}</option>
                                     ))}
-                                </select>
+                                </Select>
 
-                                <select
+                                <Select
                                     value={filter.operator}
                                     onChange={(e) => updateRow(i, { operator: e.target.value as Filter['operator'] })}
-                                    className={`${inputClass} w-12 px-1.5 py-1.5 text-center cursor-pointer`}
+                                    className={'w-12'}
                                 >
                                     {OPERATORS.map((op) => (
                                         <option key={op.value} value={op.value}>{op.label}</option>
                                     ))}
-                                </select>
+                                </Select>
 
                                 <input
                                     type="text"

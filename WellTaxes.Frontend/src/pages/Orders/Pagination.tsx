@@ -1,6 +1,8 @@
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Select from '@/shared/ui/Select';
+
 interface Props {
     total: number;
     page: number;
@@ -32,15 +34,15 @@ const Pagination: FC<Props> = ({ total, page, pageSize, onPageChange, onPageSize
             <span className="text-xs text-zinc-400">
               {from}–{to} {t('pagination.of')} {total}
             </span>
-                <select
+                <Select
                     value={pageSize}
                     onChange={(e) => { onPageSizeChange(Number(e.target.value)); onPageChange(1); }}
-                    className="text-xs text-zinc-600 border border-zinc-200 rounded-lg px-2 py-1 bg-white cursor-pointer outline-none hover:border-zinc-300 transition-colors"
+                    className="[&>select]:py-0.5"
                 >
                     {PAGE_SIZES.map((s) => (
                         <option key={s} value={s}>{s} {t('pagination.perPage')}</option>
                     ))}
-                </select>
+                </Select>
             </div>
 
             <div className="flex items-center gap-1">
