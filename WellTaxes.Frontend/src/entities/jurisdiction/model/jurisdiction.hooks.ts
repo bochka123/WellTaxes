@@ -7,3 +7,4 @@ export const useJurisdiction = () =>
         queryKey: ['jurisdiction'] as const,
         queryFn:  () => jurisdictionApi.getJurisdiction(),
     });
+
