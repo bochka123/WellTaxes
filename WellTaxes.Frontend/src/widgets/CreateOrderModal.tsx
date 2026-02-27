@@ -1,4 +1,5 @@
 import { type ChangeEvent, type Dispatch, type FC, type SetStateAction, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Map, { type LatLng } from '@/features/auth/ui/Map';
 import Modal from '@/shared/ui/Modal';
@@ -9,6 +10,7 @@ type Props = {
 };
 
 const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
+  const { t } = useTranslation();
   const [picked, setPicked] = useState<LatLng | null>(null);
   const [latInput, setLatInput] = useState('');
   const [lngInput, setLngInput] = useState('');
@@ -45,7 +47,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
     'w-full px-3 py-2 rounded border border-gray-300 text-sm focus:outline-none focus:border-[#63aeff] transition-colors';
 
   return (
-    <Modal visible={visible} setVisible={setVisible} heading="Create order">
+    <Modal visible={visible} setVisible={setVisible} heading={t('createOrder.heading')}>
       <div className="flex flex-col sm:flex-row gap-4 p-4 sm:p-5">
         
         <div className="w-full sm:w-2/3 rounded overflow-hidden">
@@ -54,11 +56,11 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
 
         <div className="flex flex-col gap-3 w-full sm:w-1/3">
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-500">Latitude</label>
+            <label className="text-xs text-gray-500">{t('createOrder.latitude')}</label>
             <input
               type="number"
               step="any"
-              placeholder="e.g. 42.147285"
+              placeholder={t('createOrder.latitudePlaceholder')}
               value={latInput}
               onChange={handleLatChange}
               className={inputClass}
@@ -66,11 +68,11 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-500">Longitude</label>
+            <label className="text-xs text-gray-500">{t('createOrder.longitude')}</label>
             <input
               type="number"
               step="any"
-              placeholder="e.g. -76.750888"
+              placeholder={t('createOrder.longitudePlaceholder')}
               value={lngInput}
               onChange={handleLngChange}
               className={inputClass}
@@ -78,12 +80,12 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-500">Price ($)</label>
+            <label className="text-xs text-gray-500">{t('createOrder.price')}</label>
             <input
               type="number"
               step="any"
               min="0"
-              placeholder="e.g. 100000"
+              placeholder={t('createOrder.pricePlaceholder')}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className={inputClass}
@@ -95,7 +97,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
             onClick={handleCreate}
             className="mt-auto w-full py-2 rounded border-2 border-green-500 text-green-600 text-sm font-semibold hover:bg-green-500 hover:text-white transition-colors cursor-pointer bg-transparent"
           >
-            Create order
+            {t('createOrder.createButton')}
           </button>
         </div>
       </div>

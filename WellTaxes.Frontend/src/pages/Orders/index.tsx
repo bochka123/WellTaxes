@@ -1,5 +1,6 @@
 import { type FC, useMemo, useState } from 'react';
 
+import { useOrders } from '@/entities/order';
 import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
@@ -7,7 +8,6 @@ import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
 import { MOCK_ORDERS } from './mock';
 import OrdersToolbar from './toolbar/OrdersToolbar';
-import { useOrders } from '@/entities/order';
 
 const Orders: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -23,11 +23,11 @@ const Orders: FC = () => {
     const { data } = useOrders({ page, pageSize, ...filterSort });
     console.log(data);
 
-    const handleCreateOrder = () => {
+    const handleCreateOrder = (): void => {
         setModalVisible(true);
     };
 
-    const handleImportCsv = (file: File) => {
+    const handleImportCsv = (file: File): void => {
         alert(`TODO: import file "${file.name}"`);
     };
 

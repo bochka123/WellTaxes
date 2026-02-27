@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { Order } from './mock';
 
@@ -6,22 +7,32 @@ interface Props {
     orders: Order[];
 }
 
-const formatAmount = (amount: number) =>
-    new Intl.NumberFormat('uk-UA', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
-
-const formatDate = (date: string) =>
-    new Intl.DateTimeFormat('uk-UA', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date));
-
-const COLUMNS = ['Номер', 'Сума', 'Сума з податком', 'Координати', 'Створено', 'Оновлено', ''];
-
 const OrdersTable: FC<Props> = ({ orders }) => {
+    const { i18n, t } = useTranslation();
+    
+    const formatAmount = (amount: number): string =>
+        new Intl.NumberFormat(i18n.language, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+
+    const formatDate = (date: string): string =>
+        new Intl.DateTimeFormat(i18n.language, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date));
+
+    const COLUMNS = [
+        t('orders.colNumber'),
+        t('orders.colAmount'),
+        t('orders.colAmountWithTax'),
+        t('orders.colCoordinates'),
+        t('orders.colCreated'),
+        t('orders.colUpdated'),
+        '',
+    ];
+
     if (orders.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
                 <svg className="w-10 h-10 mb-3 text-zinc-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
-                <p className="text-sm">Замовлень не знайдено</p>
+                <p className="text-sm">{t('orders.notFound')}</p>
             </div>
         );
     }

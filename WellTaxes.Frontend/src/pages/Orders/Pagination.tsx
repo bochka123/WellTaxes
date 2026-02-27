@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     total: number;
@@ -11,6 +12,7 @@ interface Props {
 const PAGE_SIZES = [5, 10, 25, 50];
 
 const Pagination: FC<Props> = ({ total, page, pageSize, onPageChange, onPageSizeChange }) => {
+    const { t } = useTranslation();
     const totalPages = Math.ceil(total / pageSize);
     const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
     const to = Math.min(page * pageSize, total);
@@ -28,7 +30,7 @@ const Pagination: FC<Props> = ({ total, page, pageSize, onPageChange, onPageSize
         <div className="flex items-center justify-between px-1 py-3 border-t border-zinc-100">
             <div className="flex items-center gap-3">
             <span className="text-xs text-zinc-400">
-              {from}–{to} of {total}
+              {from}–{to} {t('pagination.of')} {total}
             </span>
                 <select
                     value={pageSize}
@@ -36,7 +38,7 @@ const Pagination: FC<Props> = ({ total, page, pageSize, onPageChange, onPageSize
                     className="text-xs text-zinc-600 border border-zinc-200 rounded-lg px-2 py-1 bg-white cursor-pointer outline-none hover:border-zinc-300 transition-colors"
                 >
                     {PAGE_SIZES.map((s) => (
-                        <option key={s} value={s}>{s} / page</option>
+                        <option key={s} value={s}>{s} {t('pagination.perPage')}</option>
                     ))}
                 </select>
             </div>

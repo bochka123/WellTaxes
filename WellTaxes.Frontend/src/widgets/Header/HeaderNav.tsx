@@ -1,12 +1,15 @@
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-const NAV_LINKS = [
-    { path: '/', label: 'Home' },
-    { path: '/orders', label: 'Orders' },
-];
-
 const HeaderNav: FC = () => {
+    const { t } = useTranslation();
+
+    const NAV_LINKS = [
+        { path: '/', label: t('nav.home') },
+        { path: '/orders', label: t('nav.orders') },
+    ];
+
     return (
         <nav className="flex items-center gap-1">
             {NAV_LINKS.map(({ path, label }) => (
