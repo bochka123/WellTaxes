@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Npgsql;
+using System.Globalization;
 using System.Text;
 
 namespace WellTaxes.Service.Core.Queries
@@ -16,7 +17,12 @@ namespace WellTaxes.Service.Core.Queries
         DateTime CreatedAt
     );
 
-    public record FilterCriterion(string Field, string Operator, string Value);
+    public class FilterCriterion
+    {
+        public string Field { get; set; } = string.Empty;
+        public string Operator { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+    }
 
     public class GetOrdersQuery : IRequest<PagedResult<OrderListDto>>
     {
@@ -76,9 +82,26 @@ namespace WellTaxes.Service.Core.Queries
                             _ => "="
                         };
 
-                        var val = filter.Operator == "like" ? $"%{filter.Value}%" : filter.Value;
+                        object paramValue;
+
+                        if (filter.Operator.ToLower() == "like")
+                        {
+                            paramValue = $"%{filter.Value}%";
+                        }
+                        else
+                        {
+                            paramValue = filter.Field.ToLower() switch
+                            {
+                                "amount" or "totalrate" => decimal.TryParse(filter.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0m,
+
+                                "createdat" => DateTime.TryParse(filter.Value, CultureInfo.InvariantCulture, out var dt) ? dt : DateTime.UtcNow,
+
+                                _ => filter.Value
+                            };
+                        }
+
                         sqlBuilder.Append($" AND {dbField} {op} {paramName}");
-                        parameters.Add(paramName, val);
+                        parameters.Add(paramName, paramValue);
                     }
                 }
             }
