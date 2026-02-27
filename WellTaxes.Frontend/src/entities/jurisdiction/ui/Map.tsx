@@ -1,8 +1,10 @@
 import 'leaflet/dist/leaflet.css';
 
-import { type LeafletMouseEvent } from 'leaflet';
-import { type FC, useMemo } from 'react';
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { point } from '@turf/helpers';
+import { LatLngBounds, type LeafletMouseEvent } from 'leaflet';
+import { type FC, useEffect, useMemo, useState } from 'react';
+import { GeoJSON, MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
 import type { LatLng } from '@/entities/jurisdiction';
 import ZipZones from '@/entities/jurisdiction/ui/ZipZones.tsx';
@@ -10,25 +12,68 @@ import ZipZones from '@/entities/jurisdiction/ui/ZipZones.tsx';
 interface Props {
     picked: LatLng | null;
     onPick: (p: LatLng) => void;
-    height?: number;
 }
 
-function ClickToPick({ onPick }: { onPick: (p: LatLng) => void }): null {
+const BASE_BOUNDS = new LatLngBounds(
+    [39.5, -81.0],  // Southwest corner
+    [46.0, -70.5],  // Northeast corner
+);
+
+const NY_GEOJSON_URL =
+    'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/new%20york.geojson';
+
+function ClickToPick({
+    onPick,
+    nyGeoJson,
+}: {
+    onPick: (p: LatLng) => void;
+    nyGeoJson: GeoJSON.GeoJsonObject | null;
+}): null {
     useMapEvents({
         click(e: LeafletMouseEvent) {
+            const pt = point([e.latlng.lng, e.latlng.lat]);
+            if (nyGeoJson && !booleanPointInPolygon(pt, nyGeoJson as GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>)) {
+                return;
+            }
             onPick({ lat: e.latlng.lat, lng: e.latlng.lng });
         },
     });
     return null;
 }
 
-const Map: FC<Props> = ({ picked, onPick, height = 450 }) => {
-    const center = useMemo<LatLng>(() => ({ lat: 42.147285, lng: -76.750888 }), []);
+const Map: FC<Props> = ({ picked, onPick }) => {
+    const center = useMemo<LatLng>(() => ({ lat: 42.5, lng: -74.5 }), []);
+    const [nyGeoJson, setNyGeoJson] = useState<GeoJSON.GeoJsonObject | null>(null);
+
+    useEffect(() => {
+        fetch(NY_GEOJSON_URL)
+            .then((res) => res.json())
+            .then((data) => setNyGeoJson(data))
+            .catch(console.error);
+    }, []);
 
     return (
-        <MapContainer center={center} zoom={9} style={{ height, width: '100%', borderRadius: 6 }}>
+        <MapContainer
+            center={center}
+            zoom={7}
+            maxBounds={BASE_BOUNDS}
+            maxBoundsViscosity={1}
+            minZoom={7}
+            style={{ height: '100%', width: '100%', borderRadius: 6 }}
+        >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-            <ClickToPick onPick={onPick}/>
+            <ClickToPick onPick={onPick} nyGeoJson={nyGeoJson} />
+            {nyGeoJson && (
+                <GeoJSON
+                    data={nyGeoJson}
+                    style={{
+                        color: '#3b82f6',
+                        weight: 2,
+                        fillColor: '#bfdbfe',
+                        fillOpacity: 0.15,
+                    }}
+                />
+            )}
             <ZipZones picked={picked} />
             {picked && <Marker position={picked}/>}
         </MapContainer>
