@@ -3,15 +3,16 @@ import type { Filter, PaginatedResponse } from '@/shared/api/api.types.ts';
 export interface Order {
     id:            string;
     orderNumber:   string;
-    amount:        number;
-    amountWithTax: number;
+    subtotal:      number;
+    taxAmount:     number;
+    totalAmount:   number;
     totalRate:     number;
     taxRegionName: string;
-    createdAt:     string;
+    timestamp:     string;
 }
 
 export type SortField = keyof Pick<Order,
-    'amount' | 'amountWithTax' | 'totalRate' | 'orderNumber' | 'createdAt'
+    'subtotal' | 'totalAmount' | 'totalRate' | 'orderNumber' | 'timestamp'
 >;
 
 export interface GetOrdersParams {
