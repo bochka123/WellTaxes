@@ -34,6 +34,7 @@ jobs:
         run: |
           docker build -t ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }} \
                        -t ${{ env.ACR_NAME }}.azurecr.io/frontend:latest \
+                       --build-arg VITE_API_URL=${{ secrets.BACKEND_URL }} \
                        -f WellTaxes.Frontend/Dockerfile WellTaxes.Frontend/
           docker push ${{ env.ACR_NAME }}.azurecr.io/frontend --all-tags
 
@@ -52,3 +53,8 @@ jobs:
           containerAppName: welltaxes-orders
           resourceGroup: ${{ env.RG_NAME }}
           imageToDeploy: ${{ env.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
+          envVars: |
+            DefaultConnectionString=${{ secrets.DB_CONNECTION_STRING }}
+            AzureAd__TenantId=${{ secrets.AZURE_AD_TENANTID }}
+            AzureAd__ClientId=${{ secrets.AZURE_AD_CLIENTID }}
+            AzureAd__Audience=${{ secrets.AZURE_AD_AUDIENCE }}
