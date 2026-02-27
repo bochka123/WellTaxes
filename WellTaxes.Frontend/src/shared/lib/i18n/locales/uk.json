@@ -92,5 +92,8 @@
       "name": "Прохорчук Надія",
       "position": "Backend Developer / Frontend Developer"
     }
+  },
+  "errors": {
+    "locationErrorMessage": "Місцезнаходження знаходиться за межами штату Нью-Йорк"
   }
 }

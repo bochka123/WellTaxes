@@ -89,7 +89,7 @@ namespace WellTaxes.Service.Orders.Controllers
 
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Import([FromBody] object request)
+        public async Task<IActionResult> Import(IFormFile formFile)
         {
             return Ok();
         }

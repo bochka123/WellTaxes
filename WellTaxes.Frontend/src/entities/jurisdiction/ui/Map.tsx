@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import { point } from '@turf/helpers';
 import { LatLngBounds, type LeafletMouseEvent } from 'leaflet';
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useMemo } from 'react';
 import { GeoJSON, MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
 import type { LatLng } from '@/entities/jurisdiction';
@@ -12,15 +12,13 @@ import ZipZones from '@/entities/jurisdiction/ui/ZipZones.tsx';
 interface Props {
     picked: LatLng | null;
     onPick: (p: LatLng) => void;
+    nyGeoJson: GeoJSON.GeoJsonObject | null;
 }
 
 const BASE_BOUNDS = new LatLngBounds(
     [39.5, -81.0],  // Southwest corner
     [46.0, -70.5],  // Northeast corner
 );
-
-const NY_GEOJSON_URL =
-    'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/new%20york.geojson';
 
 function ClickToPick({
     onPick,
@@ -41,16 +39,8 @@ function ClickToPick({
     return null;
 }
 
-const Map: FC<Props> = ({ picked, onPick }) => {
+const Map: FC<Props> = ({ picked, onPick, nyGeoJson }) => {
     const center = useMemo<LatLng>(() => ({ lat: 42.5, lng: -74.5 }), []);
-    const [nyGeoJson, setNyGeoJson] = useState<GeoJSON.GeoJsonObject | null>(null);
-
-    useEffect(() => {
-        fetch(NY_GEOJSON_URL)
-            .then((res) => res.json())
-            .then((data) => setNyGeoJson(data))
-            .catch(console.error);
-    }, []);
 
     return (
         <MapContainer

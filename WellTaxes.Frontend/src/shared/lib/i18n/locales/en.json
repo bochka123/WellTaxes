@@ -92,5 +92,8 @@
       "name": "Nadiia Prokhorchuk",
       "position": "Backend Developer / Frontend Developer"
     }
+  },
+  "errors": {
+    "locationErrorMessage": "Location is outside New York state"
   }
 }
