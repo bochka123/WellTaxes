@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Order } from './mock';
+import type { Order } from '@/entities/order';
 
 interface Props {
     orders: Order[];
@@ -22,7 +22,6 @@ const OrdersTable: FC<Props> = ({ orders }) => {
         t('orders.colAmountWithTax'),
         t('orders.colCoordinates'),
         t('orders.colCreated'),
-        t('orders.colUpdated'),
         '',
     ];
 
@@ -51,15 +50,14 @@ const OrdersTable: FC<Props> = ({ orders }) => {
                 </thead>
                 <tbody className="divide-y divide-zinc-50">
                 {orders.map((order) => (
-                    <tr key={order.Id} className="group hover:bg-zinc-50/60 transition-colors duration-100">
-                        <td className="px-4 py-3.5 pl-0 font-mono text-xs text-zinc-500 whitespace-nowrap">{order.OrderNumber}</td>
-                        <td className="px-4 py-3.5 font-medium text-zinc-900 whitespace-nowrap">{formatAmount(order.Amount)}</td>
-                        <td className="px-4 py-3.5 text-zinc-600 whitespace-nowrap">{formatAmount(order.AmountWithTax)}</td>
+                    <tr key={order.id} className="group hover:bg-zinc-50/60 transition-colors duration-100">
+                        <td className="px-4 py-3.5 pl-0 font-mono text-xs text-zinc-500 whitespace-nowrap">{order.orderNumber}</td>
+                        <td className="px-4 py-3.5 font-medium text-zinc-900 whitespace-nowrap">{formatAmount(order.amount)}</td>
+                        <td className="px-4 py-3.5 text-zinc-600 whitespace-nowrap">{formatAmount(order.amountWithTax)}</td>
                         <td className="px-4 py-3.5 font-mono text-xs text-zinc-400 whitespace-nowrap">
-                            {order.Latitude.toFixed(4)}, {order.Longitude.toFixed(4)}
+                            {/*{order.Latitude.toFixed(4)}, {order.Longitude.toFixed(4)}*/}
                         </td>
-                        <td className="px-4 py-3.5 text-zinc-500 whitespace-nowrap">{formatDate(order.CreatedAt)}</td>
-                        <td className="px-4 py-3.5 text-zinc-500 whitespace-nowrap">{formatDate(order.UpdatedAt)}</td>
+                        <td className="px-4 py-3.5 text-zinc-500 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                         <td className="px-4 py-3.5 pr-0">
                             <button className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1.5 rounded-lg hover:bg-zinc-100 cursor-pointer">
                                 <svg className="w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
