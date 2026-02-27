@@ -52,7 +52,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
             <div className="flex flex-col sm:flex-row gap-4 p-4 sm:p-5">
 
                 <div className="w-full sm:w-2/3 rounded overflow-hidden">
-                    <Map picked={picked} onPick={handleMapPick} height={280}/>
+                    <Map picked={picked} onPick={handleMapPick} height={280} />
                 </div>
 
                 <div className="flex flex-col gap-3 w-full sm:w-1/3">
