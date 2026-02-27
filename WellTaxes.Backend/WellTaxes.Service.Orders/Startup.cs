@@ -120,6 +120,7 @@ namespace WellTaxes.Service.Orders
                 });
             }
 
+            app.UseMiddleware<Infrastructure.GlobalExceptionHandler>();
             app.UseHttpsRedirection();
 
             app.UseRouting();
