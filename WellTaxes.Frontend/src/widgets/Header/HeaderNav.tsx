@@ -27,7 +27,7 @@ const HeaderNav: FC = () => {
                 >
                     {({ isActive }) => (
                         <>
-                            {label}
+                            <span className="text-base">{label}</span>
                             <span
                                 className={`
                                     absolute bottom-0 left-3 right-3 h-0.5 rounded-full
