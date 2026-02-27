@@ -23,7 +23,7 @@ namespace WellTaxes.Service.Orders
             services.AddTransient(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
-                var connStr = config["DefaultConnectionString"];
+                var connStr = config.GetConnectionString("DefaultConnection");
                 return new NpgsqlConnection(connStr);
             });
 

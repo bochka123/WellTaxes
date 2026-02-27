@@ -21,7 +21,7 @@ namespace WellTaxes.Service.Worker
             builder.Services.AddTransient(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
-                var connStr = config["DbConnectionString"];
+                var connStr = config.GetConnectionString("DefaultConnection");
                 return new NpgsqlConnection(connStr);
             });
 
