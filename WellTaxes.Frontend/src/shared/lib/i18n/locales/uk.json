@@ -39,8 +39,9 @@
   "orders": {
     "notFound": "Замовлень не знайдено",
     "colNumber": "Номер",
-    "colAmount": "Сума",
-    "colAmountWithTax": "Сума з податком",
+    "colSubtotal": "Сума",
+    "colTaxAmount": "Податок",
+    "colTotalAmount": "Сума з податком",
     "colCoordinates": "Координати",
     "colCreated": "Створено",
     "colUpdated": "Оновлено"

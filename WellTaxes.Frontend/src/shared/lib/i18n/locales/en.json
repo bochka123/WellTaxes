@@ -39,8 +39,9 @@
   "orders": {
     "notFound": "No orders found",
     "colNumber": "Number",
-    "colAmount": "Amount",
-    "colAmountWithTax": "Amount (Incl. Tax)",
+    "colSubtotal": "Amount",
+    "colTaxAmount": "Tax",
+    "colTotalAmount": "Amount (Incl. Tax)",
     "colCoordinates": "Coordinates",
     "colCreated": "Created",
     "colUpdated": "Updated"

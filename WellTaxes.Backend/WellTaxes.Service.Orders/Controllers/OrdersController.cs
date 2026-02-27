@@ -87,11 +87,52 @@ namespace WellTaxes.Service.Orders.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Imports orders from CSV file
+        /// CSV format: id, longitude, latitude, timestamp, subtotal
+        /// </summary>
+        /// <param name="file">CSV file to import</param>
+        /// <param name="importService">Order import service</param>
+        /// <returns>Import result with success/failure counts</returns>
         [HttpPost("[action]")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Import(IFormFile file)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Import(IFormFile file, [FromServices] IOrderImportService importService)
         {
-            return Ok();
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File is required");
+            }
+
+            if (!file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("Only CSV files are supported");
+            }
+
+            try
+            {
+                await using var stream = file.OpenReadStream();
+                var result = await importService.ImportOrdersFromCsvAsync(stream, HttpContext.RequestAborted);
+
+                if (result.FailedCount > 0)
+                {
+                    return Ok(new
+                    {
+                        Message = "Import completed with errors",
+                        Result = result
+                    });
+                }
+
+                return Ok(new
+                {
+                    Message = "Import completed successfully",
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
         }
     }
 
