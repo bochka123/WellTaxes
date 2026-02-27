@@ -27,6 +27,17 @@ namespace WellTaxes.Service.Orders
                 return new NpgsqlConnection(connStr);
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.SetIsOriginAllowed(origin => true)
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
+
             services.AddAuth(Configuration);
             services.AddScoped<IOrderService, OrderService>();
 
@@ -109,7 +120,7 @@ namespace WellTaxes.Service.Orders
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
