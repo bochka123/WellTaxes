@@ -45,8 +45,8 @@ const Modal: FC<ModalProps> = ({ visible,
             className={`fixed inset-0 flex items-center justify-center bg-black/45 ${zClass}`}
             ref={wrapperRef}
         >
-            <div className="w-full sm:max-w-[70%] mx-0 sm:mx-4 bg-white sm:rounded-md shadow-[0_4px_24px_rgba(0,0,0,0.18)] overflow-hidden overflow-y-auto max-h-screen sm:max-h-[90vh]" ref={contentRef}>
-                <div className="flex flex-col">
+            <div className="flex flex-col w-full sm:max-w-[70%] mx-0 sm:mx-4 bg-white sm:rounded-md shadow-[0_4px_24px_rgba(0,0,0,0.18)] overflow-hidden overflow-y-auto max-h-screen sm:max-h-[90vh] min-h-[50vh]" ref={contentRef}>
+                <div className="flex flex-col flex-1">
                     <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                         <p className="m-0 text-base font-semibold text-black tracking-wide">{heading}</p>
                         <button
