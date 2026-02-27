@@ -46,7 +46,7 @@ const Home: FC = () => {
     return (
         <div className="w-full">
             <section className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 py-12 md:py-20 px-4 md:px-8">
-                <div className="max-w-6xl mx-auto">
+                <div className="flex flex-col gap-2 max-w-6xl mx-auto">
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
                         {t('welcome.title')}
                     </h1>
@@ -56,8 +56,8 @@ const Home: FC = () => {
                 </div>
             </section>
 
-            <section className="w-full py-12 md:py-20 px-4 md:px-8 bg-white">
-                <div className="w-full mx-auto">
+            <section className="flex flex-col align-middle py-12 md:py-20 px-4 md:px-8 bg-white">
+                <div className="flex flex-col self-center gap-8 w-full mx-auto max-w-320">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
                         {t('team.aboutUs')}
                     </h2>
@@ -65,7 +65,7 @@ const Home: FC = () => {
                         {TEAM_MEMBERS.map((member) => (
                             <div
                                 key={member.id}
-                                className="flex flex-col items-center text-center transform transition duration-300 hover:scale-105"
+                                className="flex flex-col gap-1 items-center text-center transform transition duration-300 hover:scale-105"
                             >
                                 <div className="w-40 h-40 md:w-32 md:h-32 lg:w-40 lg:h-40 mb-4 rounded-full overflow-hidden shadow-lg">
                                     <img
@@ -74,12 +74,14 @@ const Home: FC = () => {
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                <h3 className="text-xl md:text-lg lg:text-xl font-semibold text-gray-900 mb-2">
-                                    {member.name}
-                                </h3>
-                                <p className="text-base md:text-sm lg:text-base text-gray-600">
-                                    {member.position}
-                                </p>
+                                <div>
+                                    <h3 className="text-xl md:text-lg lg:text-xl font-semibold text-gray-900 mb-2">
+                                        {member.name}
+                                    </h3>
+                                    <p className="text-base md:text-sm lg:text-base text-gray-600">
+                                        {member.position}
+                                    </p>
+                                </div>
                             </div>
                         ))}
                     </div>
