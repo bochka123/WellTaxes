@@ -12,12 +12,12 @@ export const orderKeys = {
 export const useOrders = (params: GetOrdersParams) =>
     useQuery({
         queryKey: orderKeys.list(params),
-        queryFn:  () => orderApi.getOrders(params),
+        queryFn:  () => orderApi.getAll(/* params */),
     });
 
 export const useOrder = (id: string) =>
     useQuery({
         queryKey: orderKeys.detail(id),
-        queryFn:  () => orderApi.getOrderById(id),
+        queryFn:  () => orderApi.getById(id),
         enabled:  !!id,
     });

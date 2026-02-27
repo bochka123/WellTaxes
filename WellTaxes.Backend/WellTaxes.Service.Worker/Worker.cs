@@ -1,8 +1,7 @@
 ﻿using Dapper;
 using MediatR;
 using Npgsql;
-using WellTaxes.Service.Core.Entities;
-using WellTaxes.Service.Core.Quries;
+using WellTaxes.Service.Core.Queries;
 using WellTaxes.Service.Worker.Extensions;
 using WellTaxes.Service.Worker.Models;
 using WellTaxes.Service.Worker.Services;
