@@ -15,11 +15,13 @@ type ModalProps = {
 
 const ESCAPE_KEY = 'Escape';
 
-const Modal: FC<ModalProps> = ({ visible,
+const Modal: FC<ModalProps> = ({
+                                   visible,
                                    setVisible,
                                    heading,
                                    zIndexType,
-                                   children }) => {
+                                   children,
+                               }) => {
 
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);

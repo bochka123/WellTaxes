@@ -5,7 +5,7 @@ import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
 import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
 import type { Filter } from '@/shared/api/api.types.ts';
-import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
+import CreateOrderModal from '@/widgets/CreateOrderModal';
 
 import OrdersToolbar from './toolbar/OrdersToolbar';
 

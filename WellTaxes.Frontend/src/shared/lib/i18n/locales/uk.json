@@ -12,13 +12,24 @@
   "createOrder": {
     "heading": "Створити замовлення",
     "latitude": "Широта",
-    "latitudePlaceholder": "напр. 42.147285",
+    "latitudePlaceholder": "Клікніть на карту або введіть вручну",
     "longitude": "Довгота",
-    "longitudePlaceholder": "напр. -76.750888",
-    "price": "Ціна ($)",
-    "pricePlaceholder": "напр. 100000",
+    "longitudePlaceholder": "Клікніть на карту або введіть вручну",
+    "amount": "Ціна ($)",
+    "amountPlaceholder": "0.00",
+    "date": "Дата",
+    "time": "Час",
     "createButton": "Створити замовлення",
-    "importCSV": "Імпортувати CSV"
+    "creating": "Створення...",
+    "importCSV": "Імпортувати CSV",
+    "errors": {
+      "required": "Обов'язкове поле",
+      "invalidNumber": "Має бути числом",
+      "latRange": "Від -90 до 90",
+      "lngRange": "Від -180 до 180",
+      "positiveAmount": "Має бути більше 0",
+      "pickPoint": "Виберіть точку на карті"
+    }
   },
   "taxModal": {
     "heading": "Розрахунок податку на нерухомість",
