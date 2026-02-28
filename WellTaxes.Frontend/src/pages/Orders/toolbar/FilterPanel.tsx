@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { type Filter, OperatorEnum } from '@/shared/api/api.types';
 import Select from '@/shared/ui/Select';
+import Button from '@/shared/ui/Button';
 
 interface Props {
-    value:    Filter[];
-    onChange: (filters: Filter[]) => void;
+    value:      Filter[];
+    onChange:   (filters: Filter[]) => void;
+    className?: string
 }
 
 const OPERATORS: { value: Filter['operator']; label: string }[] = [
@@ -19,7 +21,13 @@ const OPERATORS: { value: Filter['operator']; label: string }[] = [
 
 const EMPTY_FILTER: Filter = { field: 'subtotal', operator: OperatorEnum.EQUAL, value: '' };
 
-const FilterPanel: FC<Props> = ({ value, onChange }) => {
+const FilterIcon = (
+    <svg className="w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+    </svg>
+);
+
+const FilterPanel: FC<Props> = ({ value, onChange, className }) => {
     const { t } = useTranslation();
 
     const FILTER_GROUPS: { label: string; fields: { value: string; label: string }[] }[] = [
@@ -146,9 +154,9 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
                         <button
                             onClick={() => removeRow(i)}
                             disabled={draft.length === 1}
-                            className="p-1 rounded-lg text-zinc-300 hover:text-zinc-500 hover:bg-zinc-100 transition-colors cursor-pointer disabled:opacity-0 disabled:pointer-events-none"
+                            className="flex p-1 rounded-lg text-zinc-300 hover:text-zinc-500 hover:bg-zinc-100 transition-colors cursor-pointer disabled:opacity-0 disabled:pointer-events-none"
                         >
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <svg className="shrink-0 w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                             </svg>
                         </button>
@@ -186,22 +194,20 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
     );
 
     return (
-        <div className="relative" ref={triggerRef}>
-
-            <button
+        <div className={`relative ${className}`} ref={triggerRef}>
+            <Button
                 onClick={() => open ? setOpen(false) : handleOpen()}
-                className="relative flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all cursor-pointer"
+                variant="outline"
+                className="w-full"
+                icon={FilterIcon}
             >
-                <svg className="w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                </svg>
                 {t('filter.title')}
                 {activeCount > 0 && (
                     <span className="flex items-center justify-center w-4 h-4 rounded-full text-[10px] font-bold text-white" style={{ backgroundColor: '#63aeff' }}>
                         {activeCount}
                     </span>
                 )}
-            </button>
+            </Button>
 
             {open && (
                 <>

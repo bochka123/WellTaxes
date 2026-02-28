@@ -91,7 +91,7 @@ const Orders: FC = () => {
     };
 
     return (
-        <div className="flex justify-center min-h-screen w-full">
+        <div className="flex justify-center w-full">
             <div className="flex flex-col gap-4 px-6 py-6 w-full max-w-300 min-w-0">
                 <OrdersToolbar
                     filters={filters}

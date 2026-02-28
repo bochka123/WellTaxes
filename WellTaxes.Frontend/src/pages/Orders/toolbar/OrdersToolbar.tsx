@@ -26,30 +26,30 @@ const OrdersToolbar: FC<Props> = ({
     filterSort, filters, selectionMode, selectedCount, isDeleting,
     onFilterSortChange, onFiltersChange, onCreateOrder, onImportCsv,
     onToggleSelection, onDeleteSelected,
-}) => {
-    return (
-        <div className="flex items-center gap-2 justify-between mb-6">
-            <div className="flex items-center gap-2 flex-col sm:flex-row">
-                {!selectionMode && (
-                    <>
-                        <CreateOrderButton onClick={onCreateOrder} />
-                        <ImportCsvButton onImport={onImportCsv} />
-                    </>
-                )}
-                <SelectDeleteButton
-                    selectionMode={selectionMode}
-                    selectedCount={selectedCount}
-                    isDeleting={isDeleting}
-                    onToggle={onToggleSelection}
-                    onDelete={onDeleteSelected}
-                />
-            </div>
-            <div className="flex items-center gap-2 flex-col sm:flex-row">
-                <FilterPanel value={filters} onChange={onFiltersChange} />
-                <FilterSortPanel value={filterSort} onChange={onFilterSortChange} />
-            </div>
+}) => (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+        <div className="flex items-center gap-2">
+            {!selectionMode && (
+                <>
+                    <CreateOrderButton onClick={onCreateOrder} />
+                    <ImportCsvButton onImport={onImportCsv} />
+                </>
+            )}
+            <SelectDeleteButton
+                selectionMode={selectionMode}
+                selectedCount={selectedCount}
+                isDeleting={isDeleting}
+                onToggle={onToggleSelection}
+                onDelete={onDeleteSelected}
+            />
         </div>
-    );
-};
+
+        <div className="flex items-center gap-2 ml-auto sm:ml-0">
+            <FilterPanel     value={filters}     onChange={onFiltersChange} />
+            <FilterSortPanel value={filterSort}  onChange={onFilterSortChange} />
+        </div>
+
+    </div>
+);
 
 export default OrdersToolbar;

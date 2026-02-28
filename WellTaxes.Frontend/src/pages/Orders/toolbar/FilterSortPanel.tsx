@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import type { SortField } from '@/entities/order';
+import Button from '@/shared/ui/Button';
 
 export interface FilterSortState {
     sortBy?:        SortField;
@@ -10,8 +11,9 @@ export interface FilterSortState {
 }
 
 interface Props {
-    value:    FilterSortState;
-    onChange: (v: FilterSortState) => void;
+    value:      FilterSortState;
+    onChange:   (v: FilterSortState) => void;
+    className?: string;
 }
 
 const SORT_GROUPS: { labelKey: string; fields: SortField[] }[] = [
@@ -29,7 +31,13 @@ const SORT_GROUPS: { labelKey: string; fields: SortField[] }[] = [
     },
 ];
 
-const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
+const SortIcon = (
+    <svg className="shrink-0 w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="21" y1="6" x2="3" y2="6"/><line x1="15" y1="12" x2="3" y2="12"/><line x1="9" y1="18" x2="3" y2="18"/>
+    </svg>
+);
+
+const FilterSortPanel: FC<Props> = ({ value, onChange, className }) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
@@ -120,20 +128,18 @@ const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
     );
 
     return (
-        <div className="relative" ref={triggerRef}>
-
-            <button
+        <div className={`relative ${className}`} ref={triggerRef}>
+            <Button
                 onClick={() => setOpen((v) => !v)}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-all duration-150 cursor-pointer"
+                variant="outline"
+                className="w-full"
+                icon={SortIcon}
             >
-                <svg className="w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <line x1="21" y1="6" x2="3" y2="6"/><line x1="15" y1="12" x2="3" y2="12"/><line x1="9" y1="18" x2="3" y2="18"/>
-                </svg>
                 {t('sort.labels.sorting')}
                 {value.sortBy !== 'timestamp' && (
                     <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: '#63aeff' }} />
                 )}
-            </button>
+            </Button>
 
             {open && (
                 <>
