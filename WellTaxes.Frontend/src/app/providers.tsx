@@ -1,6 +1,7 @@
 import { MsalProvider } from '@azure/msal-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { FC, ReactNode } from 'react';
+import { Toaster } from 'sonner';
 
 import { msalInstance } from '@/shared/config/msal.ts';
 
@@ -18,6 +19,7 @@ export const Providers: FC<ProvidersProps> = ({ children }) => (
     <QueryClientProvider client={queryClient}>
         <MsalProvider instance={msalInstance}>
             {children}
+            <Toaster richColors position="bottom-right" />
         </MsalProvider>
     </QueryClientProvider>
 );

@@ -8,8 +8,8 @@ export const useLogout = () => {
 
     return useMutation({
         mutationFn: async () => {
-            await instance.clearCache();
-            navigate('/auth');
+            await instance.clearCache()
+                .then(() => navigate('/auth'));
         },
     });
 };
