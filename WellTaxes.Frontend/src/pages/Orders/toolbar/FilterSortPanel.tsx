@@ -100,8 +100,8 @@ const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
                                     style={value.sortDescending === desc ? { backgroundColor: '#63aeff', borderColor: '#63aeff' } : {}}
                                 >
                                     {!desc
-                                        ? <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>{t('sort.labels.asc')}</>
-                                        : <><svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>{t('sort.labels.desc')}</>
+                                        ? <><svg className="shrink-0 w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>{t('sort.labels.asc')}</>
+                                        : <><svg className="shrink-0 w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>{t('sort.labels.desc')}</>
                                     }
                                 </button>
                             ))}
