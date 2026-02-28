@@ -13,17 +13,17 @@ export interface JurisdictionInfo {
 }
 
 export interface Order {
-    id:                  string;
-    orderNumber:         string;
-    subtotal:            number;
-    taxAmount:           number;
-    totalAmount:         number;
-    compositeTaxRate:    number;
-    timestamp:           string;
-    latitude:            number;
-    longitude:           number;
-    breakdown:           TaxBreakdown;
-    jurisdictionInfoDto: JurisdictionInfo;
+    id:               string;
+    orderNumber:      string;
+    subtotal:         number;
+    taxAmount:        number;
+    totalAmount:      number;
+    compositeTaxRate: number;
+    timestamp:        string;
+    latitude:         number;
+    longitude:        number;
+    breakdown:        TaxBreakdown;
+    jurisdiction:     JurisdictionInfo;
 }
 
 export type SortField =

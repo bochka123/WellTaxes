@@ -1,14 +1,15 @@
-import { type FC, useState } from 'react';
+import { type FC, lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Order } from '@/entities/order';
 import Spinner from '@/shared/ui/Spinner';
 
+const MapPreview = lazy(() => import('@/shared/ui/MapPreview'));
+
 interface Props {
     orders: Order[];
     isLoading: boolean;
 }
-
 
 const formatRate = (rate: number): string => `${(rate * 100).toFixed(2)}%`;
 
@@ -79,11 +80,11 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                             </td>
 
                             <td className="px-4 py-3.5 text-zinc-600 whitespace-nowrap">
-                                {order.jurisdictionInfoDto?.taxRegionName}
+                                {order.jurisdiction?.taxRegionName}
                             </td>
 
                             <td className="px-4 py-3.5 font-mono text-xs text-zinc-400 whitespace-nowrap">
-                                {order.jurisdictionInfoDto?.zipCode}
+                                {order.jurisdiction?.zipCode}
                             </td>
 
                             <td className="px-4 py-3.5 text-zinc-700 whitespace-nowrap">
@@ -109,12 +110,12 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                         { label: t('table.breakdown.county'),  value: order.breakdown.countryRate },
                                         { label: t('table.breakdown.city'),    value: order.breakdown.cityRate },
                                         { label: t('table.breakdown.special'), value: order.breakdown.specialRate },
-                                    ].filter((b) => b.value > 0).map((b) => (
+                                    ].map((b) => (
                                         <span
                                             key={b.label}
                                             className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-500"
                                         >
-                                            {b.label} {formatRate(b.value)}
+                                            {b.label} {formatRate(b.value ?? 0)}
                                         </span>
                                     ))}
                                 </div>
@@ -124,30 +125,52 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                 {formatDate(order.timestamp)}
                             </td>
 
-                            <td className="flex px-4 py-3.5">
-                                <button
-                                    className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1.5 rounded-lg hover:bg-zinc-100 cursor-pointer"
-                                    onClick={(e) => { e.stopPropagation(); setExpandedId((v) => v === order.id ? null : order.id); }}
-                                >
-                                    <svg
-                                        className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${expandedId === order.id ? 'rotate-180' : ''}`}
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                            <td>
+                                <div className="flex justify-center items-center px-4 py-3.5">
+                                    <button
+                                        className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1.5 rounded-lg hover:bg-zinc-100 cursor-pointer"
+                                        onClick={(e) => { e.stopPropagation(); setExpandedId((v) => v === order.id ? null : order.id); }}
                                     >
-                                        <path d="M6 9l6 6 6-6"/>
-                                    </svg>
-                                </button>
+                                        <svg
+                                            className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${expandedId === order.id ? 'rotate-180' : ''}`}
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                        >
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
 
                         {expandedId === order.id && (
-                            <tr key={`${order.id}-expanded`} className="bg-zinc-50/50">
-                                <td colSpan={COLUMNS.length} className="px-4 py-2.5">
-                                    <div className="flex items-center gap-4 text-xs text-zinc-400">
-                                        <span className="font-medium text-zinc-500">ID</span>
-                                        <span className="font-mono">{order.id}</span>
-                                        <span className="w-px h-3 bg-zinc-200" />
-                                        <span className="font-medium text-zinc-500">Lat / Lng</span>
-                                        <span className="font-mono">{order.latitude.toFixed(6)}, {order.longitude.toFixed(6)}</span>
+                            <tr key={`${order.id}-expanded`} className="bg-zinc-50/40">
+                                <td colSpan={COLUMNS.length} className="px-4 py-3">
+                                    <div className="flex gap-4">
+
+                                        {/* Карта */}
+                                        <div className="w-72 shrink-0 rounded-lg overflow-hidden border border-zinc-200">
+                                            <Suspense fallback={
+                                                <div className="w-full bg-zinc-100 animate-pulse rounded-lg" style={{ height: 180 }} />
+                                            }>
+                                                <MapPreview
+                                                    position={{ lat: order.latitude, lng: order.longitude }}
+                                                    height={180}
+                                                />
+                                            </Suspense>
+                                        </div>
+
+                                        {/* Деталі */}
+                                        <div className="flex flex-col justify-center gap-2 text-xs">
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-16 text-zinc-400 shrink-0">Latitude</span>
+                                                <span className="font-mono text-zinc-600">{order.latitude.toFixed(6)}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-16 text-zinc-400 shrink-0">Longitude</span>
+                                                <span className="font-mono text-zinc-600">{order.longitude.toFixed(6)}</span>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </td>
                             </tr>
