@@ -6,8 +6,10 @@ import { useLogout } from '@/features/auth';
 import { msalScopes } from '@/shared/config/msal.ts';
 import { Avatar } from '@/shared/ui/Avatar';
 import LanguageSwitcher from '@/shared/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 export const UserMenu: FC = () => {
+    const { t } = useTranslation();
     const { accounts, instance } = useMsal();
     const { mutate: logout, isPending } = useLogout();
     const [open, setOpen] = useState(false);
@@ -57,7 +59,7 @@ export const UserMenu: FC = () => {
                 <div className="absolute right-0 top-10 w-64 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden">
                     <div className="flex flex-col gap-2 px-4 py-3 border-b border-zinc-100">
                         <p className="text-xs font-medium text-zinc-400 uppercase tracking-wide mb-2">
-                            Активний акаунт
+                            {t('userMenu.activeAccount')}
                         </p>
                         <div className="flex items-center gap-2.5">
                             <Avatar name={displayName} photoUrl={null} size="sm" />
@@ -71,7 +73,7 @@ export const UserMenu: FC = () => {
                     {otherAccounts.length > 0 && (
                         <div className="border-b border-zinc-100">
                             <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-zinc-400 uppercase tracking-wide">
-                                Інші акаунти
+                                {t('userMenu.otherAccounts')}
                             </p>
                             {otherAccounts.map((account) => (
                                 <button
@@ -109,7 +111,7 @@ export const UserMenu: FC = () => {
                                 <line x1="19" y1="8" x2="19" y2="14" />
                                 <line x1="22" y1="11" x2="16" y2="11" />
                             </svg>
-                            Додати акаунт
+                            {t('userMenu.addAccount')}
                         </button>
 
                         <button
@@ -125,7 +127,7 @@ export const UserMenu: FC = () => {
                                 <polyline points="16 17 21 12 16 7" />
                                 <line x1="21" y1="12" x2="9" y2="12" />
                             </svg>
-                            {isPending ? 'Виходимо...' : 'Вийти'}
+                            {isPending ? t('userMenu.loggingOut') : t('auth.logout')}
                         </button>
                     </div>
                 </div>
