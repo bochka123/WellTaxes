@@ -66,28 +66,28 @@ namespace WellTaxes.Service.Core.Services
         }
 
         private async Task ProcessBatchAsync(
-            List<(int RowNumber, OrderCsvRecord Record)> allRows,
-            Guid userId,
-            ImportResult result,
-            CancellationToken cancellationToken)
+    List<(int RowNumber, OrderCsvRecord Record)> allRows,
+    Guid userId,
+    ImportResult result,
+    CancellationToken cancellationToken)
         {
             var lats = allRows.Select(b => b.Record.Latitude).ToArray();
             var lons = allRows.Select(b => b.Record.Longitude).ToArray();
             var timestamps = allRows.Select(b => b.Record.Timestamp).ToArray();
 
             const string taxLookupSql = @"
-                SELECT
-                    idx                     AS Index,
-                    tr.id                   AS TaxRatesId,
-                    tr.total_rate           AS TotalRate
-                FROM unnest(@Lats, @Lons, @Timestamps) WITH ORDINALITY
-                         AS input(lat, lon, ts, idx)
-                JOIN jurisdictions j
-                    ON ST_Contains(j.geom, ST_SetSRID(ST_MakePoint(input.lon, input.lat), 4269))
-                JOIN tax_rates tr
-                    ON  tr.jurisdiction_id = j.id
-                    AND input.ts >= tr.valid_from
-                    AND (input.ts < tr.valid_to OR tr.valid_to IS NULL)";
+        SELECT
+            idx                     AS Index,
+            tr.id                   AS TaxRatesId,
+            tr.total_rate           AS TotalRate
+        FROM unnest(@Lats, @Lons, @Timestamps) WITH ORDINALITY
+                 AS input(lat, lon, ts, idx)
+        JOIN jurisdictions j
+            ON ST_Contains(j.geom, ST_SetSRID(ST_MakePoint(input.lon, input.lat), 4269))
+        JOIN tax_rates tr
+            ON  tr.jurisdiction_id = j.id
+            AND input.ts >= tr.valid_from
+            AND (input.ts < tr.valid_to OR tr.valid_to IS NULL)";
 
             logger.LogInformation("Looking up tax info for {Count} records", allRows.Count);
             var taxRows = (await db.QueryAsync<TaxLookupRow>(taxLookupSql, new
@@ -98,6 +98,8 @@ namespace WellTaxes.Service.Core.Services
             })).ToDictionary(r => (int)r.Index - 1);
 
             var ordersToInsert = new List<OrderInsertRow>(allRows.Count);
+
+            var shortUserId = userId.ToString()[..4].ToUpper();
 
             for (var i = 0; i < allRows.Count; i++)
             {
@@ -120,9 +122,10 @@ namespace WellTaxes.Service.Core.Services
                 }
 
                 var amountWithTax = record.Subtotal * (1 + tax.TotalRate);
+
                 var orderNumber = string.IsNullOrWhiteSpace(record.Id)
-                    ? $"ORD-{record.Timestamp:yyMMddHHmmss}-{Guid.NewGuid().ToString()[..4].ToUpper()}"
-                    : $"ORD-{record.Id}";
+                    ? $"ORD-{shortUserId}-{record.Timestamp:yyMMdd}-{Guid.NewGuid().ToString()[..4].ToUpper()}"
+                    : $"ORD-{shortUserId}-{record.Id}";
 
                 ordersToInsert.Add(new OrderInsertRow(
                     orderNumber, userId, record.Subtotal, amountWithTax,
