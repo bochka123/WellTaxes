@@ -25,7 +25,7 @@ const FilterSortPanel: FC<Props> = ({ value, onChange }) => {
         },
         {
             labelKey: 'sort.groups.breakdown',
-            fields: ['stateRate', 'countryRate', 'cityRate', 'specialRate'],
+            fields: ['stateRate', 'countyRate', 'cityRate', 'specialRate'],
         },
         {
             labelKey: 'sort.groups.jurisdiction',
