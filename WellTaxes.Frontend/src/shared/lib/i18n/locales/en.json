@@ -10,15 +10,26 @@
     "calculateTax": "Calculate Tax"
   },
   "createOrder": {
-    "heading": "Create order",
+    "heading": "Create Order",
     "latitude": "Latitude",
-    "latitudePlaceholder": "e.g. 42.147285",
+    "latitudePlaceholder": "Click on map or enter manually",
     "longitude": "Longitude",
-    "longitudePlaceholder": "e.g. -76.750888",
-    "price": "Price ($)",
-    "pricePlaceholder": "e.g. 100000",
+    "longitudePlaceholder": "Click on map or enter manually",
+    "amount": "Price ($)",
+    "amountPlaceholder": "0.00",
+    "date": "Date",
+    "time": "Time",
     "createButton": "Create order",
-    "importCSV": "Import CSV"
+    "creating": "Creating...",
+    "importCSV": "Import CSV",
+    "errors": {
+      "required": "Required field",
+      "invalidNumber": "Must be a number",
+      "latRange": "Must be between -90 and 90",
+      "lngRange": "Must be between -180 and 180",
+      "positiveAmount": "Must be greater than 0",
+      "pickPoint": "Pick a point on the map"
+    }
   },
   "taxModal": {
     "heading": "Estimated Property Tax",
@@ -36,38 +47,101 @@
     "home": "Home",
     "orders": "Orders"
   },
-  "orders": {
-    "notFound": "No orders found",
-    "colNumber": "Number",
-    "colAmount": "Amount",
-    "colAmountWithTax": "Amount (Incl. Tax)",
-    "colCoordinates": "Coordinates",
-    "colCreated": "Created",
-    "colUpdated": "Updated"
+  "table": {
+    "empty": "No orders found",
+    "columns": {
+      "orderNumber": "Number",
+      "region": "Region",
+      "zip": "ZIP",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Rate",
+      "breakdown": "Breakdown",
+      "timestamp": "Date"
+    },
+    "breakdown": {
+      "state": "State",
+      "county": "County",
+      "city": "City",
+      "special": "Special"
+    }
   },
-  "filterSort": {
-    "sorting": "Sorting",
+  "sort": {
+    "title": "Sort",
     "sortBy": "Sort by",
     "direction": "Direction",
     "asc": "Asc",
     "desc": "Desc",
-    "createdAt": "Creation Date",
-    "updatedAt": "Modified Date",
-    "amount": "Amount",
-    "amountWithTax": "Amount (Incl. Tax)",
-    "orderNumber": "Order Number"
+    "reset": "Reset sorting",
+    "groups": {
+      "order": "Order",
+      "breakdown": "Tax breakdown",
+      "jurisdiction": "Jurisdiction"
+    },
+    "fields": {
+      "orderNumber": "Order number",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Tax rate",
+      "timestamp": "Date",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "stateRate": "State rate",
+      "countyRate": "County rate",
+      "cityRate": "City rate",
+      "specialRate": "Special rate",
+      "zipCode": "ZIP",
+      "taxRegionName": "Region"
+    },
+    "labels": {
+      "sorting": "Sorting",
+      "sortBy": "Sort by",
+      "direction": "Direction",
+      "asc": "Asc",
+      "desc": "Desc",
+      "createdAt": "Creation Date",
+      "updatedAt": "Modified Date",
+      "amount": "Amount",
+      "amountWithTax": "Amount (Incl. Tax)",
+      "orderNumber": "Order Number"
+    }
   },
   "filter": {
+    "title": "Filters",
+    "addCondition": "Add condition",
     "apply": "Apply",
     "reset": "Reset",
-    "title": "Filter",
-    "addCondition": "Add condition",
-    "valuePlaceholder": "value",
-    "amount": "Amount",
-    "amountWithTax": "Amount with tax",
-    "totalRate": "Total rate",
-    "taxRegionName": "Region",
-    "orderNumber": "Order number"
+    "valuePlaceholder": "Value",
+    "fields": {
+      "orderNumber": "Order number",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Tax rate",
+      "timestamp": "Date",
+      "stateRate": "State rate",
+      "countyRate": "County rate",
+      "cityRate": "City rate",
+      "specialRate": "Special rate",
+      "zipCode": "ZIP",
+      "taxRegionName": "Region"
+    },
+    "operators": {
+      "eq": "=",
+      "ne": "≠",
+      "gt": ">",
+      "lt": "<",
+      "gte": "≥",
+      "lte": "≤",
+      "like": "~"
+    },
+    "groups": {
+      "order": "Order",
+      "breakdown": "Tax breakdown",
+      "jurisdiction": "Jurisdiction"
+    }
   },
   "pagination": {
     "of": "of",

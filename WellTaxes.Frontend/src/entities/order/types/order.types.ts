@@ -1,18 +1,35 @@
 import type { Filter, PaginatedResponse } from '@/shared/api/api.types.ts';
 
-export interface Order {
-    id:            string;
-    orderNumber:   string;
-    amount:        number;
-    amountWithTax: number;
-    totalRate:     number;
-    taxRegionName: string;
-    createdAt:     string;
+export interface TaxBreakdown {
+    stateRate:   number;
+    countyRate: number;
+    cityRate:    number;
+    specialRate: number;
 }
 
-export type SortField = keyof Pick<Order,
-    'amount' | 'amountWithTax' | 'totalRate' | 'orderNumber' | 'createdAt'
->;
+export interface JurisdictionInfo {
+    zipCode:       string;
+    taxRegionName: string;
+}
+
+export interface Order {
+    id:               string;
+    orderNumber:      string;
+    subtotal:         number;
+    taxAmount:        number;
+    totalAmount:      number;
+    compositeTaxRate: number;
+    timestamp:        string;
+    latitude:         number;
+    longitude:        number;
+    breakdown:        TaxBreakdown;
+    jurisdiction:     JurisdictionInfo;
+}
+
+export type SortField =
+    | keyof Pick<Order, 'orderNumber' | 'subtotal' | 'taxAmount' | 'totalAmount' | 'compositeTaxRate' | 'timestamp' | 'latitude' | 'longitude'>
+    | keyof Pick<TaxBreakdown, 'stateRate' | 'countyRate' | 'cityRate' | 'specialRate'>
+    | keyof Pick<JurisdictionInfo, 'zipCode' | 'taxRegionName'>;
 
 export interface GetOrdersParams {
     page:            number;

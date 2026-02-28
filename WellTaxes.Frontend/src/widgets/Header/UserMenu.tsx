@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useLogout } from '@/features/auth';
 import { msalScopes } from '@/shared/config/msal.ts';
-import { useUserPhoto } from '@/shared/lib/msal/useUserPhoto.ts';
 import { Avatar } from '@/shared/ui/Avatar';
 
 const getInitials = (name: string): string =>
@@ -16,7 +15,6 @@ const UserMenu: FC = () => {
     const { mutate: logout, isPending } = useLogout();
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    const photoUrl = useUserPhoto();
     const { t } = useTranslation();
 
     const activeAccount = instance.getActiveAccount() ?? accounts[0];
@@ -57,7 +55,7 @@ const UserMenu: FC = () => {
                 style={{ backgroundColor: '#63aeff' }}
                 aria-label="User menu"
             >
-                <Avatar name={displayName} photoUrl={photoUrl} size="md" />
+                <Avatar name={displayName} photoUrl={null} size="md" />
             </button>
 
             {open && (
@@ -71,7 +69,7 @@ const UserMenu: FC = () => {
                                 className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0"
                                 style={{ backgroundColor: '#63aeff' }}
                             >
-                                <Avatar name={displayName} photoUrl={photoUrl} size="sm" />
+                                <Avatar name={displayName} photoUrl={null} size="sm" />
                             </div>
                             <div className="min-w-0">
                                 <p className="text-sm font-medium text-zinc-900 truncate">{displayName}</p>

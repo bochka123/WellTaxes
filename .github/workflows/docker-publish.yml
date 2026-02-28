@@ -57,8 +57,6 @@ jobs:
             ConnectionStrings__DefaultConnection="${{ secrets.DB_CONNECTION_STRING }}"
             AzureAd__TenantId="${{ secrets.AZURE_AD_TENANTID }}"
             AzureAd__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
-            AzureAd__Audience="${{ secrets.AZURE_AD_AUDIENCE }}"
             AzureAd__Scopes="${{ secrets.AZURE_AD_AUDIENCE }}"
-            AzureAd__Instance="https://login.microsoftonline.com/"
             Swagger__ClientId="${{ secrets.AZURE_AD_CLIENTID }}"
             Swagger__ClientSecret="${{ secrets.AZURE_AD_CLIENTSECRET }}"

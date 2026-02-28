@@ -1,12 +1,11 @@
 import { type FC, useState } from 'react';
 
-import { useOrders } from '@/entities/order';
+import { useImportCSV, useOrders } from '@/entities/order';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
 import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
 import type { Filter } from '@/shared/api/api.types.ts';
-import Spinner from '@/shared/ui/Spinner';
-import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
+import CreateOrderModal from '@/widgets/CreateOrderModal';
 
 import OrdersToolbar from './toolbar/OrdersToolbar';
 
@@ -16,7 +15,7 @@ const Orders: FC = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [filterSort, setFilterSort] = useState<FilterSortState>({
-        sortBy:         'createdAt',
+        sortBy:         'timestamp',
         sortDescending: true,
     });
     const [filters, setFilters] = useState<Filter[]>([]);
@@ -29,30 +28,25 @@ const Orders: FC = () => {
         filters: filters.length ? filters : undefined,
     });
 
+    const { mutate: importCSV } = useImportCSV();
+
     const handleCreateOrder = (): void => {
         setModalVisible(true);
     };
 
-    const handleImportCsv = (file: File): void => {
-        alert(`TODO: import file "${file.name}"`);
-    };
-    
     return (
         <div className="flex justify-center min-h-screen w-full">
-            <div className="flex flex-col gap-4 px-6 py-6 max-w-6xl w-6xl">
+            <div className="flex flex-col gap-4 px-6 py-6 w-max min-w-0">
                 <OrdersToolbar
                     filters={filters}
                     filterSort={filterSort}
                     onFilterSortChange={setFilterSort}
                     onFiltersChange={setFilters}
                     onCreateOrder={handleCreateOrder}
-                    onImportCsv={handleImportCsv}
+                    onImportCsv={importCSV}
                 />
-                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-6 py-2">
-                    <OrdersTable orders={orders?.items ?? []} />
-                    {
-                        isLoading && <Spinner />
-                    }
+                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-4 py-2">
+                    <OrdersTable orders={orders?.items ?? []} isLoading={isLoading} />
                     <Pagination
                         total={orders?.totalCount ?? 0}
                         page={page}

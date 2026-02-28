@@ -12,13 +12,24 @@
   "createOrder": {
     "heading": "Створити замовлення",
     "latitude": "Широта",
-    "latitudePlaceholder": "напр. 42.147285",
+    "latitudePlaceholder": "Клікніть на карту або введіть вручну",
     "longitude": "Довгота",
-    "longitudePlaceholder": "напр. -76.750888",
-    "price": "Ціна ($)",
-    "pricePlaceholder": "напр. 100000",
+    "longitudePlaceholder": "Клікніть на карту або введіть вручну",
+    "amount": "Ціна ($)",
+    "amountPlaceholder": "0.00",
+    "date": "Дата",
+    "time": "Час",
     "createButton": "Створити замовлення",
-    "importCSV": "Імпортувати CSV"
+    "creating": "Створення...",
+    "importCSV": "Імпортувати CSV",
+    "errors": {
+      "required": "Обов'язкове поле",
+      "invalidNumber": "Має бути числом",
+      "latRange": "Від -90 до 90",
+      "lngRange": "Від -180 до 180",
+      "positiveAmount": "Має бути більше 0",
+      "pickPoint": "Виберіть точку на карті"
+    }
   },
   "taxModal": {
     "heading": "Розрахунок податку на нерухомість",
@@ -36,38 +47,94 @@
     "home": "Головна",
     "orders": "Замовлення"
   },
-  "orders": {
-    "notFound": "Замовлень не знайдено",
-    "colNumber": "Номер",
-    "colAmount": "Сума",
-    "colAmountWithTax": "Сума з податком",
-    "colCoordinates": "Координати",
-    "colCreated": "Створено",
-    "colUpdated": "Оновлено"
+  "table": {
+    "columns": {
+      "orderNumber": "Номер замовлення",
+      "region": "Регіон / Юрисдикція",
+      "zip": "Поштовий індекс",
+      "subtotal": "Сума без ПДВ",
+      "taxAmount": "Сума податку",
+      "totalAmount": "Загальна сума",
+      "compositeTaxRate": "Комбінована ставка",
+      "breakdown": "Деталізація",
+      "timestamp": "Дата та час"
+    }
   },
-  "filterSort": {
-    "sorting": "Сортування",
+  "sort": {
+    "title": "Сортування",
     "sortBy": "Сортувати за",
     "direction": "Напрямок",
-    "asc": "За зростанням",
-    "desc": "За спаданням",
-    "createdAt": "Дата створення",
-    "updatedAt": "Дата зміни",
-    "amount": "Сума",
-    "amountWithTax": "Сума з податком",
-    "orderNumber": "Номер замовлення"
+    "asc": "Зрост.",
+    "desc": "Спад.",
+    "reset": "Скинути сортування",
+    "groups": {
+      "order": "Замовлення",
+      "breakdown": "Розбивка податку",
+      "jurisdiction": "Юрисдикція"
+    },
+    "fields": {
+      "orderNumber": "Номер замовлення",
+      "subtotal": "Сума",
+      "taxAmount": "Податок",
+      "totalAmount": "Разом",
+      "compositeTaxRate": "Ставка",
+      "timestamp": "Дата",
+      "latitude": "Широта",
+      "longitude": "Довгота",
+      "stateRate": "Ставка штату",
+      "countyRate": "Ставка округу",
+      "cityRate": "Ставка міста",
+      "specialRate": "Спец. ставка",
+      "zipCode": "ZIP",
+      "taxRegionName": "Регіон"
+    },
+    "labels": {
+      "sorting": "Сортування",
+      "sortBy": "Сортувати за",
+      "direction": "Напрямок",
+      "asc": "Збільш.",
+      "desc": "Зменш.",
+      "createdAt": "Дата створення",
+      "updatedAt": "Дата зміни",
+      "amount": "Сума",
+      "amountWithTax": "Сума з податком",
+      "orderNumber": "Номер замовлення"
+    }
   },
   "filter": {
+    "title": "Фільтри",
+    "addCondition": "Додати умову",
     "apply": "Застосувати",
     "reset": "Скинути",
-    "title": "Фільтр",
-    "addCondition": "Додати умову",
-    "valuePlaceholder": "значення",
-    "amount": "Сума",
-    "amountWithTax": "Сума з податком",
-    "totalRate": "Ставка",
-    "taxRegionName": "Регіон",
-    "orderNumber": "Номер замовлення"
+    "valuePlaceholder": "Значення",
+    "fields": {
+      "orderNumber": "Номер замовлення",
+      "subtotal": "Сума",
+      "taxAmount": "Податок",
+      "totalAmount": "Разом",
+      "compositeTaxRate": "Ставка",
+      "timestamp": "Дата",
+      "stateRate": "Ставка штату",
+      "countyRate": "Ставка округу",
+      "cityRate": "Ставка міста",
+      "specialRate": "Спец. ставка",
+      "zipCode": "ZIP",
+      "taxRegionName": "Регіон"
+    },
+    "operators": {
+      "eq": "=",
+      "ne": "≠",
+      "gt": ">",
+      "lt": "<",
+      "gte": "≥",
+      "lte": "≤",
+      "like": "~"
+    },
+    "groups": {
+      "order": "Замовлення",
+      "breakdown": "Розбивка податку",
+      "jurisdiction": "Юрисдикція"
+    }
   },
   "pagination": {
     "of": "з",

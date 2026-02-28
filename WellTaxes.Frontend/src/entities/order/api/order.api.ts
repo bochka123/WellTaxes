@@ -3,10 +3,10 @@ import type { PaginatedOrders } from '@/entities/order/types/order.types.ts';
 import { apiClient } from '@/shared/api/client';
 
 export interface CreateOrderDto {
-    userId:        string;
-    amount:        number;
-    latitude:      number;
-    longitude:     number;
+    amount:    number;
+    latitude:  number;
+    longitude: number;
+    timestamp: string;
 }
 
 const buildQuery = (params: GetOrdersParams): string => {
@@ -38,6 +38,9 @@ export const orderApi = {
     create: (data: CreateOrderDto): Promise<Order> =>
         apiClient.post<Order>('/Orders', data),
 
-    importCSV: (data: any): Promise<void> =>
-        apiClient.post<void>('/Orders/Import', data)
+    importCSV: (file: File): Promise<void> => {
+        const form = new FormData();
+        form.append('file', file, file.name);
+        return apiClient.post<void>('/Orders/Import', form);
+    },
 };
