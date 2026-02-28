@@ -5,7 +5,6 @@ import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
 import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
 import type { Filter } from '@/shared/api/api.types.ts';
-import Spinner from '@/shared/ui/Spinner';
 import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
 import OrdersToolbar from './toolbar/OrdersToolbar';
@@ -47,10 +46,7 @@ const Orders: FC = () => {
                     onImportCsv={importCSV}
                 />
                 <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-4 py-2">
-                    <OrdersTable orders={orders?.items ?? []} />
-                    {
-                        isLoading && <Spinner />
-                    }
+                    <OrdersTable orders={orders?.items ?? []} isLoading={isLoading} />
                     <Pagination
                         total={orders?.totalCount ?? 0}
                         page={page}

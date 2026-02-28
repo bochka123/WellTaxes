@@ -2,15 +2,17 @@ import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Order } from '@/entities/order';
+import Spinner from '@/shared/ui/Spinner';
 
 interface Props {
     orders: Order[];
+    isLoading: boolean;
 }
 
 
 const formatRate = (rate: number): string => `${(rate * 100).toFixed(2)}%`;
 
-const OrdersTable: FC<Props> = ({ orders }) => {
+const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
     const { t, i18n } = useTranslation();
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -32,6 +34,14 @@ const OrdersTable: FC<Props> = ({ orders }) => {
         t('table.columns.timestamp'),
         '',
     ];
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
+                <Spinner />
+            </div>
+        );
+    }
 
     if (orders.length === 0) {
         return (
