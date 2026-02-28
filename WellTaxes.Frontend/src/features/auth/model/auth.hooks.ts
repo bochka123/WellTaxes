@@ -7,7 +7,8 @@ export const useLogout = () => {
     return useMutation({
         mutationFn: async () => {
             await instance.logoutRedirect({
-                postLogoutRedirectUri: '/auth',
+                postLogoutRedirectUri: `${window.location.origin}/auth`,
+                account: instance.getActiveAccount() || undefined
             });
         },
     });
