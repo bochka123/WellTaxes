@@ -41,7 +41,7 @@ services:
       context: ./WellTaxes.Frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: "http://orders-service:8080"
+        VITE_API_URL: "http://localhost:8080"
     depends_on:
       - orders-service
     ports:
