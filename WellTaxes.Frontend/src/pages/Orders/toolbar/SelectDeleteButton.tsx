@@ -37,7 +37,7 @@ const SelectDeleteButton: FC<Props> = ({ selectionMode, selectedCount, isDeletin
     }
 
     return (
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${className ?? ''}`}>
             <Button
                 onClick={onToggle}
                 variant="outline"

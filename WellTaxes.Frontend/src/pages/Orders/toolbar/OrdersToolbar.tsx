@@ -27,12 +27,12 @@ const OrdersToolbar: FC<Props> = ({
     onFilterSortChange, onFiltersChange, onCreateOrder, onImportCsv,
     onToggleSelection, onDeleteSelected,
 }) => (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
-        <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 flex-wrap">
+        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
             {!selectionMode && (
                 <>
-                    <CreateOrderButton onClick={onCreateOrder} />
-                    <ImportCsvButton onImport={onImportCsv} />
+                    <CreateOrderButton onClick={onCreateOrder} className="flex-1 sm:flex-none" />
+                    <ImportCsvButton onImport={onImportCsv} className="flex-1 sm:flex-none" />
                 </>
             )}
             <SelectDeleteButton
@@ -41,12 +41,13 @@ const OrdersToolbar: FC<Props> = ({
                 isDeleting={isDeleting}
                 onToggle={onToggleSelection}
                 onDelete={onDeleteSelected}
+                className="flex-1 sm:flex-none"
             />
         </div>
 
         <div className="flex items-center gap-2 ml-auto sm:ml-0">
-            <FilterPanel     value={filters}     onChange={onFiltersChange} />
-            <FilterSortPanel value={filterSort}  onChange={onFilterSortChange} />
+            <FilterPanel value={filters} onChange={onFiltersChange} className="flex-1 sm:flex-none" />
+            <FilterSortPanel value={filterSort} onChange={onFilterSortChange} className="flex-1 sm:flex-none" />
         </div>
 
     </div>
