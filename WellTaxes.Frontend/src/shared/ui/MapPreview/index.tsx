@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css';
+import '@/shared/lib/leaflet/defaultIcons';
 
 import { type FC, useMemo } from 'react';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
