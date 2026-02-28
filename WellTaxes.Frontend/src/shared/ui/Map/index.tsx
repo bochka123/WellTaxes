@@ -8,8 +8,6 @@ import { GeoJSON, MapContainer, Marker, TileLayer, useMapEvents } from 'react-le
 
 import type { LatLng } from '@/entities/jurisdiction';
 
-import ZipZones from './ZipZones.tsx';
-
 interface Props {
     picked: LatLng | null;
     onPick: (p: LatLng) => void;
@@ -65,7 +63,6 @@ const Map: FC<Props> = ({ picked, onPick, nyGeoJson }) => {
                     }}
                 />
             )}
-            <ZipZones picked={picked} />
             {picked && <Marker position={picked}/>}
         </MapContainer>
     );
