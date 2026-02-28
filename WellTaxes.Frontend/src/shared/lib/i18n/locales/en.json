@@ -98,16 +98,39 @@
     }
   },
   "filter": {
+    "title": "Filters",
+    "addCondition": "Add condition",
     "apply": "Apply",
     "reset": "Reset",
-    "title": "Filter",
-    "addCondition": "Add condition",
-    "valuePlaceholder": "value",
-    "amount": "Amount",
-    "amountWithTax": "Amount with tax",
-    "totalRate": "Total rate",
-    "taxRegionName": "Region",
-    "orderNumber": "Order number"
+    "valuePlaceholder": "Value",
+    "fields": {
+      "orderNumber": "Order number",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Tax rate",
+      "timestamp": "Date",
+      "stateRate": "State rate",
+      "countryRate": "County rate",
+      "cityRate": "City rate",
+      "specialRate": "Special rate",
+      "zipCode": "ZIP",
+      "taxRegionName": "Region"
+    },
+    "operators": {
+      "eq": "=",
+      "ne": "≠",
+      "gt": ">",
+      "lt": "<",
+      "gte": "≥",
+      "lte": "≤",
+      "like": "~"
+    },
+    "groups": {
+      "order": "Order",
+      "breakdown": "Tax breakdown",
+      "jurisdiction": "Jurisdiction"
+    }
   },
   "pagination": {
     "of": "of",

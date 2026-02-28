@@ -1,8 +1,7 @@
-import { type FC, useEffect,useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { type Filter } from '@/shared/api/api.types';
-import { OperatorEnum } from '@/shared/api/api.types';
+import { type Filter, OperatorEnum } from '@/shared/api/api.types';
 import Select from '@/shared/ui/Select';
 
 interface Props {
@@ -11,27 +10,49 @@ interface Props {
 }
 
 const OPERATORS: { value: Filter['operator']; label: string }[] = [
-    { value: OperatorEnum.EQUAL,         label: '=' },
-    { value: OperatorEnum.GREATER_THAN,  label: '>' },
-    { value: OperatorEnum.LESS_THAN,     label: '<' },
-    { value: OperatorEnum.LIKE,          label: '~' },
+    { value: OperatorEnum.EQUAL,        label: '=' },
+    { value: OperatorEnum.GREATER_THAN, label: '>' },
+    { value: OperatorEnum.LESS_THAN,    label: '<' },
+    { value: OperatorEnum.LIKE,         label: '~' },
 ];
 
-const EMPTY_FILTER: Filter = { field: 'amount', operator: OperatorEnum.EQUAL, value: '' };
+const EMPTY_FILTER: Filter = { field: 'subtotal', operator: OperatorEnum.EQUAL, value: '' };
 
 const FilterPanel: FC<Props> = ({ value, onChange }) => {
     const { t } = useTranslation();
 
-    const FILTER_FIELDS: { value: string; label: string }[] = [
-        { value: 'amount',        label: t('filter.amount') },
-        { value: 'amountWithTax', label: t('filter.amountWithTax') },
-        { value: 'totalRate',     label: t('filter.totalRate') },
-        { value: 'taxRegionName', label: t('filter.taxRegionName') },
-        { value: 'orderNumber',   label: t('filter.orderNumber') },
+    const FILTER_GROUPS: { label: string; fields: { value: string; label: string }[] }[] = [
+        {
+            label: t('filter.groups.order'),
+            fields: [
+                { value: 'orderNumber',      label: t('filter.fields.orderNumber') },
+                { value: 'subtotal',         label: t('filter.fields.subtotal') },
+                { value: 'taxAmount',        label: t('filter.fields.taxAmount') },
+                { value: 'totalAmount',      label: t('filter.fields.totalAmount') },
+                { value: 'compositeTaxRate', label: t('filter.fields.compositeTaxRate') },
+                { value: 'timestamp',        label: t('filter.fields.timestamp') },
+            ],
+        },
+        {
+            label: t('filter.groups.breakdown'),
+            fields: [
+                { value: 'breakdown.stateRate',   label: t('filter.fields.stateRate') },
+                { value: 'breakdown.countryRate', label: t('filter.fields.countryRate') },
+                { value: 'breakdown.cityRate',    label: t('filter.fields.cityRate') },
+                { value: 'breakdown.specialRate', label: t('filter.fields.specialRate') },
+            ],
+        },
+        {
+            label: t('filter.groups.jurisdiction'),
+            fields: [
+                { value: 'jurisdictionInfoDto.zipCode',       label: t('filter.fields.zipCode') },
+                { value: 'jurisdictionInfoDto.taxRegionName', label: t('filter.fields.taxRegionName') },
+            ],
+        },
     ];
 
-    const [open, setOpen]     = useState(false);
-    const [draft, setDraft]   = useState<Filter[]>(value.length ? value : [{ ...EMPTY_FILTER }]);
+    const [open, setOpen]   = useState(false);
+    const [draft, setDraft] = useState<Filter[]>(value.length ? value : [{ ...EMPTY_FILTER }]);
     const ref = useRef<HTMLDivElement>(null);
 
     const handleOpen = () => {
@@ -47,9 +68,8 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    const updateRow = (i: number, patch: Partial<Filter>) => {
+    const updateRow = (i: number, patch: Partial<Filter>) =>
         setDraft((prev) => prev.map((f, idx) => idx === i ? { ...f, ...patch } : f));
-    };
 
     const addRow    = () => setDraft((prev) => [...prev, { ...EMPTY_FILTER }]);
     const removeRow = (i: number) => setDraft((prev) => prev.filter((_, idx) => idx !== i));
@@ -87,7 +107,7 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
             </button>
 
             {open && (
-                <div className="absolute right-0 top-10 w-120 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg p-4 flex flex-col gap-3">
+                <div className="absolute right-0 top-10 w-[480px] z-50 bg-white border border-zinc-200 rounded-xl shadow-lg p-4 flex flex-col gap-3">
 
                     <p className="text-xs font-medium text-zinc-400 uppercase tracking-wide">{t('filter.title')}</p>
 
@@ -98,17 +118,21 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
                                 <Select
                                     value={filter.field}
                                     onChange={(e) => updateRow(i, { field: e.target.value })}
-                                    className={'flex-1 min-w-0'}
+                                    className="flex-1 min-w-0"
                                 >
-                                    {FILTER_FIELDS.map((f) => (
-                                        <option key={f.value} value={f.value}>{f.label}</option>
+                                    {FILTER_GROUPS.map((group) => (
+                                        <optgroup key={group.label} label={group.label}>
+                                            {group.fields.map((f) => (
+                                                <option key={f.value} value={f.value}>{f.label}</option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </Select>
 
                                 <Select
                                     value={filter.operator}
                                     onChange={(e) => updateRow(i, { operator: e.target.value as Filter['operator'] })}
-                                    className={'w-12'}
+                                    className="w-12"
                                 >
                                     {OPERATORS.map((op) => (
                                         <option key={op.value} value={op.value}>{op.label}</option>
