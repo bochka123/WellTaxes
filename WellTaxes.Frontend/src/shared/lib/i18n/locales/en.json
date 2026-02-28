@@ -36,26 +36,101 @@
     "home": "Home",
     "orders": "Orders"
   },
-  "orders": {
-    "notFound": "No orders found",
-    "colNumber": "Number",
-    "colAmount": "Amount",
-    "colAmountWithTax": "Amount (Incl. Tax)",
-    "colCoordinates": "Coordinates",
-    "colCreated": "Created",
-    "colUpdated": "Updated"
+  "table": {
+    "empty": "No orders found",
+    "columns": {
+      "orderNumber": "Number",
+      "region": "Region",
+      "zip": "ZIP",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Rate",
+      "breakdown": "Breakdown",
+      "timestamp": "Date"
+    },
+    "breakdown": {
+      "state": "State",
+      "county": "County",
+      "city": "City",
+      "special": "Special"
+    }
   },
-  "filterSort": {
-    "sorting": "Sorting",
+  "sort": {
+    "title": "Sort",
     "sortBy": "Sort by",
     "direction": "Direction",
     "asc": "Asc",
     "desc": "Desc",
-    "createdAt": "Creation Date",
-    "updatedAt": "Modified Date",
-    "amount": "Amount",
-    "amountWithTax": "Amount (Incl. Tax)",
-    "orderNumber": "Order Number"
+    "reset": "Reset sorting",
+    "groups": {
+      "order": "Order",
+      "breakdown": "Tax breakdown",
+      "jurisdiction": "Jurisdiction"
+    },
+    "fields": {
+      "orderNumber": "Order number",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Tax rate",
+      "timestamp": "Date",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "stateRate": "State rate",
+      "countryRate": "County rate",
+      "cityRate": "City rate",
+      "specialRate": "Special rate",
+      "zipCode": "ZIP",
+      "taxRegionName": "Region"
+    },
+    "labels": {
+      "sorting": "Sorting",
+      "sortBy": "Sort by",
+      "direction": "Direction",
+      "asc": "Asc",
+      "desc": "Desc",
+      "createdAt": "Creation Date",
+      "updatedAt": "Modified Date",
+      "amount": "Amount",
+      "amountWithTax": "Amount (Incl. Tax)",
+      "orderNumber": "Order Number"
+    }
+  },
+  "filter": {
+    "title": "Filters",
+    "addCondition": "Add condition",
+    "apply": "Apply",
+    "reset": "Reset",
+    "valuePlaceholder": "Value",
+    "fields": {
+      "orderNumber": "Order number",
+      "subtotal": "Subtotal",
+      "taxAmount": "Tax",
+      "totalAmount": "Total",
+      "compositeTaxRate": "Tax rate",
+      "timestamp": "Date",
+      "stateRate": "State rate",
+      "countryRate": "County rate",
+      "cityRate": "City rate",
+      "specialRate": "Special rate",
+      "zipCode": "ZIP",
+      "taxRegionName": "Region"
+    },
+    "operators": {
+      "eq": "=",
+      "ne": "≠",
+      "gt": ">",
+      "lt": "<",
+      "gte": "≥",
+      "lte": "≤",
+      "like": "~"
+    },
+    "groups": {
+      "order": "Order",
+      "breakdown": "Tax breakdown",
+      "jurisdiction": "Jurisdiction"
+    }
   },
   "pagination": {
     "of": "of",

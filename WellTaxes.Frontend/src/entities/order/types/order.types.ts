@@ -1,25 +1,42 @@
-export interface Order {
-    id: string;
-    orderNumber: string;
-    userId: string;
-    amount: number;
-    amountWithTax: number;
-    latitude: number;
-    longitude: number;
-    createdAt: string;
-    updatedAt: string;
+import type { Filter, PaginatedResponse } from '@/shared/api/api.types.ts';
+
+export interface TaxBreakdown {
+    stateRate:   number;
+    countryRate: number;
+    cityRate:    number;
+    specialRate: number;
 }
+
+export interface JurisdictionInfo {
+    zipCode:       string;
+    taxRegionName: string;
+}
+
+export interface Order {
+    id:                  string;
+    orderNumber:         string;
+    subtotal:            number;
+    taxAmount:           number;
+    totalAmount:         number;
+    compositeTaxRate:    number;
+    timestamp:           string;
+    latitude:            number;
+    longitude:           number;
+    breakdown:           TaxBreakdown;
+    jurisdictionInfoDto: JurisdictionInfo;
+}
+
+export type SortField =
+    | keyof Pick<Order, 'orderNumber' | 'subtotal' | 'taxAmount' | 'totalAmount' | 'compositeTaxRate' | 'timestamp' | 'latitude' | 'longitude'>
+    | keyof Pick<TaxBreakdown, 'stateRate' | 'countryRate' | 'cityRate' | 'specialRate'>
+    | keyof Pick<JurisdictionInfo, 'zipCode' | 'taxRegionName'>;
 
 export interface GetOrdersParams {
-    page:     number;
-    pageSize: number;
-    sortBy:   keyof Pick<Order, 'createdAt' | 'updatedAt' | 'amount' | 'amountWithTax' | 'orderNumber'>;
-    sortDir:  'asc' | 'desc';
+    page:            number;
+    pageSize:        number;
+    sortBy?:         SortField;
+    sortDescending?: boolean;
+    filters?:        Filter[];
 }
 
-export interface PaginatedResponse<T> {
-    data:     T[];
-    total:    number;
-    page:     number;
-    pageSize: number;
-}
+export interface PaginatedOrders extends PaginatedResponse<Order> { }

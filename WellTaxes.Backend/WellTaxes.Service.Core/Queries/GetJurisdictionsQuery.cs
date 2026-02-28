@@ -1,6 +1,5 @@
-﻿using Dapper;
-using MediatR;
-using Npgsql;
+﻿using MediatR;
+using WellTaxes.Service.Core.Interfaces;
 
 namespace WellTaxes.Service.Core.Queries
 {
@@ -10,14 +9,12 @@ namespace WellTaxes.Service.Core.Queries
         public string ZipCode { get; set; } = string.Empty;
         public string GeometryJson { get; set; } = string.Empty;
     }
-    public record GetJurisdictionsQuery() : IRequest<List<JurisdictionDto>>;
-    public class GetJurisdictionsHandler(NpgsqlConnection db) : IRequestHandler<GetJurisdictionsQuery, List<JurisdictionDto>>
+    public record GetJurisdictionsQuery() : IRequest<IEnumerable<JurisdictionDto>>;
+    public class GetJurisdictionsHandler(IJurisdictionsService jurisdictionsService) : IRequestHandler<GetJurisdictionsQuery, IEnumerable<JurisdictionDto>>
     {
-        public async Task<List<JurisdictionDto>> Handle(GetJurisdictionsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<JurisdictionDto>> Handle(GetJurisdictionsQuery request, CancellationToken cancellationToken)
         {
-            var sql = @"SELECT name, zipcode, ST_AsGeoJSON(geom) AS GeometryJson FROM jurisdictions";
-            var result = await db.QueryAsync<JurisdictionDto>(sql);
-            return result.AsList();
+            return await jurisdictionsService.GetAllJurisdictionsAsync();
         }
     }
 }

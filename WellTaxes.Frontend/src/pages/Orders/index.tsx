@@ -1,68 +1,54 @@
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useState } from 'react';
 
-import { useOrders } from '@/entities/order';
-import type { FilterSortState } from '@/pages/Orders/FilterSortPanel.tsx';
+import { useImportCSV, useOrders } from '@/entities/order';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
+import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
+import type { Filter } from '@/shared/api/api.types.ts';
 import CreateOrderModal from '@/widgets/CreateOrderModal.tsx';
 
-import { MOCK_ORDERS } from './mock';
 import OrdersToolbar from './toolbar/OrdersToolbar';
 
 const Orders: FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [filterSort, setFilterSort] = useState<FilterSortState>({
-        sortBy:  'createdAt',
-        sortDir: 'desc',
-    });
-
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [filterSort, setFilterSort] = useState<FilterSortState>({
+        sortBy:         'timestamp',
+        sortDescending: true,
+    });
+    const [filters, setFilters] = useState<Filter[]>([]);
 
-    const { data } = useOrders({ page, pageSize, ...filterSort });
-    console.log(data);
+    const { data: orders, isLoading } = useOrders({
+        page,
+        pageSize,
+        sortBy: filterSort.sortBy,
+        sortDescending: filterSort.sortDescending,
+        filters: filters.length ? filters : undefined,
+    });
+
+    const { mutate: importCSV } = useImportCSV();
 
     const handleCreateOrder = (): void => {
         setModalVisible(true);
     };
 
-    const handleImportCsv = (file: File): void => {
-        alert(`TODO: import file "${file.name}"`);
-    };
-
-    const sorted = useMemo(() => {
-        return [...MOCK_ORDERS].sort((a, b) => {
-            let cmp = 0;
-            switch (filterSort.sortBy) {
-                case 'createdAt':     cmp = a.CreatedAt.localeCompare(b.CreatedAt); break;
-                case 'updatedAt':     cmp = a.UpdatedAt.localeCompare(b.UpdatedAt); break;
-                case 'amount':        cmp = a.Amount - b.Amount; break;
-                case 'amountWithTax': cmp = a.AmountWithTax - b.AmountWithTax; break;
-                case 'orderNumber':   cmp = a.OrderNumber.localeCompare(b.OrderNumber); break;
-            }
-            return filterSort.sortDir === 'asc' ? cmp : -cmp;
-        });
-    }, [filterSort]);
-
-    const paginated = useMemo(
-        () => sorted.slice((page - 1) * pageSize, page * pageSize),
-        [sorted, page, pageSize]
-    );
-    
     return (
         <div className="flex justify-center min-h-screen w-full">
             <div className="flex flex-col gap-4 px-6 py-6 max-w-6xl w-6xl">
                 <OrdersToolbar
+                    filters={filters}
                     filterSort={filterSort}
                     onFilterSortChange={setFilterSort}
+                    onFiltersChange={setFilters}
                     onCreateOrder={handleCreateOrder}
-                    onImportCsv={handleImportCsv}
+                    onImportCsv={importCSV}
                 />
-                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-6 py-2">
-                    <OrdersTable orders={paginated} />
+                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-4 py-2">
+                    <OrdersTable orders={orders?.items ?? []} isLoading={isLoading} />
                     <Pagination
-                        total={sorted.length}
+                        total={orders?.totalCount ?? 0}
                         page={page}
                         pageSize={pageSize}
                         onPageChange={setPage}
