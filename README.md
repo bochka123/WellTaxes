@@ -243,7 +243,7 @@ Dora198605QQ
 Live production environment:
 
 ```
-https://welltaxes-frontend.victoriousdune-34a0373b.polandcentral.azurecontainerapps.io/
+https://welltaxes.online/
 ```
 
 ---
