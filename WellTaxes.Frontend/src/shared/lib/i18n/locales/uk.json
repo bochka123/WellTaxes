@@ -156,7 +156,8 @@
     "activeAccount": "Активний акаунт",
     "otherAccounts": "Інші акаунти",
     "addAccount": "Додати акаунт",
-    "loggingOut": "Виходимо..."
+    "loggingOut": "Виходимо...",
+    "language": "Мова"
   },
   "import": {
     "loading": "Імпортуємо CSV…",
