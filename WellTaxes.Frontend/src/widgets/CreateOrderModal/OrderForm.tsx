@@ -66,25 +66,25 @@ const OrderForm: FC<Props> = ({
                     className={fieldInput(!!touched.amount && !!errors.amount)}
                 />
             </Field>
-            
-            <div className="flex flex-col md:flex-row items-center justify-between  gap-2">
-                <Field label={t('createOrder.date')} error={err('date')} className="flex-1 w-full">
+
+            <div className="flex gap-2 min-w-0">
+                <Field label={t('date')} error={err('date')} className="flex-1 min-w-0">
                     <input
                         type="date"
                         value={form.date}
                         onChange={(e) => onChange({ date: e.target.value })}
                         onBlur={() => onBlur('date')}
-                        className={fieldInput(!!touched.date && !!errors.date)}
+                        className={`${fieldInput(!!touched.date && !!errors.date)} min-w-0`}
                     />
                 </Field>
 
-                <Field label={t('createOrder.time')} error={err('time')} className="w-full md:w-28">
+                <Field label={t('time')} error={err('time')} className="w-[6.5rem] shrink-0">
                     <input
                         type="time"
                         value={form.time}
                         onChange={(e) => onChange({ time: e.target.value })}
                         onBlur={() => onBlur('time')}
-                        className={fieldInput(!!touched.time && !!errors.time)}
+                        className={`${fieldInput(!!touched.time && !!errors.time)} min-w-0`}
                     />
                 </Field>
             </div>
