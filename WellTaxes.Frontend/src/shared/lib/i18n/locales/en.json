@@ -181,7 +181,7 @@
   },
   "welcome": {
     "title": "Welcome to WellTaxes",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    "description": "WellTaxes is a property-tax calculation platform for New York State.\nUsers can select a parcel on an interactive map, enter a sale price, and receive a detailed breakdown of applicable state, county, city, and special district taxes based on ZIP jurisdiction."
   },
   "team": {
     "aboutUs": "About us",
