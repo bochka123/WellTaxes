@@ -8,8 +8,6 @@ import { GeoJSON, MapContainer, Marker, TileLayer, useMapEvents } from 'react-le
 
 import type { LatLng } from '@/entities/jurisdiction';
 
-import ZipZones from './ZipZones.tsx';
-
 interface Props {
     picked: LatLng | null;
     onPick: (p: LatLng) => void;
@@ -49,7 +47,7 @@ const Map: FC<Props> = ({ picked, onPick, nyGeoJson }) => {
             zoom={7}
             maxBounds={BASE_BOUNDS}
             maxBoundsViscosity={1}
-            minZoom={7}
+            minZoom={6.5}
             style={{ height: '100%', width: '100%', borderRadius: 6 }}
         >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
@@ -65,7 +63,6 @@ const Map: FC<Props> = ({ picked, onPick, nyGeoJson }) => {
                     }}
                 />
             )}
-            <ZipZones picked={picked} />
             {picked && <Marker position={picked}/>}
         </MapContainer>
     );

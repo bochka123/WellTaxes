@@ -10,15 +10,26 @@
     "calculateTax": "Calculate Tax"
   },
   "createOrder": {
-    "heading": "Create order",
+    "heading": "Create Order",
     "latitude": "Latitude",
-    "latitudePlaceholder": "e.g. 42.147285",
+    "latitudePlaceholder": "Click on map or enter manually",
     "longitude": "Longitude",
-    "longitudePlaceholder": "e.g. -76.750888",
-    "price": "Price ($)",
-    "pricePlaceholder": "e.g. 100000",
+    "longitudePlaceholder": "Click on map or enter manually",
+    "amount": "Price ($)",
+    "amountPlaceholder": "0.00",
+    "date": "Date",
+    "time": "Time",
     "createButton": "Create order",
-    "importCSV": "Import CSV"
+    "creating": "Creating...",
+    "importCSV": "Import CSV",
+    "errors": {
+      "required": "Required field",
+      "invalidNumber": "Must be a number",
+      "latRange": "Must be between -90 and 90",
+      "lngRange": "Must be between -180 and 180",
+      "positiveAmount": "Must be greater than 0",
+      "pickPoint": "Pick a point on the map"
+    }
   },
   "taxModal": {
     "heading": "Estimated Property Tax",

@@ -20,12 +20,12 @@ const OrdersToolbar: FC<Props> = ({
     filterSort, filters, onFilterSortChange, onFiltersChange, onCreateOrder, onImportCsv
 }) => {
     return (
-        <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-between mb-6">
+            <div className="flex items-center gap-2 flex-col sm:flex-row">
                 <CreateOrderButton onClick={onCreateOrder} />
                 <ImportCsvButton onImport={onImportCsv} />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-col sm:flex-row">
                 <FilterPanel value={filters} onChange={onFiltersChange} />
                 <FilterSortPanel value={filterSort} onChange={onFilterSortChange} />
             </div>

@@ -3,10 +3,10 @@ import type { PaginatedOrders } from '@/entities/order/types/order.types.ts';
 import { apiClient } from '@/shared/api/client';
 
 export interface CreateOrderDto {
-    userId:        string;
-    amount:        number;
-    latitude:      number;
-    longitude:     number;
+    amount:    number;
+    latitude:  number;
+    longitude: number;
+    timestamp: string;
 }
 
 const buildQuery = (params: GetOrdersParams): string => {

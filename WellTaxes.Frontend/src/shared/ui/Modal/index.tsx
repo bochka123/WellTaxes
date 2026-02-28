@@ -15,11 +15,13 @@ type ModalProps = {
 
 const ESCAPE_KEY = 'Escape';
 
-const Modal: FC<ModalProps> = ({ visible,
+const Modal: FC<ModalProps> = ({
+                                   visible,
                                    setVisible,
                                    heading,
                                    zIndexType,
-                                   children }) => {
+                                   children,
+                               }) => {
 
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -42,21 +44,30 @@ const Modal: FC<ModalProps> = ({ visible,
 
     const renderPortalBody = (): ReactNode => (
         <div
-            className={`fixed inset-0 flex items-center justify-center bg-black/45 ${zClass}`}
             ref={wrapperRef}
+            className={`fixed inset-0 flex items-center justify-center bg-black/45 ${zClass} p-0 sm:p-4`}
         >
-            <div className="flex flex-col w-full sm:max-w-[70%] mx-0 sm:mx-4 bg-white sm:rounded-md shadow-[0_4px_24px_rgba(0,0,0,0.18)] overflow-hidden overflow-y-auto max-h-screen sm:max-h-[90vh] min-h-[50vh]" ref={contentRef}>
-                <div className="flex flex-col flex-1">
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                        <p className="m-0 text-base font-semibold text-black tracking-wide">{heading}</p>
-                        <button
-                            type="button"
-                            onClick={() => setVisible(false)}
-                            className="flex items-center justify-center w-7 h-7 rounded text-black hover:bg-[#fe8380] hover:text-white transition-colors duration-150 cursor-pointer border-none bg-transparent"
-                        >
-                            <FontAwesomeIcon icon={faXmark} />
-                        </button>
-                    </div>
+            <div
+                ref={contentRef}
+                className={[
+                    'flex flex-col bg-white overflow-hidden',
+                    'shadow-[0_4px_24px_rgba(0,0,0,0.18)]',
+                    'w-full max-h-[95dvh] rounded-2xl',
+                    'sm:min-w-0 sm:w-240 sm:max-w-[95vw] sm:max-h-[90dvh] sm:rounded-xl',
+                ].join(' ')}
+            >
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+                    <p className="m-0 text-base font-semibold text-black tracking-wide">{heading}</p>
+                    <button
+                        type="button"
+                        onClick={() => setVisible(false)}
+                        className="flex items-center justify-center w-7 h-7 rounded text-black hover:bg-[#fe8380] hover:text-white transition-colors duration-150 cursor-pointer border-none bg-transparent"
+                    >
+                        <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto min-h-0">
                     {children}
                 </div>
             </div>
