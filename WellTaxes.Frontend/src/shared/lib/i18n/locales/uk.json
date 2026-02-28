@@ -36,26 +36,59 @@
     "home": "Головна",
     "orders": "Замовлення"
   },
-  "orders": {
-    "notFound": "Замовлень не знайдено",
-    "colNumber": "Номер",
-    "colAmount": "Сума",
-    "colAmountWithTax": "Сума з податком",
-    "colCoordinates": "Координати",
-    "colCreated": "Створено",
-    "colUpdated": "Оновлено"
+  "table": {
+    "columns": {
+      "orderNumber": "Номер замовлення",
+      "region": "Регіон / Юрисдикція",
+      "zip": "Поштовий індекс",
+      "subtotal": "Сума без ПДВ",
+      "taxAmount": "Сума податку",
+      "totalAmount": "Загальна сума",
+      "compositeTaxRate": "Комбінована ставка",
+      "breakdown": "Деталізація",
+      "timestamp": "Дата та час"
+    }
   },
-  "filterSort": {
-    "sorting": "Сортування",
+  "sort": {
+    "title": "Сортування",
     "sortBy": "Сортувати за",
     "direction": "Напрямок",
-    "asc": "За зростанням",
-    "desc": "За спаданням",
-    "createdAt": "Дата створення",
-    "updatedAt": "Дата зміни",
-    "amount": "Сума",
-    "amountWithTax": "Сума з податком",
-    "orderNumber": "Номер замовлення"
+    "asc": "Зрост.",
+    "desc": "Спад.",
+    "reset": "Скинути сортування",
+    "groups": {
+      "order": "Замовлення",
+      "breakdown": "Розбивка податку",
+      "jurisdiction": "Юрисдикція"
+    },
+    "fields": {
+      "orderNumber": "Номер замовлення",
+      "subtotal": "Сума",
+      "taxAmount": "Податок",
+      "totalAmount": "Разом",
+      "compositeTaxRate": "Ставка",
+      "timestamp": "Дата",
+      "latitude": "Широта",
+      "longitude": "Довгота",
+      "stateRate": "Ставка штату",
+      "countryRate": "Ставка округу",
+      "cityRate": "Ставка міста",
+      "specialRate": "Спец. ставка",
+      "zipCode": "ZIP",
+      "taxRegionName": "Регіон"
+    },
+    "labels": {
+      "sorting": "Сортування",
+      "sortBy": "Сортувати за",
+      "direction": "Напрямок",
+      "asc": "За зростанням",
+      "desc": "За спаданням",
+      "createdAt": "Дата створення",
+      "updatedAt": "Дата зміни",
+      "amount": "Сума",
+      "amountWithTax": "Сума з податком",
+      "orderNumber": "Номер замовлення"
+    }
   },
   "filter": {
     "apply": "Застосувати",

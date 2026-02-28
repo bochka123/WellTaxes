@@ -16,7 +16,7 @@ const Orders: FC = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [filterSort, setFilterSort] = useState<FilterSortState>({
-        sortBy:         'createdAt',
+        sortBy:         'timestamp',
         sortDescending: true,
     });
     const [filters, setFilters] = useState<Filter[]>([]);
@@ -48,7 +48,7 @@ const Orders: FC = () => {
                     onCreateOrder={handleCreateOrder}
                     onImportCsv={handleImportCsv}
                 />
-                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-6 py-2">
+                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-4 py-2">
                     <OrdersTable orders={orders?.items ?? []} />
                     {
                         isLoading && <Spinner />
