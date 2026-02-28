@@ -65,11 +65,17 @@ const Orders: FC = () => {
         importCSV(file, {
             onSuccess: (data) => {
                 toast.dismiss(toastIdRef.current);
-                if (data.result.failedCount === 0) {
-                    toast.success(t('import.success', { count: data.result.successCount }));
+                const { successCount, failedCount } = data.result;
+
+                if (failedCount === 0) {
+                    toast.success(t('import.success', { count: successCount }));
+                } else if (successCount > 0) {
+                    toast.warning(t('import.partialWarning', { success: successCount, failed: failedCount }), {
+                        description: t('import.partialWarningDesc'),
+                    });
                 } else {
-                    toast.error(t('import.partialError', { count: data.result.failedCount }), {
-                        description: data.result.errors.slice(0, 5).map(e => e.errorMessage).join('\n'),
+                    toast.error(t('import.allFailed'), {
+                        description: t('import.allFailedDesc'),
                     });
                 }
             },

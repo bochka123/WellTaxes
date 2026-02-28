@@ -168,7 +168,10 @@
   "import": {
     "loading": "Importing CSV…",
     "success": "Imported {{count}} orders successfully",
-    "partialError": "Import finished with {{count}} error(s)",
+    "partialWarning": "Imported {{success}} of {{success, number}} rows, {{failed}} failed",
+    "partialWarningDesc": "Not all rows were imported. Please check invalid data and try again.",
+    "allFailed": "Import failed — no rows were imported",
+    "allFailedDesc": "No rows could be imported. Please verify your CSV format or contact the administrator.",
     "error": "Import failed"
   },
   "delete": {
