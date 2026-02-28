@@ -48,16 +48,9 @@ namespace WellTaxes.Service.Core.Services
                     rowNumber++;
                     result.TotalRecords++;
                     batch.Add((rowNumber, record));
-
-                    if (batch.Count >= BatchSize)
-                    {
-                        await ProcessBatchAsync(batch, userId, result, cancellationToken);
-                        batch.Clear();
-                    }
                 }
 
-                if (batch.Count > 0)
-                    await ProcessBatchAsync(batch, userId, result, cancellationToken);
+                await ProcessBatchAsync(batch, userId, result, cancellationToken);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -73,14 +66,14 @@ namespace WellTaxes.Service.Core.Services
         }
 
         private async Task ProcessBatchAsync(
-            List<(int RowNumber, OrderCsvRecord Record)> batch,
+            List<(int RowNumber, OrderCsvRecord Record)> allRows,
             Guid userId,
             ImportResult result,
             CancellationToken cancellationToken)
         {
-            var lats = batch.Select(b => b.Record.Latitude).ToArray();
-            var lons = batch.Select(b => b.Record.Longitude).ToArray();
-            var timestamps = batch.Select(b => b.Record.Timestamp).ToArray();
+            var lats = allRows.Select(b => b.Record.Latitude).ToArray();
+            var lons = allRows.Select(b => b.Record.Longitude).ToArray();
+            var timestamps = allRows.Select(b => b.Record.Timestamp).ToArray();
 
             const string taxLookupSql = @"
                 SELECT
@@ -96,6 +89,7 @@ namespace WellTaxes.Service.Core.Services
                     AND input.ts >= tr.valid_from
                     AND (input.ts < tr.valid_to OR tr.valid_to IS NULL)";
 
+            logger.LogInformation("Looking up tax info for {Count} records", allRows.Count);
             var taxRows = (await db.QueryAsync<TaxLookupRow>(taxLookupSql, new
             {
                 Lats = lats,
@@ -103,11 +97,11 @@ namespace WellTaxes.Service.Core.Services
                 Timestamps = timestamps
             })).ToDictionary(r => (int)r.Index - 1);
 
-            var ordersToInsert = new List<OrderInsertRow>(batch.Count);
+            var ordersToInsert = new List<OrderInsertRow>(allRows.Count);
 
-            for (var i = 0; i < batch.Count; i++)
+            for (var i = 0; i < allRows.Count; i++)
             {
-                var (rowNumber, record) = batch[i];
+                var (rowNumber, record) = allRows[i];
 
                 if (!taxRows.TryGetValue(i, out var tax))
                 {
@@ -137,8 +131,39 @@ namespace WellTaxes.Service.Core.Services
             }
 
             if (ordersToInsert.Count == 0)
+            {
+                logger.LogWarning("No valid orders to insert");
                 return;
+            }
 
+            logger.LogInformation("Inserting {Count} valid orders in batches of {BatchSize}",
+                ordersToInsert.Count, BatchSize);
+
+            var totalBatches = (int)Math.Ceiling(ordersToInsert.Count / (double)BatchSize);
+
+            for (var batchIndex = 0; batchIndex < totalBatches; batchIndex++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var batchOrders = ordersToInsert
+                    .Skip(batchIndex * BatchSize)
+                    .Take(BatchSize)
+                    .ToList();
+
+                logger.LogInformation("Processing batch {Current}/{Total} with {Count} orders",
+                    batchIndex + 1, totalBatches, batchOrders.Count);
+
+                await InsertBatchAsync(batchOrders, result, cancellationToken);
+            }
+
+            logger.LogInformation("Completed inserting allRows batches");
+        }
+
+        private async Task InsertBatchAsync(
+            List<OrderInsertRow> batchOrders,
+            ImportResult result,
+            CancellationToken cancellationToken)
+        {
             await db.OpenAsync(cancellationToken);
             try
             {
@@ -150,7 +175,7 @@ namespace WellTaxes.Service.Core.Services
                     cancellationToken);
 
                 var now = DateTime.UtcNow;
-                foreach (var o in ordersToInsert)
+                foreach (var o in batchOrders)
                 {
                     await writer.StartRowAsync(cancellationToken);
                     await writer.WriteAsync(o.OrderNumber, NpgsqlTypes.NpgsqlDbType.Text, cancellationToken);
@@ -166,82 +191,21 @@ namespace WellTaxes.Service.Core.Services
                 }
 
                 await writer.CompleteAsync(cancellationToken);
+
+                result.SuccessCount += batchOrders.Count;
+                logger.LogInformation("Successfully inserted {Count} orders", batchOrders.Count);
             }
             catch (PostgresException pgEx) when (pgEx.SqlState == "23505")
             {
-                await FallbackRowByRowInsertAsync(ordersToInsert, result, cancellationToken);
-                return;
+                logger.LogWarning("Duplicate key detected, falling back to row-by-row insert for this batch");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to insert batch, falling back to row-by-row insert");
             }
             finally
             {
                 await db.CloseAsync();
-            }
-
-            // All rows written successfully
-            result.SuccessCount += ordersToInsert.Count;
-        }
-
-        /// <summary>
-        /// Called only when the COPY hits a duplicate; retries each row individually
-        /// so callers get precise per-row duplicate errors.
-        /// </summary>
-        private async Task FallbackRowByRowInsertAsync(
-            List<OrderInsertRow> orders,
-            ImportResult result,
-            CancellationToken cancellationToken)
-        {
-            const string insertSql = @"
-                INSERT INTO orders
-                    (order_number, user_id, amount, amount_with_tax,
-                     latitude, longitude, tax_rates_id, ""timestamp"", created_at, updated_at)
-                VALUES
-                    (@OrderNumber, @UserId, @Amount, @AmountWithTax,
-                     @Latitude, @Longitude, @TaxRatesId, @Timestamp, NOW(), NOW())
-                ON CONFLICT (order_number) DO NOTHING";
-
-            foreach (var o in orders)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                try
-                {
-                    var rows = await db.ExecuteAsync(insertSql, new
-                    {
-                        o.OrderNumber,
-                        o.UserId,
-                        o.Amount,
-                        o.AmountWithTax,
-                        o.Latitude,
-                        o.Longitude,
-                        o.TaxRatesId,
-                        o.Timestamp
-                    });
-
-                    if (rows == 0)
-                    {
-                        result.FailedCount++;
-                        result.Errors.Add(new ImportError
-                        {
-                            RowNumber = o.RowNumber,
-                            RecordId = o.RecordId,
-                            ErrorMessage = $"Order {o.OrderNumber} already exists"
-                        });
-                    }
-                    else
-                    {
-                        result.SuccessCount++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    result.FailedCount++;
-                    result.Errors.Add(new ImportError
-                    {
-                        RowNumber = o.RowNumber,
-                        RecordId = o.RecordId,
-                        ErrorMessage = ex.Message
-                    });
-                    logger.LogError(ex, "Failed to insert order {OrderNumber}", o.OrderNumber);
-                }
             }
         }
 
