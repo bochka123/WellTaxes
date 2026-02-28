@@ -1,181 +1,311 @@
 # WellTaxes
 
-A property-tax calculation platform for New York State. Users select a parcel on an interactive map, submit a sale price, and receive a breakdown of state / county / city / special tax rates for the matching ZIP jurisdiction.
+WellTaxes is a property-tax calculation platform for New York State.
+Users can select a parcel on an interactive map, enter a sale price, and receive a detailed breakdown of applicable state, county, city, and special district taxes based on ZIP jurisdiction.
 
 ---
 
 ## Table of Contents
 
-- [WellTaxes](#welltaxes)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
-  - [Repository Structure](#repository-structure)
-  - [Database Setup](#database-setup)
-    - [1. Create the database and enable extensions](#1-create-the-database-and-enable-extensions)
-    - [2. Run the schema script](#2-run-the-schema-script)
-    - [3. Seed tax-rate data](#3-seed-tax-rate-data)
-  - [Backend Setup](#backend-setup)
-    - [Azure AD — app registration](#azure-ad--app-registration)
-    - [User Secrets — Orders service](#user-secrets--orders-service)
-  - [Frontend Setup](#frontend-setup)
-    - [1. Install dependencies](#1-install-dependencies)
-    - [2. Create `.env.local`](#2-create-envlocal)
-  - [Running Everything](#running-everything)
-  - [Docker Build (Frontend)](#docker-build-frontend)
+* [Project Overview](#project-overview)
+* [Important: Use the `localhost` Branch for Local Development](#important-use-the-localhost-branch-for-local-development)
+* [Prerequisites](#prerequisites)
+
+  * [Install Docker Desktop (Windows/macOS)](#install-docker-desktop-windowsmacos)
+  * [Install Docker on Linux](#install-docker-on-linux)
+  * [Verify Installation](#verify-installation)
+* [Project Structure](#project-structure)
+* [First-Time Setup](#first-time-setup)
+* [Access URLs](#access-urls)
+* [Test User Credentials](#test-user-credentials)
+* [Production Deployment](#production-deployment)
+* [How to Stop Containers](#how-to-stop-containers)
+* [How to Fully Reset Docker Environment](#how-to-fully-reset-docker-environment)
+* [Services Overview](#services-overview)
+
+---
+
+## Project Overview
+
+WellTaxes enables users to:
+
+1. Select a parcel on an interactive New York State map.
+2. Enter a property sale price.
+3. Calculate tax breakdowns including:
+
+   * State taxes
+   * County taxes
+   * City taxes
+   * Special district taxes
+4. View a structured tax summary based on ZIP jurisdiction rules.
+
+The entire system runs using Docker containers. No manual installation of .NET, Node.js, or PostgreSQL is required.
+
+---
+
+## Important: Use the `localhost` Branch for Local Development
+
+Before pulling or cloning the project for local execution, make sure you use the `localhost` branch.
+
+### If cloning for the first time:
+
+```bash
+git clone -b localhost <repository-url>
+cd WellTaxes
+```
+
+### If you already cloned the repository:
+
+```bash
+cd WellTaxes
+git fetch
+git checkout localhost
+git pull
+```
+
+The `localhost` branch contains the correct Docker configuration and environment settings required for local execution.
 
 ---
 
 ## Prerequisites
 
-| Tool | Minimum version |
-|---|---|
-| [.NET SDK](https://dotnet.microsoft.com/download) | 8 |
-| [Node.js](https://nodejs.org/) | 22 |
-| [PostgreSQL](https://www.postgresql.org/) + [PostGIS](https://postgis.net/) | PG 15 / PostGIS 3 |
-| [psql](https://www.postgresql.org/docs/current/app-psql.html) CLI | any |
-
-> **PostGIS** is required — the jurisdictions table stores `GEOMETRY(MULTIPOLYGON, 4269)` and tax lookup uses spatial queries.
+You only need Docker installed on your system.
 
 ---
 
-## Repository Structure
+### Install Docker Desktop (Windows/macOS)
+
+1. Go to:
+   [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+2. Download Docker Desktop for your operating system.
+3. Run the installer.
+4. Restart your computer if prompted.
+5. Launch Docker Desktop and wait until it shows that Docker is running.
+
+---
+
+### Install Docker on Linux
+
+For Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose-plugin
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+Add your user to the Docker group (optional but recommended):
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+Log out and log back in after running this command.
+
+---
+
+### Verify Installation
+
+Run:
+
+```bash
+docker --version
+docker compose version
+```
+
+If both commands return version numbers, Docker is installed correctly.
+
+---
+
+## Project Structure
+
+Example structure of the `WellTaxes` root folder:
 
 ```
 WellTaxes/
-├── WellTaxes.Frontend/          # React + Vite SPA
-└── WellTaxes.Backend/
-    ├── WellTaxes.Service.Core/      # Shared entities, interfaces, services
-    ├── WellTaxes.Service.Orders/    # Main REST API  (port 7116 / 5005)
-    └── WellTaxes.Service.Worker/    # Background worker + DB init SQL
+│
+├── docker-compose.yml
+├── README.md
+│
+├── WellTaxes.Backend/
+│   ├── Dockerfile
+│   └── (ASP.NET Core API source)
+│
+├── WellTaxes.Frontend/
+│   ├── Dockerfile
+│   └── (React / Web UI source)
+│
+└── init-db/
+    └── (PostgreSQL configuration, migrations, seeds)
 ```
 
 ---
 
-## Database Setup
+## First-Time Setup
 
-### 1. Create the database and enable extensions
+Follow these steps carefully.
 
-```sql
-CREATE DATABASE welltaxes;
-\c welltaxes
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS postgis;
-```
+### 1. Navigate to the Project Root
 
-### 2. Run the schema script
+Open a terminal and go to the root folder:
 
 ```bash
-psql -U postgres -d welltaxes -f WellTaxes.Backend/WellTaxes.Service.Worker/init.sql
+cd path/to/WellTaxes
 ```
 
-This creates three tables: `jurisdictions`, `tax_rates`, and `orders`.
+Make sure you are inside the folder that contains `docker-compose.yml`.
 
-### 3. Seed tax-rate data
+---
 
-Import your NY tax-rate CSV (one row per ZIP code) into the `tax_rates` table:
+### 2. Stop and Remove Existing Containers (Clean Start)
 
 ```bash
-psql -U postgres -d welltaxes -c "\copy tax_rates(state, zipcode, tax_region_name, total_rate, state_rate, estimated_county_rate, estimated_city_rate, estimated_special_rate, valid_from) FROM 'path/to/tax_rates.csv' CSV HEADER"
+docker compose down -v
 ```
 
-Seed jurisdiction polygons (NY GeoJSON / Shapefile → PostGIS):
+This removes:
+
+* All containers
+* Networks
+* Volumes (including database data)
+
+---
+
+### 3. Build Containers (No Cache)
 
 ```bash
-# example using shp2pgsql if you have a Shapefile
-shp2pgsql -s 4269 ny_jurisdictions.shp public.jurisdictions | psql -U postgres -d welltaxes
+docker compose build --no-cache
+```
+
+This ensures a clean rebuild of:
+
+* Backend API
+* Frontend application
+* Database service
+
+---
+
+### 4. Start the Application
+
+```bash
+docker compose up
+```
+
+Wait until all services are fully started.
+
+You should see logs indicating:
+
+* Database is ready
+* Backend is running
+* Frontend is running
+
+---
+
+## Access URLs
+
+After startup, access the application in your browser:
+
+Frontend:
+
+```
+http://localhost:3000/
+```
+
+Backend API:
+
+```
+http://localhost:8080/
 ```
 
 ---
 
-## Backend Setup
+## Test User Credentials
 
-### Azure AD — app registration
+Use the following credentials to log in:
 
-Both the API and the frontend share **one** Azure AD app registration.
+**Email:**
 
-1. Go to **Azure Portal → App registrations → New registration**
-2. Set a **Redirect URI** of type *Single-page application*: `http://localhost:5173`
-3. Under **Expose an API**, add a scope (e.g. `access`) and note the full scope URI:  
-   `api://<CLIENT_ID>/access`
-4. Note your **Client ID** and **Tenant ID**
-
-### User Secrets — Orders service
-
-The Orders API reads secrets via `dotnet user-secrets`. Run from inside `WellTaxes.Service.Orders/`:
-
-```bash
-cd WellTaxes.Backend/WellTaxes.Service.Orders
-
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" \
-  "Host=localhost;Port=5432;Database=welltaxes;Username=postgres;Password=YOUR_PG_PASSWORD"
-
-dotnet user-secrets set "AzureAd:ClientId"  "<YOUR_CLIENT_ID>"
-dotnet user-secrets set "AzureAd:TenantId"  "<YOUR_TENANT_ID>"
-dotnet user-secrets set "AzureAd:Scopes"    "access"
+```
+welltaxes@hopiemplegmail.onmicrosoft.com
 ```
 
-Verify secrets are stored:
+**Password:**
 
-```bash
-dotnet user-secrets list
+```
+Dora198605QQ
 ```
 
 ---
 
-## Frontend Setup
+## Production Deployment
 
-### 1. Install dependencies
+Live production environment:
 
-```bash
-cd WellTaxes.Frontend
-npm install
 ```
-
-### 2. Create `.env.local`
-
-Create `WellTaxes.Frontend/.env.local` (this file is git-ignored):
-
-```env
-# URL of the backend Orders API
-VITE_API_URL=https://localhost:7116
+https://welltaxes.online
 ```
-
-The MSAL configuration (Client ID, Tenant ID, scopes) is already hardcoded in  
-`src/shared/config/msal.ts`. Update that file if you use a different app registration.
 
 ---
 
-## Running Everything
+## How to Stop Containers
 
-Open three terminals from the repository root:
+To stop all running services:
 
-**Terminal 1 — Orders API**
 ```bash
-cd WellTaxes.Backend/WellTaxes.Service.Orders
-dotnet run
-# Listening on https://localhost:7116
+docker compose down
 ```
-
-**Terminal 2 — Frontend**
-```bash
-cd WellTaxes.Frontend
-npm run dev
-# http://localhost:5173
-```
-
-Open **http://localhost:5173** — sign in with your Microsoft / Azure AD account.
 
 ---
 
-## Docker Build (Frontend)
+## How to Fully Reset Docker Environment
+
+To completely reset the project:
 
 ```bash
-docker build \
-  --build-arg VITE_API_URL=https://your-api-domain.com \
-  -t welltaxes-frontend \
-  WellTaxes.Frontend
-
-docker run -p 80:80 welltaxes-frontend
+docker compose down -v
+docker compose build --no-cache
+docker compose up
 ```
 
-`VITE_API_URL` is baked in at build time by Vite — pass the production API URL as a build argument.
+If you need to remove unused Docker resources globally:
+
+```bash
+docker system prune -a --volumes
+```
+
+Use this command with caution. It removes all unused containers, images, and volumes on your machine.
+
+---
+
+## Services Overview
+
+### Frontend
+
+* Interactive map interface
+* Parcel selection
+* Sale price input
+* Tax breakdown display
+* Runs on port 3000
+
+### Backend API
+
+* Tax calculation engine
+* Jurisdiction-based logic
+* ZIP-based tax resolution
+* Authentication support
+* Runs on port 8080
+
+### Database
+
+* PostgreSQL
+* Stores tax zones and jurisdiction data
+* Stores application user data
+* Runs inside Docker container
+
+---
+
+## Summary
+
+WellTaxes is fully containerized and designed for simple local execution using Docker.
+Follow the setup steps exactly as described, and the platform will run locally without installing any additional development tools.
