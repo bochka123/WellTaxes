@@ -192,16 +192,39 @@ namespace WellTaxes.Service.Core.Services
 
                 await writer.CompleteAsync(cancellationToken);
 
+                // All rows in this batch written successfully
                 result.SuccessCount += batchOrders.Count;
                 logger.LogInformation("Successfully inserted {Count} orders", batchOrders.Count);
             }
             catch (PostgresException pgEx) when (pgEx.SqlState == "23505")
             {
-                logger.LogWarning("Duplicate key detected, falling back to row-by-row insert for this batch");
+                logger.LogWarning("Duplicate key detected in batch with {Count} orders", batchOrders.Count);
+                result.FailedCount += batchOrders.Count;
+
+                foreach (var o in batchOrders)
+                {
+                    result.Errors.Add(new ImportError
+                    {
+                        RowNumber = o.RowNumber,
+                        RecordId = o.RecordId,
+                        ErrorMessage = "Batch failed due to duplicate order number"
+                    });
+                }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to insert batch, falling back to row-by-row insert");
+                logger.LogError(ex, "Failed to insert batch with {Count} orders", batchOrders.Count);
+                result.FailedCount += batchOrders.Count;
+
+                foreach (var o in batchOrders)
+                {
+                    result.Errors.Add(new ImportError
+                    {
+                        RowNumber = o.RowNumber,
+                        RecordId = o.RecordId,
+                        ErrorMessage = $"Batch insert failed: {ex.Message}"
+                    });
+                }
             }
             finally
             {
