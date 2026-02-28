@@ -41,6 +41,67 @@ WellTaxes enables users to:
 
 The entire system runs using Docker containers. No manual installation of .NET, Node.js, or PostgreSQL is required.
 
+## Use Cases
+
+Below are the primary features and workflows of the WellTaxes platform.
+
+### 1. Homepage & Team Introduction
+The homepage provides an overview of the platform and introduces the development team behind WellTaxes.
+![Homepage](./docs/images/home_page.png)
+
+### 2. User Menu & Settings
+Located in the top right corner, this menu allows users to manage their account profile, switch between different accounts, log out, or change the website language.
+![User Menu](./docs/images/user_menu.png)
+![Localization](./docs/images/localization.png)
+
+### 3. Orders Page Overview
+The central hub for managing logistics. This page displays all orders with comprehensive information and provides functionality to view, create, or delete them.
+![Orders Page](./docs/images/orders_page.png)
+
+### 4. Creating a New Order
+Clicking the "Create Order" button opens a modal window where users can select a destination point, specify the price, set the date and time, and finalize order creation.
+![Create Order Modal](./docs/images/create_order.png)
+
+### 5. CSV Import Functionality
+The "Import CSV" button allows users to upload a CSV file to bulk-import multiple orders into the system at once.
+
+### 6. Selecting and Deleting Orders
+Use the "Select" functionality to highlight specific orders in the table. Once selected, they can be deleted in bulk.
+![Select and Delete](./docs/images/select_button.png)
+
+### 7. Filtering Data
+The "Filter" button allows users to refine the table data based on specific conditions and parameters.
+![Filtering](./docs/images/filters.png)
+
+### 8. Sorting Data
+Users can sort the data by clicking on column headers or using the sorting button to organize orders by selected parameters.
+![Sorting](./docs/images/sorting.png)
+
+### 9. Pagination and Page Control
+Located below the table, the pagination component allows users to navigate through large datasets, switch pages, and adjust the number of items displayed per page.
+![Pagination](./docs/images/pagination.png)
+
+### 10. Detailed Order View with Map
+Clicking on an order row expands it to show detailed information, including specific coordinates and the location visualized on an interactive map.
+![Order Details Map](./docs/images/expanding.png)
+
+### 11. Mobile Version
+WellTaxes is fully responsive. The mobile interface is optimized for on-the-go management of orders and tax calculations.
+![Mobile Version](./docs/images/mobile_view.png)
+
+### 12. Language Selection in Mobile
+In the mobile view, language settings can be accessed through the profile menu by clicking on the profile photo in the top right corner.
+![Mobile Language Menu](./docs/images/mobile_user_menu.png)
+
+---
+
+## Quick Start: Production vs. Localhost
+
+WellTaxes is configured to work in two primary environments:
+
+* **Production:** The live version is available at **[welltaxes.online](https://welltaxes.online/)**. The `main` branch is optimized for this production-grade deployment.
+* **Local Development:** If you want to run, test, or debug the application on your own machine, **you must use the `localhost` branch.**
+
 ---
 
 ## Important: Use the `localhost` Branch for Local Development
