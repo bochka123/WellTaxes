@@ -1,8 +1,6 @@
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useJurisdiction } from '@/entities/jurisdiction';
-
 interface TeamMember {
     id: number;
     name: string;
@@ -11,10 +9,7 @@ interface TeamMember {
 }
 
 const Home: FC = () => {
-    const { data } = useJurisdiction();
     const { t } = useTranslation();
-
-    console.log(data);
 
     const TEAM_MEMBERS: TeamMember[] = [
         {
