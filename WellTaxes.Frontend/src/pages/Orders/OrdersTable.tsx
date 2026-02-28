@@ -107,7 +107,7 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                 <div className="flex items-center gap-1">
                                     {[
                                         { label: t('table.breakdown.state'),   value: order.breakdown.stateRate },
-                                        { label: t('table.breakdown.county'),  value: order.breakdown.countryRate },
+                                        { label: t('table.breakdown.county'),  value: order.breakdown.countyRate },
                                         { label: t('table.breakdown.city'),    value: order.breakdown.cityRate },
                                         { label: t('table.breakdown.special'), value: order.breakdown.specialRate },
                                     ].map((b) => (
@@ -147,7 +147,6 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                 <td colSpan={COLUMNS.length} className="px-4 py-3">
                                     <div className="flex gap-4">
 
-                                        {/* Карта */}
                                         <div className="w-72 shrink-0 rounded-lg overflow-hidden border border-zinc-200">
                                             <Suspense fallback={
                                                 <div className="w-full bg-zinc-100 animate-pulse rounded-lg" style={{ height: 180 }} />
@@ -159,7 +158,6 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                             </Suspense>
                                         </div>
 
-                                        {/* Деталі */}
                                         <div className="flex flex-col justify-center gap-2 text-xs">
                                             <div className="flex items-center gap-2">
                                                 <span className="w-16 text-zinc-400 shrink-0">Latitude</span>

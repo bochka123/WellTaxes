@@ -40,7 +40,7 @@ const Modal: FC<ModalProps> = ({
         return () => window.removeEventListener('keydown', close);
     }, []);
 
-    const zClass = zIndexType === 'top' ? 'z-[200]' : 'z-[100]';
+    const zClass = zIndexType === 'top' ? 'z-[1000]' : 'z-[100]';
 
     const renderPortalBody = (): ReactNode => (
         <div
