@@ -208,7 +208,7 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
                     {/* Desktop */}
                     <div
                         ref={dropdownRef}
-                        className="hidden sm:flex absolute right-0 top-10 w-120 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg p-4 flex-col gap-3 max-h-[70vh] overflow-hidden"
+                        className="hidden sm:flex absolute right-0 top-12 w-120 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg p-4 flex-col gap-3 max-h-[70vh] overflow-hidden"
                     >
                         {panelContent}
                     </div>

@@ -45,14 +45,14 @@ const Modal: FC<ModalProps> = ({
     const renderPortalBody = (): ReactNode => (
         <div
             ref={wrapperRef}
-            className={`fixed inset-0 flex items-center justify-center bg-black/45 ${zClass} p-0 sm:p-4`}
+            className={`fixed inset-0 flex items-end sm:items-center justify-center bg-black/45 ${zClass} p-0 sm:p-4`}
         >
             <div
                 ref={contentRef}
                 className={[
                     'flex flex-col bg-white overflow-hidden',
                     'shadow-[0_4px_24px_rgba(0,0,0,0.18)]',
-                    'w-full max-h-[95dvh] rounded-2xl',
+                    'w-full max-h-[95dvh] rounded-t-2xl',
                     'sm:min-w-0 sm:w-240 sm:max-w-[95vw] sm:max-h-[90dvh] sm:rounded-xl',
                 ].join(' ')}
             >
