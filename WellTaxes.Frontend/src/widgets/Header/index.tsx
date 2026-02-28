@@ -12,7 +12,9 @@ const Header: FC = () => {
                 <HeaderNav />
             </div>
             <div className="flex items-center gap-3">
-                <LanguageSwitcher />
+                <div className="hidden sm:block">
+                    <LanguageSwitcher variant="compact" />
+                </div>
                 <UserMenu />
             </div>
         </header>
