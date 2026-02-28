@@ -78,7 +78,7 @@ namespace WellTaxes.Service.Orders.Controllers
         /// </summary>
         /// <param name="id">Order ID</param>
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var success = await orderService.DeleteOrderAsync(id);
