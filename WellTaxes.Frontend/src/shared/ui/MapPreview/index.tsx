@@ -20,7 +20,7 @@ const MapPreview: FC<Props> = ({ position, height = 180 }) => (
     <MapContainer
         center={position}
         zoom={13}
-        zoomControl={false}
+        zoomControl={true}
         scrollWheelZoom={false}
         dragging={false}
         doubleClickZoom={false}
