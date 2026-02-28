@@ -158,7 +158,9 @@ const FilterSortPanel: FC<Props> = ({ value, onChange, className }) => {
                                 ref={dropdownRef}
                                 className="flex flex-col gap-3 bg-white rounded-t-2xl p-4 max-h-[85dvh] overflow-hidden"
                             >
-                                <div className="w-10 h-1 rounded-full bg-zinc-200 mx-auto shrink-0" />
+                                <div className="flex justify-center">
+                                    <div className="w-10 h-1 rounded-full bg-zinc-200 shrink-0" />
+                                </div>
                                 {panelContent}
                             </div>
                         </div>,
