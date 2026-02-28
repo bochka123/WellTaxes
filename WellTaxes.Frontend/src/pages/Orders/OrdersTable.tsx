@@ -1,4 +1,5 @@
 import { type FC, lazy, Suspense, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Order } from '@/entities/order';
@@ -7,21 +8,55 @@ import Spinner from '@/shared/ui/Spinner';
 const MapPreview = lazy(() => import('@/shared/ui/MapPreview'));
 
 interface Props {
-    orders: Order[];
-    isLoading: boolean;
+    orders:            Order[];
+    isLoading:         boolean;
+    selectionMode?:    boolean;
+    selectedIds?:      Set<string>;
+    onSelectionChange?: (ids: Set<string>) => void;
 }
 
 const formatRate = (rate: number): string => `${(rate * 100).toFixed(2)}%`;
 
-const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
+const OrdersTable: FC<Props> = ({ orders, isLoading, selectionMode = false, selectedIds = new Set(), onSelectionChange }) => {
     const { t, i18n } = useTranslation();
     const [expandedId, setExpandedId] = useState<string | null>(null);
+
+    const allSelected = orders.length > 0 && orders.every((o) => selectedIds.has(o.id));
+
+    const toggleAll = (): void => {
+        if (!onSelectionChange) return;
+        if (allSelected) {
+            const next = new Set(selectedIds);
+            orders.forEach((o) => next.delete(o.id));
+            onSelectionChange(next);
+        } else {
+            const next = new Set(selectedIds);
+            orders.forEach((o) => next.add(o.id));
+            onSelectionChange(next);
+        }
+    };
+
+    const toggleOne = (id: string): void => {
+        if (!onSelectionChange) return;
+        const next = new Set(selectedIds);
+        next.has(id) ? next.delete(id) : next.add(id);
+        onSelectionChange(next);
+    };
 
     const formatAmount = (amount: number): string =>
         new Intl.NumberFormat(i18n.language, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(amount);
 
-    const formatDate = (date: string): string =>
-        new Intl.DateTimeFormat(i18n.language, { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(date));
+    const formatDate = (date: string): string => {
+        const utcDate = new Date(date.endsWith('Z') ? date : date + 'Z');
+
+        return new Intl.DateTimeFormat(i18n.language, {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(utcDate);
+    };
 
     const COLUMNS = [
         t('table.columns.orderNumber'),
@@ -60,6 +95,16 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
             <table className="w-full text-sm">
                 <thead>
                 <tr className="border-b border-zinc-100">
+                    {selectionMode && (
+                        <th className="px-4 py-3 w-8">
+                            <input
+                                type="checkbox"
+                                checked={allSelected}
+                                onChange={toggleAll}
+                                className="w-3.5 h-3.5 rounded accent-blue-400 cursor-pointer"
+                            />
+                        </th>
+                    )}
                     {COLUMNS.map((h, i) => (
                         <th key={i} className="text-left text-xs font-medium text-zinc-400 uppercase tracking-wide px-4 py-3 whitespace-nowrap">
                             {h}
@@ -69,12 +114,22 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                 </thead>
                 <tbody className="divide-y divide-zinc-50">
                 {orders.map((order) => (
-                    <>
+                    <React.Fragment key={order.id}>
                         <tr
                             key={order.id}
-                            className="group hover:bg-zinc-50/60 transition-colors duration-100 cursor-pointer"
-                            onClick={() => setExpandedId((v) => v === order.id ? null : order.id)}
+                            className={`group hover:bg-zinc-50/60 transition-colors duration-100 cursor-pointer ${selectionMode && selectedIds.has(order.id) ? 'bg-blue-50/60' : ''}`}
+                            onClick={() => selectionMode ? toggleOne(order.id) : setExpandedId((v) => v === order.id ? null : order.id)}
                         >
+                            {selectionMode && (
+                                <td className="px-4 py-3.5 w-8" onClick={(e) => e.stopPropagation()}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedIds.has(order.id)}
+                                        onChange={() => toggleOne(order.id)}
+                                        className="w-3.5 h-3.5 rounded accent-blue-400 cursor-pointer"
+                                    />
+                                </td>
+                            )}
                             <td className="px-4 py-3.5 font-mono text-xs text-zinc-500 whitespace-nowrap">
                                 {order.orderNumber}
                             </td>
@@ -142,7 +197,7 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                             </td>
                         </tr>
 
-                        {expandedId === order.id && (
+                        {expandedId === order.id && !selectionMode && (
                             <tr key={`${order.id}-expanded`} className="bg-zinc-50/40">
                                 <td colSpan={COLUMNS.length} className="px-4 py-3">
                                     <div className="flex gap-4">
@@ -173,7 +228,7 @@ const OrdersTable: FC<Props> = ({ orders, isLoading }) => {
                                 </td>
                             </tr>
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
                 </tbody>
             </table>

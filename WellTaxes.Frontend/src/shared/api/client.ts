@@ -14,7 +14,7 @@ async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
     if (token) headers.set('Authorization', `Bearer ${token}`);
 
     const body = options.body;
-    
+
     if (isFormData(body)) {
         headers.delete('Content-Type');
     } else {
@@ -57,5 +57,9 @@ export const apiClient = {
             method: 'PUT',
             body: body instanceof FormData ? body : body === undefined ? undefined : JSON.stringify(body),
         }),
-    delete: <T>(url: string) => request<T>(url, { method: 'DELETE' }),
+    delete: <T>(url: string, body?: unknown) =>
+        request<T>(url, {
+            method: 'DELETE',
+            body: body instanceof FormData ? body : body === undefined ? undefined : JSON.stringify(body),
+        }),
 };

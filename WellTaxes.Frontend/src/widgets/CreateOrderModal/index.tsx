@@ -1,5 +1,6 @@
-import { type ChangeEvent, type Dispatch, type FC, type SetStateAction, useState } from 'react';
+import { type ChangeEvent, type Dispatch, type FC, type SetStateAction, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 import { type LatLng, useNyGeoJson } from '@/entities/jurisdiction';
 import { useCreateOrder } from '@/entities/order';
@@ -7,7 +8,7 @@ import Modal from '@/shared/ui/Modal';
 
 import MapSection from './MapSelection';
 import OrderForm  from './OrderForm';
-import { buildLocaleTimestamp, EMPTY_FORM, type FormErrors, type FormState, validate } from './validation';
+import { buildTimestamp, EMPTY_FORM, type FormErrors, type FormState, validate } from './validation';
 
 interface Props {
     visible:    boolean;
@@ -18,6 +19,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
     const { t } = useTranslation();
     const { mutate: createOrder, isPending } = useCreateOrder();
     const nyGeoJson = useNyGeoJson();
+    const toastIdRef = useRef<string | number | undefined>(undefined);
 
     const [picked,  setPicked]  = useState<LatLng | null>(null);
     const [form,    setForm]    = useState<FormState>(EMPTY_FORM);
@@ -47,12 +49,12 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
         if (!isNaN(num)) setPicked((prev) => ({ lat: prev?.lat ?? 0, lng: num }));
     };
 
-    const handleBlur = (field: keyof FormErrors) => {
+    const handleBlur = (field: keyof FormErrors) : void => {
         setTouched((prev) => ({ ...prev, [field]: true }));
         setErrors(validate(form, picked));
     };
 
-    const reset = () => {
+    const reset = () : void => {
         setPicked(null);
         setForm(EMPTY_FORM);
         setErrors({});
@@ -71,12 +73,22 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
                 amount:    parseFloat(form.amount),
                 latitude:  parseFloat(form.latInput),
                 longitude: parseFloat(form.lngInput),
-                timestamp: buildLocaleTimestamp(form.date, form.time),
+                timestamp: buildTimestamp(form.date, form.time),
             },
             {
-                onSuccess: () => { reset(); setVisible(false); },
+                onSuccess: () => {
+                    toast.dismiss(toastIdRef.current);
+                    toast.success(t('createOrder.toast.success'));
+                    reset();
+                    setVisible(false);
+                },
+                onError: (err) => {
+                    toast.dismiss(toastIdRef.current);
+                    toast.error(t('createOrder.toast.error'), { description: err.message });
+                },
             }
         );
+        toastIdRef.current = toast.loading(t('createOrder.toast.loading'));
     };
 
     return (
