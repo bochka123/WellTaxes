@@ -36,7 +36,7 @@ const Orders: FC = () => {
 
     return (
         <div className="flex justify-center min-h-screen w-full">
-            <div className="flex flex-col gap-4 px-6 py-6 max-w-8xl w-max min-w-0">
+            <div className="flex flex-col gap-4 px-6 py-6 w-max min-w-0">
                 <OrdersToolbar
                     filters={filters}
                     filterSort={filterSort}

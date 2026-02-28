@@ -29,11 +29,12 @@ const Pagination: FC<Props> = ({ total, page, pageSize, onPageChange, onPageSize
     const btnBase = 'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-all duration-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed';
 
     return (
-        <div className="flex items-center justify-between px-3 py-3 border-t border-zinc-100">
+        <div className="flex items-center justify-between px-3 py-3 border-t border-zinc-100 flex-col sm:flex-row">
             <div className="flex items-center gap-3">
-            <span className="text-xs text-zinc-400">
-              {from}–{to} {t('pagination.of')} {total}
-            </span>
+                <span className="text-xs text-zinc-400">
+                  {from}–{to} {t('pagination.of')} {total}
+                </span>
+
                 <Select
                     value={pageSize}
                     onChange={(e) => { onPageSizeChange(Number(e.target.value)); onPageChange(1); }}
