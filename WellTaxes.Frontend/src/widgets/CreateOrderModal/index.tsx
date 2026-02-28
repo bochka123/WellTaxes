@@ -65,8 +65,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
         const errs = validate(form, picked);
         setErrors(errs);
         if (Object.keys(errs).length > 0) return;
-        // eslint-disable-next-line no-console
-        console.log(form.date, form.time);
+        
         createOrder(
             {
                 amount:    parseFloat(form.amount),

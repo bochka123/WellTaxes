@@ -37,7 +37,7 @@ const FilterPanel: FC<Props> = ({ value, onChange }) => {
             label: t('filter.groups.breakdown'),
             fields: [
                 { value: 'breakdown.stateRate',   label: t('filter.fields.stateRate') },
-                { value: 'breakdown.countryRate', label: t('filter.fields.countryRate') },
+                { value: 'breakdown.countyRate', label: t('filter.fields.countyRate') },
                 { value: 'breakdown.cityRate',    label: t('filter.fields.cityRate') },
                 { value: 'breakdown.specialRate', label: t('filter.fields.specialRate') },
             ],
