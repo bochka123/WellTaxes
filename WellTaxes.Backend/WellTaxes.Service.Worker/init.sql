@@ -1,65 +1,65 @@
--- =========================================
--- Таблиця: jurisdictions
--- =========================================
-CREATE TABLE jurisdictions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name TEXT NOT NULL,
-    zipcode VARCHAR(10) NOT NULL,
-    geom GEOMETRY(MULTIPOLYGON, 4269) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+-- Створення розширень
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+-- Таблиці
+CREATE TABLE public.jurisdictions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name text NOT NULL,
+    zipcode character varying(10) NOT NULL,
+    geom public.geometry(MultiPolygon,4269) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT jurisdictions_pkey PRIMARY KEY (id)
 );
 
--- Унікальний індекс на ZIP для швидкого пошуку
-CREATE UNIQUE INDEX idx_jurisdictions_zipcode ON jurisdictions(zipcode);
-
--- Просторовий GIST-індекс для геометрії
-CREATE INDEX idx_jurisdictions_geom_gist ON jurisdictions USING GIST(geom);
-
--- =========================================
--- Таблиця: orders
--- =========================================
-CREATE TABLE orders (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    order_number TEXT NOT NULL,
-    user_id UUID NOT NULL,
-    amount NUMERIC(18,2) NOT NULL CHECK (amount >= 0),
-    amount_with_tax NUMERIC(18,2) NOT NULL CHECK (amount_with_tax >= 0),
-    latitude NUMERIC(9,6) NOT NULL,
-    longitude NUMERIC(9,6) NOT NULL,
-    tax_rates_id UUID NOT NULL REFERENCES tax_rates(id),
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+CREATE TABLE public.orders (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    order_number text NOT NULL,
+    user_id uuid NOT NULL,
+    amount numeric(18,2) NOT NULL,
+    amount_with_tax numeric(18,2) NOT NULL,
+    latitude numeric(9,6) NOT NULL,
+    longitude numeric(9,6) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    tax_rates_id uuid,
+    "timestamp" timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT orders_pkey PRIMARY KEY (id),
+    CONSTRAINT orders_amount_check CHECK (amount >= 0),
+    CONSTRAINT orders_amount_with_tax_check CHECK (amount_with_tax >= 0)
 );
 
--- Унікальний індекс на номер замовлення
-CREATE UNIQUE INDEX idx_orders_order_number ON orders(order_number);
-
--- Індекс на користувача для швидкого вибору його замовлень
-CREATE INDEX idx_orders_user_id ON orders(user_id);
-
--- =========================================
--- Таблиця: tax_rates
--- =========================================
-CREATE TABLE tax_rates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    state TEXT NOT NULL,
-    zipcode VARCHAR(10) NOT NULL,
-    tax_region_name TEXT NOT NULL,
-    total_rate NUMERIC(5,3) NOT NULL CHECK (total_rate >= 0 AND total_rate <= 1),
-    state_rate NUMERIC(5,3) NOT NULL CHECK (state_rate >= 0 AND state_rate <= 1),
-    estimated_county_rate NUMERIC(5,3) NOT NULL CHECK (estimated_county_rate >= 0 AND estimated_county_rate <= 1),
-    estimated_city_rate NUMERIC(5,3) NOT NULL CHECK (estimated_city_rate >= 0 AND estimated_city_rate <= 1),
-    estimated_special_rate NUMERIC(5,3) NOT NULL CHECK (estimated_special_rate >= 0 AND estimated_special_rate <= 1),
-    jurisdiction_id UUID REFERENCES jurisdictions(id),
-    valid_from TIMESTAMP NOT NULL,
-    valid_to TIMESTAMP NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+CREATE TABLE public.tax_rates (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    state text NOT NULL,
+    zipcode character varying(10) NOT NULL,
+    tax_region_name text NOT NULL,
+    total_rate numeric(5,3) NOT NULL CHECK (total_rate >= 0 AND total_rate <= 1),
+    state_rate numeric(5,3) NOT NULL CHECK (state_rate >= 0 AND state_rate <= 1),
+    estimated_county_rate numeric(5,3) NOT NULL CHECK (estimated_county_rate >= 0 AND estimated_county_rate <= 1),
+    estimated_city_rate numeric(5,3) NOT NULL CHECK (estimated_city_rate >= 0 AND estimated_city_rate <= 1),
+    estimated_special_rate numeric(5,3) NOT NULL CHECK (estimated_special_rate >= 0 AND estimated_special_rate <= 1),
+    jurisdiction_id uuid,
+    valid_from timestamp without time zone NOT NULL,
+    valid_to timestamp without time zone,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT tax_rates_pkey PRIMARY KEY (id),
+    CONSTRAINT tax_rates_jurisdiction_id_fkey FOREIGN KEY (jurisdiction_id) REFERENCES public.jurisdictions(id)
 );
 
--- Унікальний ключ для уникнення дублікатів по ZIP + період
-CREATE UNIQUE INDEX idx_taxrates_zip_period ON tax_rates(zipcode, valid_from, valid_to);
+-- Індекси
+CREATE UNIQUE INDEX idx_jurisdictions_zipcode ON public.jurisdictions USING btree (zipcode);
+CREATE INDEX idx_jurisdictions_geom_gist ON public.jurisdictions USING gist (geom);
 
--- Індекс на ZIP для швидких запитів
-CREATE INDEX idx_taxrates_zipcode ON tax_rates(zipcode);
+CREATE UNIQUE INDEX idx_orders_order_number ON public.orders USING btree (order_number);
+CREATE INDEX idx_orders_user_id ON public.orders USING btree (user_id);
+CREATE INDEX idx_orders_tax_rates_id ON public.orders USING btree (tax_rates_id);
+
+CREATE UNIQUE INDEX idx_taxrates_zip_period ON public.tax_rates USING btree (zipcode, valid_from, valid_to);
+CREATE INDEX idx_taxrates_zipcode ON public.tax_rates USING btree (zipcode);
+
+-- FK для orders
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_orders_tax_rates FOREIGN KEY (tax_rates_id) REFERENCES public.tax_rates(id);

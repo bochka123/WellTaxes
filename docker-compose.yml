@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: welltaxes-db
+    environment:
+      POSTGRES_DB: postgis
+      POSTGRES_USER: postgisadmin
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  init-db:
+    build:
+      context: ./init-db
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Database=postgis;Username=postgisadmin;Password=pass;Port=5432"
+    restart: "no"
+
+  orders-service:
+    build:
+      context: ./WellTaxes.Backend
+      dockerfile: WellTaxes.Service.Orders/Dockerfile
+    depends_on:
+      init-db:
+        condition: service_completed_successfully
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Database=postgis;Username=postgisadmin;Password=pass;Port=5432"
+    ports:
+      - "8080:8080"
+    restart: "no"
+
+  frontend:
+    build:
+      context: ./WellTaxes.Frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "http://orders-service:8080"
+    depends_on:
+      - orders-service
+    ports:
+      - "3000:80"
+    restart: "no"
+
+volumes:
+  pgdata:

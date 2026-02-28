@@ -60,3 +60,4 @@ nunit-*.xml
 /WellTaxes.Backend/WellTaxes.Service.Orders/Properties
 /WellTaxes.Backend/WellTaxes.Service.Orders/appsettings.Development.json
 *.user
+/init-db/.vs
