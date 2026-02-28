@@ -10,11 +10,11 @@ export const msalConfig = {
     cache: {
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: true
-    }
+    },
 };
 
 export const msalScopes = [
-    'offline access',
+    'offline_access',
     'api://c8ea19e7-1732-457b-9f81-524a7ed404ed/access'
 ];
 export const msalInstance = new PublicClientApplication(msalConfig);
