@@ -47,7 +47,7 @@ const Map: FC<Props> = ({ picked, onPick, nyGeoJson }) => {
             zoom={7}
             maxBounds={BASE_BOUNDS}
             maxBoundsViscosity={1}
-            minZoom={7}
+            minZoom={6.5}
             style={{ height: '100%', width: '100%', borderRadius: 6 }}
         >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>

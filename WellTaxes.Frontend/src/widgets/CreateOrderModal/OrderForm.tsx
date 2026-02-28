@@ -67,8 +67,8 @@ const OrderForm: FC<Props> = ({
                 />
             </Field>
             
-            <div className="flex gap-2">
-                <Field label={t('createOrder.date')} error={err('date')} className="flex-1">
+            <div className="flex flex-col md:flex-row items-center justify-between  gap-2">
+                <Field label={t('createOrder.date')} error={err('date')} className="flex-1 w-full">
                     <input
                         type="date"
                         value={form.date}
@@ -78,7 +78,7 @@ const OrderForm: FC<Props> = ({
                     />
                 </Field>
 
-                <Field label={t('createOrder.time')} error={err('time')} className="w-28">
+                <Field label={t('createOrder.time')} error={err('time')} className="w-full md:w-28">
                     <input
                         type="time"
                         value={form.time}
