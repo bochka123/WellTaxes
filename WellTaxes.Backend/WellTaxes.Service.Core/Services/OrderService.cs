@@ -1,25 +1,15 @@
 using Dapper;
-using Microsoft.AspNetCore.Http;
 using Npgsql;
 using WellTaxes.Service.Core.Entities;
 using WellTaxes.Service.Core.Interfaces;
 
 namespace WellTaxes.Service.Core.Services
 {
-    public class OrderService(NpgsqlConnection db, IHttpContextAccessor httpContextAccessor) : IOrderService
+    public class OrderService(NpgsqlConnection db, IUserContext userContext) : IOrderService
     {
-        private Guid GetCurrentUserId()
-        {
-            var user = httpContextAccessor.HttpContext?.User;
-            var userIdString = user?.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value
-                            ?? user?.FindFirst("oid")?.Value;
-
-            return Guid.TryParse(userIdString, out var userId) ? userId : throw new UnauthorizedAccessException();
-        }
-
         public async Task<Order> CreateOrderAsync(decimal amount, decimal latitude, decimal longitude, DateTime orderTimestamp)
         {
-            var userId = GetCurrentUserId();
+            var userId = userContext.UserId;
 
             var taxLookupSql = @"
                 SELECT tr.id as TaxRatesId, tr.total_rate as TotalRate
@@ -69,7 +59,7 @@ namespace WellTaxes.Service.Core.Services
 
         public async Task<Order?> GetOrderByIdAsync(Guid id)
         {
-            var userId = GetCurrentUserId();
+            var userId = userContext.UserId;
             var sql = @"
                 SELECT id as Id, order_number as OrderNumber, user_id as UserId, amount as Amount, 
                        amount_with_tax as AmountWithTax, latitude as Latitude, longitude as Longitude, 
@@ -81,7 +71,7 @@ namespace WellTaxes.Service.Core.Services
 
         public async Task<bool> UpdateOrderAsync(Guid id, decimal amount, decimal latitude, decimal longitude)
         {
-            var userId = GetCurrentUserId();
+            var userId = userContext.UserId;
 
             var existingOrder = await GetOrderByIdAsync(id);
             if (existingOrder == null) return false;
@@ -132,7 +122,7 @@ namespace WellTaxes.Service.Core.Services
 
         public async Task<bool> DeleteOrderAsync(Guid id)
         {
-            var userId = GetCurrentUserId();
+            var userId = userContext.UserId;
             var sql = "DELETE FROM orders WHERE id = @Id AND user_id = @UserId";
             var affected = await db.ExecuteAsync(sql, new { Id = id, UserId = userId });
             return affected > 0;

@@ -38,6 +38,9 @@ export const orderApi = {
     create: (data: CreateOrderDto): Promise<Order> =>
         apiClient.post<Order>('/Orders', data),
 
-    importCSV: (data: any): Promise<void> =>
-        apiClient.post<void>('/Orders/Import', data)
+    importCSV: (file: File): Promise<void> => {
+        const form = new FormData();
+        form.append('file', file, file.name);
+        return apiClient.post<void>('/Orders/Import', form);
+    },
 };

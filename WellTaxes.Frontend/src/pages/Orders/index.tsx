@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react';
 
-import { useOrders } from '@/entities/order';
+import { useImportCSV, useOrders } from '@/entities/order';
 import OrdersTable from '@/pages/Orders/OrdersTable.tsx';
 import Pagination from '@/pages/Orders/Pagination.tsx';
 import type { FilterSortState } from '@/pages/Orders/toolbar/FilterSortPanel.tsx';
@@ -29,14 +29,12 @@ const Orders: FC = () => {
         filters: filters.length ? filters : undefined,
     });
 
+    const { mutate: importCSV } = useImportCSV();
+
     const handleCreateOrder = (): void => {
         setModalVisible(true);
     };
 
-    const handleImportCsv = (file: File): void => {
-        alert(`TODO: import file "${file.name}"`);
-    };
-    
     return (
         <div className="flex justify-center min-h-screen w-full">
             <div className="flex flex-col gap-4 px-6 py-6 max-w-6xl w-6xl">
@@ -46,7 +44,7 @@ const Orders: FC = () => {
                     onFilterSortChange={setFilterSort}
                     onFiltersChange={setFilters}
                     onCreateOrder={handleCreateOrder}
-                    onImportCsv={handleImportCsv}
+                    onImportCsv={importCSV}
                 />
                 <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm px-4 py-2">
                     <OrdersTable orders={orders?.items ?? []} />

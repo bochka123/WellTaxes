@@ -5,6 +5,7 @@ using WellTaxes.Service.Core.Interfaces;
 using WellTaxes.Service.Core.Queries;
 using WellTaxes.Service.Core.Services;
 using WellTaxes.Service.Orders.Extensions;
+using WellTaxes.Service.Orders.Infrastructure;
 
 namespace WellTaxes.Service.Orders
 {
@@ -40,8 +41,11 @@ namespace WellTaxes.Service.Orders
             });
 
             services.AddAuth(Configuration);
+
+            services.AddScoped<IUserContext, UserContext>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IJurisdictionsService, JurisdictionsService>();
+            services.AddScoped<IOrderImportService, OrderImportService>();
 
             services.AddMemoryCache();
 
@@ -120,12 +124,13 @@ namespace WellTaxes.Service.Orders
                 });
             }
 
-            app.UseMiddleware<Infrastructure.GlobalExceptionHandler>();
+            app.UseMiddleware<GlobalExceptionHandler>();
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseCors("AllowAll");
             app.UseAuthentication();
+            app.UseUserContext();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
