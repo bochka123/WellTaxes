@@ -2,7 +2,7 @@ import type { Filter, PaginatedResponse } from '@/shared/api/api.types.ts';
 
 export interface TaxBreakdown {
     stateRate:   number;
-    countryRate: number;
+    countyRate: number;
     cityRate:    number;
     specialRate: number;
 }
@@ -28,7 +28,7 @@ export interface Order {
 
 export type SortField =
     | keyof Pick<Order, 'orderNumber' | 'subtotal' | 'taxAmount' | 'totalAmount' | 'compositeTaxRate' | 'timestamp' | 'latitude' | 'longitude'>
-    | keyof Pick<TaxBreakdown, 'stateRate' | 'countryRate' | 'cityRate' | 'specialRate'>
+    | keyof Pick<TaxBreakdown, 'stateRate' | 'countyRate' | 'cityRate' | 'specialRate'>
     | keyof Pick<JurisdictionInfo, 'zipCode' | 'taxRegionName'>;
 
 export interface GetOrdersParams {

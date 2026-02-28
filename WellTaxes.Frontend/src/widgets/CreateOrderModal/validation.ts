@@ -25,6 +25,12 @@ export const EMPTY_FORM: FormState = {
     time:     new Date().toTimeString().slice(0, 5),
 };
 
+export const buildLocaleTimestamp = (date: string, time: string): string => {
+    const d = new Date(`${date}T${time}:00`);
+    const pad = (n: number) : string => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+};
+
 export const buildTimestamp = (date: string, time: string): string => {
     return new Date(`${date}T${time}:00`).toISOString();
 };

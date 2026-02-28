@@ -7,7 +7,7 @@ import Modal from '@/shared/ui/Modal';
 
 import MapSection from './MapSelection';
 import OrderForm  from './OrderForm';
-import { buildTimestamp, EMPTY_FORM, type FormErrors, type FormState, validate } from './validation';
+import { buildLocaleTimestamp, EMPTY_FORM, type FormErrors, type FormState, validate } from './validation';
 
 interface Props {
     visible:    boolean;
@@ -65,13 +65,14 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
         const errs = validate(form, picked);
         setErrors(errs);
         if (Object.keys(errs).length > 0) return;
-
+        // eslint-disable-next-line no-console
+        console.log(form.date, form.time);
         createOrder(
             {
                 amount:    parseFloat(form.amount),
                 latitude:  parseFloat(form.latInput),
                 longitude: parseFloat(form.lngInput),
-                timestamp: buildTimestamp(form.date, form.time),
+                timestamp: buildLocaleTimestamp(form.date, form.time),
             },
             {
                 onSuccess: () => { reset(); setVisible(false); },
@@ -84,6 +85,7 @@ const CreateOrderModal: FC<Props> = ({ visible, setVisible }) => {
             visible={visible}
             setVisible={() => { reset(); setVisible(false); }}
             heading={t('createOrder.heading')}
+            zIndexType="top"
         >
             <div className="flex flex-col sm:flex-row gap-4 p-4 sm:p-5">
 
