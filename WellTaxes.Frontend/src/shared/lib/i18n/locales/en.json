@@ -22,6 +22,11 @@
     "createButton": "Create order",
     "creating": "Creating...",
     "importCSV": "Import CSV",
+    "toast": {
+      "loading": "Creating order…",
+      "success": "Order created successfully",
+      "error": "Failed to create order"
+    },
     "errors": {
       "required": "Required field",
       "invalidNumber": "Must be a number",
@@ -49,6 +54,9 @@
   },
   "table": {
     "empty": "No orders found",
+    "select": "Select",
+    "deleteSelected": "Delete ({{count}})",
+    "deleting": "Deleting…",
     "columns": {
       "orderNumber": "Number",
       "region": "Region",
@@ -148,13 +156,25 @@
     "perPage": "/ page"
   },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel"
   },
   "userMenu": {
     "activeAccount": "Active account",
     "otherAccounts": "Other accounts",
     "addAccount": "Add an account",
     "loggingOut": "Logging out..."
+  },
+  "import": {
+    "loading": "Importing CSV…",
+    "success": "Imported {{count}} orders successfully",
+    "partialError": "Import finished with {{count}} error(s)",
+    "error": "Import failed"
+  },
+  "delete": {
+    "loading": "Deleting {{count}} order(s)…",
+    "success": "Deleted {{count}} order(s) successfully",
+    "error": "Delete failed"
   },
   "welcome": {
     "title": "Welcome to WellTaxes",
