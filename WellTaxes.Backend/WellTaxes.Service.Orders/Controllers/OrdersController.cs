@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WellTaxes.Service.Core.Entities;
+using WellTaxes.Service.Core.Commands;
 using WellTaxes.Service.Core.Interfaces;
 using WellTaxes.Service.Core.Queries;
 
@@ -40,7 +40,7 @@ namespace WellTaxes.Service.Orders.Controllers
         {
             var order = await orderService.GetOrderByIdAsync(id);
             if (order == null) return NotFound();
-            
+
             return Ok(order);
         }
 
@@ -167,6 +167,42 @@ namespace WellTaxes.Service.Orders.Controllers
             {
                 return BadRequest(new { Error = ex.Message });
             }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> FastImport(
+            IFormFile file,
+            CancellationToken cancellationToken)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File is required");
+            }
+
+            if (!file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("Only CSV files are supported");
+            }
+
+            await using var stream = file.OpenReadStream();
+            var result = await mediator.Send(
+                new ImportOrdersCommand(stream),
+                cancellationToken);
+
+            if (result.FailedCount > 0)
+            {
+                return Ok(new
+                {
+                    Message = "Import completed with errors",
+                    Result = result
+                });
+            }
+
+            return Ok(new
+            {
+                Message = "Import completed successfully",
+                Result = result
+            });
         }
     }
 

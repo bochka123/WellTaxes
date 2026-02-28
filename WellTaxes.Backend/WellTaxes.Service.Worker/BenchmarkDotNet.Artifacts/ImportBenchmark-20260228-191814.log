@@ -1,0 +1,206 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 2 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1/" /p:OutDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:OutputPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:PublishDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\publish/" in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1
+// command took 1.4 sec and exited with 0
+// start dotnet  build -c Release --no-restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1/" /p:OutDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:OutputPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:PublishDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\publish/" --output "D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1
+// command took 11.43 sec and exited with 0
+// ***** Done, took 00:00:12 (13 sec)   *****
+// Found 2 benchmarks:
+//   ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+//   ImportBenchmark.ImportWithMediatR: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+Setup power plan (GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c FriendlyName: Висока продуктивність)
+// **************************
+// Benchmark: ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+// *** Execute ***
+// Launch: 1 / 1
+// Execute: dotnet WellTaxes.Service.Worker-1.dll --anonymousPipes 1876 1864 --benchmarkName ImportBenchmark.ImportWithService --job "InvocationCount=1, UnrollFactor=1" --benchmarkId 0 in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0
+// BeforeAnythingElse
+
+// Benchmark Process Environment Information:
+// BenchmarkDotNet v0.15.8
+// Runtime=.NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3
+// GC=Concurrent Workstation
+// HardwareIntrinsics=AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL,AvxVnni,SERIALIZE VectorSize=256
+// Job: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+OverheadJitting  1: 1 op, 127700.00 ns, 127.7000 us/op
+info: WellTaxes.Service.Core.Services.OrderImportService[0]
+      Looking up tax info for 11222 records
+fail: WellTaxes.Service.Core.Services.OrderImportService[0]
+      Failed to read CSV file
+      Npgsql.NpgsqlException (0x80004005): No such host is known.
+       ---> System.Net.Sockets.SocketException (11001): No such host is known.
+         at System.Net.NameResolutionPal.ProcessResult(SocketError errorCode, GetAddrInfoExContext* context)
+         at System.Net.NameResolutionPal.GetAddressInfoExCallback(Int32 error, Int32 bytes, NativeOverlapped* overlapped)
+      --- End of stack trace from previous location ---
+         at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+         at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+         at Npgsql.Internal.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|209_0(NpgsqlConnector conn, String username, SslMode sslMode, GssEncryptionMode gssEncMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+         at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 433
+         at WellTaxes.Service.Core.Services.OrderImportService.ProcessBatchAsync(List`1 allRows, Guid userId, ImportResult result, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs:line 93
+         at WellTaxes.Service.Core.Services.OrderImportService.ImportOrdersFromCsvAsync(Stream csvStream, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs:line 53
+
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.InvalidOperationException: Failed to read CSV file
+ ---> Npgsql.NpgsqlException (0x80004005): No such host is known.
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.NameResolutionPal.ProcessResult(SocketError errorCode, GetAddrInfoExContext* context)
+   at System.Net.NameResolutionPal.GetAddressInfoExCallback(Int32 error, Int32 bytes, NativeOverlapped* overlapped)
+--- End of stack trace from previous location ---
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|209_0(NpgsqlConnector conn, String username, SslMode sslMode, GssEncryptionMode gssEncMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 433
+   at WellTaxes.Service.Core.Services.OrderImportService.ProcessBatchAsync(List`1 allRows, Guid userId, ImportResult result, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs:line 93
+   at WellTaxes.Service.Core.Services.OrderImportService.ImportOrdersFromCsvAsync(Stream csvStream, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs:line 53
+   --- End of inner exception stack trace ---
+   at WellTaxes.Service.Core.Services.OrderImportService.ImportOrdersFromCsvAsync(Stream csvStream, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs:line 58
+   at ImportBenchmark.ImportWithService() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs:line 45
+   at ImportBenchmark.ImportWithService() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs:line 45
+   at BenchmarkDotNet.Helpers.AwaitHelper.GetResult(Task task)
+   at BenchmarkDotNet.Autogenerated.Runnable_0.<.ctor>b__3_2() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 198
+   at BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(Int64 invokeCount) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 272
+   at BenchmarkDotNet.Engines.Engine.Measure(Action`1 action, Int64 invokeCount)
+   at BenchmarkDotNet.Engines.Engine.RunIteration(IterationData data)
+   at BenchmarkDotNet.Engines.EngineFactory.Jit(Engine engine, Int32 jitIndex, Int32 invokeCount, Int32 unrollFactor)
+   at BenchmarkDotNet.Engines.EngineFactory.CreateReadyToRun(EngineParameters engineParameters)
+   at BenchmarkDotNet.Autogenerated.Runnable_0.Run(IHost host, String benchmarkName) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 177
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(String[] args) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 57
+// AfterAll
+No Workload Results were obtained from the run.
+// Benchmark Process 12508 has exited with code -1.
+
+// ** Remained 1 (50,0%) benchmark(s) to run. Estimated finish 2026-02-28 19:18 (0h 0m from now) **
+Setup power plan (GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c FriendlyName: Висока продуктивність)
+// **************************
+// Benchmark: ImportBenchmark.ImportWithMediatR: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+// *** Execute ***
+// Launch: 1 / 1
+// Execute: dotnet WellTaxes.Service.Worker-1.dll --anonymousPipes 1888 1900 --benchmarkName ImportBenchmark.ImportWithMediatR --job "InvocationCount=1, UnrollFactor=1" --benchmarkId 1 in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0
+// BeforeAnythingElse
+
+// Benchmark Process Environment Information:
+// BenchmarkDotNet v0.15.8
+// Runtime=.NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3
+// GC=Concurrent Workstation
+// HardwareIntrinsics=AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL,AvxVnni,SERIALIZE VectorSize=256
+// Job: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+OverheadJitting  1: 1 op, 106800.00 ns, 106.8000 us/op
+
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> Npgsql.NpgsqlException (0x80004005): No such host is known.
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.NameResolutionPal.ProcessResult(SocketError errorCode, GetAddrInfoExContext* context)
+   at System.Net.NameResolutionPal.GetAddressInfoExCallback(Int32 error, Int32 bytes, NativeOverlapped* overlapped)
+--- End of stack trace from previous location ---
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|209_0(NpgsqlConnector conn, String username, SslMode sslMode, GssEncryptionMode gssEncMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at WellTaxes.Service.Core.Commands.ImportOrdersHandler.Handle(ImportOrdersCommand request, CancellationToken cancellationToken) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Commands\ImportOrdersCommand.cs:line 26
+   at ImportBenchmark.ImportWithMediatR() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs:line 52
+   at ImportBenchmark.ImportWithMediatR() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs:line 52
+   at BenchmarkDotNet.Helpers.AwaitHelper.GetResult(Task task)
+   at BenchmarkDotNet.Autogenerated.Runnable_1.<.ctor>b__3_2() in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 361
+   at BenchmarkDotNet.Autogenerated.Runnable_1.WorkloadActionUnroll(Int64 invokeCount) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 435
+   at BenchmarkDotNet.Engines.Engine.Measure(Action`1 action, Int64 invokeCount)
+   at BenchmarkDotNet.Engines.Engine.RunIteration(IterationData data)
+   at BenchmarkDotNet.Engines.EngineFactory.Jit(Engine engine, Int32 jitIndex, Int32 invokeCount, Int32 unrollFactor)
+   at BenchmarkDotNet.Engines.EngineFactory.CreateReadyToRun(EngineParameters engineParameters)
+   at BenchmarkDotNet.Autogenerated.Runnable_1.Run(IHost host, String benchmarkName) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 340
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(String[] args) in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs:line 57
+// AfterAll
+No Workload Results were obtained from the run.
+// Benchmark Process 27564 has exited with code -1.
+
+// ** Remained 0 (0,0%) benchmark(s) to run. Estimated finish 2026-02-28 19:18 (0h 0m from now) **
+Successfully reverted power plan (GUID: 381b4222-f694-41f0-9685-ff5bb260df2e FriendlyName: Збалансований)
+// ***** BenchmarkRunner: Finish  *****
+
+// * Export *
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report.csv
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report-github.md
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report.html
+
+// * Detailed results *
+ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+Runtime = .NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3; GC = Concurrent Workstation
+There are not any results runs
+
+ImportBenchmark.ImportWithMediatR: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+Runtime = .NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3; GC = Concurrent Workstation
+There are not any results runs
+
+// * Summary *
+
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.22631.6199/23H2/2023Update/SunValley3)
+12th Gen Intel Core i7-12700H 2.70GHz, 1 CPU, 20 logical and 14 physical cores
+.NET SDK 10.0.103
+  [Host]     : .NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3 [AttachedDebugger]
+  Job-CNUJVU : .NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3
+
+InvocationCount=1  UnrollFactor=1  
+
+| Method            | Mean | Error |
+|------------------ |-----:|------:|
+| ImportWithService |   NA |    NA |
+| ImportWithMediatR |   NA |    NA |
+
+Benchmarks with issues:
+  ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+  ImportBenchmark.ImportWithMediatR: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+// * Warnings *
+Environment
+  Summary -> Benchmark was executed with attached debugger
+  Summary -> Detected error exit code from one of the benchmarks. It might be caused by following antivirus software:
+        - Windows Defender (windowsdefender://)
+Use InProcessEmitToolchain or InProcessNoEmitToolchain to avoid new process creation.
+
+
+// * Legends *
+  Mean  : Arithmetic mean of all measurements
+  Error : Half of 99.9% confidence interval
+  1 ns  : 1 Nanosecond (0.000000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:00:08 (8.46 sec), executed benchmarks: 2
+
+Global total time: 00:00:21 (22 sec), executed benchmarks: 2
+// * Artifacts cleanup *
+Artifacts cleanup is finished

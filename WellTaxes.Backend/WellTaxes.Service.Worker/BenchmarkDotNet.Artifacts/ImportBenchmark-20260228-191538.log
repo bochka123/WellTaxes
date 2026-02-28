@@ -1,0 +1,100 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 2 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1/" /p:OutDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:OutputPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:PublishDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\publish/" in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1
+// command took 1.99 sec and exited with 0
+// start dotnet  build -c Release --no-restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1/" /p:OutDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:OutputPath="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" /p:PublishDir="D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\publish/" --output "D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0/" in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1
+// command took 9.73 sec and exited with 1
+// ***** Done, took 00:00:11 (11.8 sec)   *****
+// Found 2 benchmarks:
+//   ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+//   ImportBenchmark.ImportWithMediatR: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+Setup power plan (GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c FriendlyName: Висока продуктивність)
+// Build Error: Standard output: 
+  
+ Standard error: 
+ D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Entities\Order.cs(5,23): warning CS8618: Non-nullable property 'OrderNumber' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\WellTaxes.Service.Core.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs(34,25): warning CS8602: Dereference of a possibly null reference. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\WellTaxes.Service.Core.csproj]
+  WellTaxes.Service.Core -> D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0\WellTaxes.Service.Core.dll
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(8,23): warning CS8618: Non-nullable property 'State' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(11,23): warning CS8618: Non-nullable property 'ZipCode' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(14,23): warning CS8618: Non-nullable property 'TaxRegionName' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(32,23): warning CS8618: Non-nullable property 'RiskLevel' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Worker.cs(13,64): warning CS9113: Parameter 'mediator' is unread. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Worker.cs(13,90): warning CS9113: Parameter 'logger' is unread. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(12,33): warning CS8618: Non-nullable field '_service' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(13,23): warning CS8618: Non-nullable field '_mediator' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(14,20): warning CS8618: Non-nullable field '_csvData' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Extensions\JurisdictionExtensions.cs(54,56): warning CS8602: Dereference of a possibly null reference. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+  WellTaxes.Service.Worker -> D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\bin\Release\net10.0\WellTaxes.Service.Worker.dll
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs(196,38): error CS0407: 'Task ImportBenchmark.Cleanup()' has the wrong return type [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\BenchmarkDotNet.Autogenerated.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs(359,38): error CS0407: 'Task ImportBenchmark.Cleanup()' has the wrong return type [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\BenchmarkDotNet.Autogenerated.csproj]
+Build FAILED.
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Entities\Order.cs(5,23): warning CS8618: Non-nullable property 'OrderNumber' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\WellTaxes.Service.Core.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\Services\OrderImportService.cs(34,25): warning CS8602: Dereference of a possibly null reference. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Core\WellTaxes.Service.Core.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(8,23): warning CS8618: Non-nullable property 'State' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(11,23): warning CS8618: Non-nullable property 'ZipCode' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(14,23): warning CS8618: Non-nullable property 'TaxRegionName' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Models\TaxRateCsv.cs(32,23): warning CS8618: Non-nullable property 'RiskLevel' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Worker.cs(13,64): warning CS9113: Parameter 'mediator' is unread. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Worker.cs(13,90): warning CS9113: Parameter 'logger' is unread. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(12,33): warning CS8618: Non-nullable field '_service' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(13,23): warning CS8618: Non-nullable field '_mediator' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Benchmark\ImportBenchmarks.cs(14,20): warning CS8618: Non-nullable field '_csvData' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\Extensions\JurisdictionExtensions.cs(54,56): warning CS8602: Dereference of a possibly null reference. [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\WellTaxes.Service.Worker.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs(196,38): error CS0407: 'Task ImportBenchmark.Cleanup()' has the wrong return type [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\BenchmarkDotNet.Autogenerated.csproj]
+D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\WellTaxes.Service.Worker-1.notcs(359,38): error CS0407: 'Task ImportBenchmark.Cleanup()' has the wrong return type [D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1\BenchmarkDotNet.Autogenerated.csproj]
+    12 Warning(s)
+    2 Error(s)
+Time Elapsed 00:00:09.45
+
+// BenchmarkDotNet has failed to build the auto-generated boilerplate code.
+// It can be found in D:\Programming\Projects\WellTaxes\WellTaxes.Backend\WellTaxes.Service.Worker\bin\Release\net10.0\WellTaxes.Service.Worker-1
+// Please follow the troubleshooting guide: https://benchmarkdotnet.org/articles/guides/troubleshooting.html
+
+// ** Remained 0 (0,0%) benchmark(s) to run. Estimated finish 2026-02-28 19:15 (0h 0m from now) **
+Successfully reverted power plan (GUID: 381b4222-f694-41f0-9685-ff5bb260df2e FriendlyName: Збалансований)
+// ***** BenchmarkRunner: Finish  *****
+
+// * Export *
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report.csv
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report-github.md
+  BenchmarkDotNet.Artifacts\results\ImportBenchmark-report.html
+
+// * Detailed results *
+ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+Runtime = ; GC = 
+There are not any results runs
+
+// * Summary *
+
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.22631.6199/23H2/2023Update/SunValley3)
+12th Gen Intel Core i7-12700H 2.70GHz, 1 CPU, 20 logical and 14 physical cores
+.NET SDK 10.0.103
+  [Host] : .NET 10.0.3 (10.0.3, 10.0.326.7603), X64 RyuJIT x86-64-v3
+
+InvocationCount=1  UnrollFactor=1  
+
+| Method            | Mean | Error |
+|------------------ |-----:|------:|
+| ImportWithService |   NA |    NA |
+
+Benchmarks with issues:
+  ImportBenchmark.ImportWithService: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
+
+// * Legends *
+  Mean  : Arithmetic mean of all measurements
+  Error : Half of 99.9% confidence interval
+  1 ns  : 1 Nanosecond (0.000000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:00:00 (0.15 sec), executed benchmarks: 0
+
+Global total time: 00:00:13 (13.89 sec), executed benchmarks: 0
+// * Artifacts cleanup *
+Artifacts cleanup is finished
