@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css';
+import '@/shared/lib/leaflet/defaultIcons';
 
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import { point } from '@turf/helpers';
