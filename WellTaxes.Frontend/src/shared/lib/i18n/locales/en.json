@@ -163,7 +163,8 @@
     "activeAccount": "Active account",
     "otherAccounts": "Other accounts",
     "addAccount": "Add an account",
-    "loggingOut": "Logging out..."
+    "loggingOut": "Logging out...",
+    "language": "Language"
   },
   "import": {
     "loading": "Importing CSV…",

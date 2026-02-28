@@ -93,7 +93,7 @@ export const UserMenu: FC = () => {
 
                     <div className="sm:hidden border-b border-zinc-100">
                         <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-zinc-400 uppercase tracking-wide">
-                            Мова
+                            {t('userMenu.language')}
                         </p>
                         <div className="px-2 pb-2">
                             <LanguageSwitcher variant="full" />
