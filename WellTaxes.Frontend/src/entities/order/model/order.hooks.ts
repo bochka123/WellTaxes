@@ -1,6 +1,6 @@
 import { useMutation, type UseMutationResult, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 
-import { type CreateOrderDto, orderApi } from '@/entities/order/api/order.api.ts';
+import { type CreateOrderDto, type ImportCsvResult, orderApi } from '@/entities/order/api/order.api.ts';
 import type { GetOrdersParams, Order, PaginatedOrders } from '@/entities/order/types/order.types.ts';
 
 export const orderKeys = {
@@ -30,10 +30,18 @@ export const useCreateOrder = (): UseMutationResult<Order, Error, CreateOrderDto
     });
 };
 
-export const useImportCSV = (): UseMutationResult<void, Error, File> => {
+export const useImportCSV = (): UseMutationResult<ImportCsvResult, Error, File> => {
     const queryClient = useQueryClient();
-    return useMutation<void, Error, File>({
+    return useMutation<ImportCsvResult, Error, File>({
         mutationFn: (file) => orderApi.importCSV(file),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: orderKeys.all() }),
+    });
+};
+
+export const useDeleteOrders = (): UseMutationResult<void, Error, string[]> => {
+    const queryClient = useQueryClient();
+    return useMutation<void, Error, string[]>({
+        mutationFn: (ids) => orderApi.bulkDelete(ids),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: orderKeys.all() }),
     });
 };

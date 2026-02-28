@@ -3,10 +3,28 @@ import type { PaginatedOrders } from '@/entities/order/types/order.types.ts';
 import { apiClient } from '@/shared/api/client';
 
 export interface CreateOrderDto {
-    amount:    number;
-    latitude:  number;
+    amount: number;
+    latitude: number;
     longitude: number;
     timestamp: string;
+}
+
+export interface ImportCsvResult {
+    message: string;
+    result: InfoResult;
+}
+
+export interface InfoResult {
+    totalRecords: number;
+    successCount: number;
+    failedCount: number;
+    errors: ErrorResult[];
+}
+
+export interface ErrorResult {
+    rowNumber: number;
+    recordId: string;
+    errorMessage: string;
 }
 
 const buildQuery = (params: GetOrdersParams): string => {
@@ -17,12 +35,12 @@ const buildQuery = (params: GetOrdersParams): string => {
 
     if (params.sortBy) query.set('SortBy', params.sortBy);
     if (params.sortDescending !== undefined)
-        query.set('SortDescending',  String(params.sortDescending));
+        query.set('SortDescending', String(params.sortDescending));
 
     params.filters?.forEach((f, i) => {
-        query.append(`Filters[${i}].field`,    f.field);
+        query.append(`Filters[${i}].field`, f.field);
         query.append(`Filters[${i}].operator`, f.operator);
-        query.append(`Filters[${i}].value`,    f.value);
+        query.append(`Filters[${i}].value`, f.value);
     });
 
     return query.toString();
@@ -38,9 +56,12 @@ export const orderApi = {
     create: (data: CreateOrderDto): Promise<Order> =>
         apiClient.post<Order>('/Orders', data),
 
-    importCSV: (file: File): Promise<void> => {
+    importCSV: (file: File): Promise<ImportCsvResult> => {
         const form = new FormData();
         form.append('file', file, file.name);
-        return apiClient.post<void>('/Orders/Import', form);
+        return apiClient.post<ImportCsvResult>('/Orders/Import', form);
     },
+
+    bulkDelete: (ids: string[]): Promise<void> =>
+        apiClient.delete<void>('/Orders/Bulk', ids),
 };

@@ -88,6 +88,40 @@ namespace WellTaxes.Service.Orders.Controllers
         }
 
         /// <summary>
+        /// Mass deletes orders using a streamed JSON array
+        /// </summary>
+        /// <param name="ids">Stream of Order IDs</param>
+        /// <returns>Summary of the deletion process</returns>
+        [HttpDelete("bulk")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> BulkDelete([FromBody] IAsyncEnumerable<Guid> ids, CancellationToken cancellationToken)
+        {
+            var deletedCount = 0;
+            var failedIds = new List<Guid>();
+
+            await foreach (var id in ids.WithCancellation(cancellationToken))
+            {
+                var success = await orderService.DeleteOrderAsync(id);
+
+                if (success)
+                {
+                    deletedCount++;
+                }
+                else
+                {
+                    failedIds.Add(id);
+                }
+            }
+
+            return Ok(new
+            {
+                Message = "Bulk deletion completed",
+                DeletedCount = deletedCount,
+                FailedIds = failedIds
+            });
+        }
+
+        /// <summary>
         /// Imports orders from CSV file
         /// CSV format: id, longitude, latitude, timestamp, subtotal
         /// </summary>

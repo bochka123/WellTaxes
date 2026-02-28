@@ -22,6 +22,11 @@
     "createButton": "Створити замовлення",
     "creating": "Створення...",
     "importCSV": "Імпортувати CSV",
+    "toast": {
+      "loading": "Створюємо замовлення…",
+      "success": "Замовлення створено успішно",
+      "error": "Помилка створення замовлення"
+    },
     "errors": {
       "required": "Обов'язкове поле",
       "invalidNumber": "Має бути числом",
@@ -48,6 +53,9 @@
     "orders": "Замовлення"
   },
   "table": {
+    "select": "Вибрати",
+    "deleteSelected": "Видалити ({{count}})",
+    "deleting": "Видалення…",
     "columns": {
       "orderNumber": "Номер замовлення",
       "region": "Регіон / Юрисдикція",
@@ -141,13 +149,25 @@
     "perPage": "/ стор."
   },
   "common": {
-    "close": "Закрити"
+    "close": "Закрити",
+    "cancel": "Скасувати"
   },
   "userMenu": {
     "activeAccount": "Активний акаунт",
     "otherAccounts": "Інші акаунти",
     "addAccount": "Додати акаунт",
     "loggingOut": "Виходимо..."
+  },
+  "import": {
+    "loading": "Імпортуємо CSV…",
+    "success": "Успішно імпортовано {{count}} замовлень",
+    "partialError": "Імпорт завершено з {{count}} помилкою(ами)",
+    "error": "Помилка імпорту"
+  },
+  "delete": {
+    "loading": "Видаляємо {{count}} замовлень(я)…",
+    "success": "Успішно видалено {{count}} замовлень(я)",
+    "error": "Помилка видалення"
   },
   "welcome": {
     "title": "Вітаємо на платформі WellTaxes",
