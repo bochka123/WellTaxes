@@ -26,30 +26,31 @@ const OrdersToolbar: FC<Props> = ({
     filterSort, filters, selectionMode, selectedCount, isDeleting,
     onFilterSortChange, onFiltersChange, onCreateOrder, onImportCsv,
     onToggleSelection, onDeleteSelected,
-}) => {
-    return (
-        <div className="flex items-center gap-2 justify-between mb-6">
-            <div className="flex items-center gap-2 flex-col sm:flex-row">
-                {!selectionMode && (
-                    <>
-                        <CreateOrderButton onClick={onCreateOrder} />
-                        <ImportCsvButton onImport={onImportCsv} />
-                    </>
-                )}
-                <SelectDeleteButton
-                    selectionMode={selectionMode}
-                    selectedCount={selectedCount}
-                    isDeleting={isDeleting}
-                    onToggle={onToggleSelection}
-                    onDelete={onDeleteSelected}
-                />
-            </div>
-            <div className="flex items-center gap-2 flex-col sm:flex-row">
-                <FilterPanel value={filters} onChange={onFiltersChange} />
-                <FilterSortPanel value={filterSort} onChange={onFilterSortChange} />
-            </div>
+}) => (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 flex-wrap">
+        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+            {!selectionMode && (
+                <>
+                    <CreateOrderButton onClick={onCreateOrder} className="flex-1 sm:flex-none" />
+                    <ImportCsvButton onImport={onImportCsv} className="flex-1 sm:flex-none" />
+                </>
+            )}
+            <SelectDeleteButton
+                selectionMode={selectionMode}
+                selectedCount={selectedCount}
+                isDeleting={isDeleting}
+                onToggle={onToggleSelection}
+                onDelete={onDeleteSelected}
+                className="flex-1 sm:flex-none"
+            />
         </div>
-    );
-};
+
+        <div className="flex items-center gap-2 ml-auto sm:ml-0">
+            <FilterPanel value={filters} onChange={onFiltersChange} className="flex-1 sm:flex-none" />
+            <FilterSortPanel value={filterSort} onChange={onFilterSortChange} className="flex-1 sm:flex-none" />
+        </div>
+
+    </div>
+);
 
 export default OrdersToolbar;

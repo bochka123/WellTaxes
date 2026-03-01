@@ -1,21 +1,19 @@
 import type { AccountInfo } from '@azure/msal-browser';
 import { useMsal } from '@azure/msal-react';
 import { type FC, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useLogout } from '@/features/auth';
 import { msalScopes } from '@/shared/config/msal.ts';
 import { Avatar } from '@/shared/ui/Avatar';
+import LanguageSwitcher from '@/shared/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
-const getInitials = (name: string): string =>
-    name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
-
-const UserMenu: FC = () => {
+export const UserMenu: FC = () => {
+    const { t } = useTranslation();
     const { accounts, instance } = useMsal();
     const { mutate: logout, isPending } = useLogout();
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    const { t } = useTranslation();
 
     const activeAccount = instance.getActiveAccount() ?? accounts[0];
     const otherAccounts = accounts.filter((a) => a.homeAccountId !== activeAccount?.homeAccountId);
@@ -51,8 +49,7 @@ const UserMenu: FC = () => {
         <div className="relative" ref={ref}>
             <button
                 onClick={() => setOpen((v) => !v)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold hover:opacity-90 active:scale-95 transition-all duration-150 cursor-pointer"
-                style={{ backgroundColor: '#63aeff' }}
+                className="hover:opacity-90 active:scale-95 transition-all duration-150 cursor-pointer rounded-full"
                 aria-label="User menu"
             >
                 <Avatar name={displayName} photoUrl={null} size="md" />
@@ -65,12 +62,7 @@ const UserMenu: FC = () => {
                             {t('userMenu.activeAccount')}
                         </p>
                         <div className="flex items-center gap-2.5">
-                            <div
-                                className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0"
-                                style={{ backgroundColor: '#63aeff' }}
-                            >
-                                <Avatar name={displayName} photoUrl={null} size="sm" />
-                            </div>
+                            <Avatar name={displayName} photoUrl={null} size="sm" />
                             <div className="min-w-0">
                                 <p className="text-sm font-medium text-zinc-900 truncate">{displayName}</p>
                                 <p className="text-xs text-zinc-400 truncate">{email}</p>
@@ -89,9 +81,7 @@ const UserMenu: FC = () => {
                                     onClick={() => switchAccount(account)}
                                     className="w-full flex items-center gap-2.5 px-4 py-2 hover:bg-zinc-50 transition-colors duration-100 cursor-pointer"
                                 >
-                                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0 bg-zinc-400">
-                                        {getInitials(account.name ?? 'U')}
-                                    </div>
+                                    <Avatar name={account.name ?? 'U'} photoUrl={null} size="sm" />
                                     <div className="min-w-0 text-left">
                                         <p className="text-sm font-medium text-zinc-700 truncate">{account.name}</p>
                                         <p className="text-xs text-zinc-400 truncate">{account.username}</p>
@@ -100,6 +90,15 @@ const UserMenu: FC = () => {
                             ))}
                         </div>
                     )}
+
+                    <div className="sm:hidden border-b border-zinc-100">
+                        <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-zinc-400 uppercase tracking-wide">
+                            {t('userMenu.language')}
+                        </p>
+                        <div className="px-2 pb-2">
+                            <LanguageSwitcher variant="full" />
+                        </div>
+                    </div>
 
                     <div className="p-1.5 flex flex-col gap-0.5">
                         <button
